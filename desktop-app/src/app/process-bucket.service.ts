@@ -3,6 +3,7 @@ import { StatusBarService } from './status-bar.service';
 export interface ProcessTask {
     key: string;
     name: string;
+    app_name?: string;
     icon: string;
     status?: string;
     running?: boolean;
@@ -26,9 +27,9 @@ export class ProcessBucketService {
         this.processBucket();
     }
 
-    addItem(name, resolve) {
+    addItem(name, resolve, app_name?) {
         const key = (<any>window).require('uuid/v4')();
-        const status = 'Waiting...';
+        const status = (app_name ? app_name + ': ' : '') + 'Waiting...';
         let icon = 'list';
         let _name = 'app install';
         switch (name) {
@@ -67,15 +68,16 @@ export class ProcessBucketService {
         this.tasks.push({
             key,
             name,
+            app_name,
             icon,
             status,
             resolve,
         });
-        this.left_length = this.tasks.filter(t => t.status === 'Waiting...').length;
+        this.left_length = this.tasks.filter(t => !t.failed && !t.running && !t.cancelled && !t.succeeded).length;
     }
 
     async processBucket() {
-        const objects = this.tasks.filter(t => t.status === 'Waiting...');
+        const objects = this.tasks.filter(t => !t.failed && !t.running && !t.cancelled && !t.succeeded);
         const timeout = new Promise(resolve => setTimeout(() => resolve(), 1000));
         this.left_length = objects.length;
         if (objects.length) {
@@ -85,6 +87,7 @@ export class ProcessBucketService {
             await task
                 .resolve(task)
                 .then(() => {
+                    task.running = false;
                     task.succeeded = true;
                     if (!task.cancelled) {
                         return timeout.then(() => this.processBucket());
@@ -92,7 +95,8 @@ export class ProcessBucketService {
                 })
                 .catch(e => {
                     task.running = false;
-                    task.status = e.message ? e.message : e.code ? e.code : e.toString();
+                    task.status =
+                        (task.app_name ? task.app_name + ': ' : '') + (e.message ? e.message : e.code ? e.code : e.toString());
                     task.failed = true;
                     this.statusService.showStatus(task.status, true);
                     if (!task.cancelled) {
@@ -143,5 +147,9 @@ export class ProcessBucketService {
 
     clearFailed() {
         this.tasks = this.tasks.filter(t => !t.failed);
+    }
+    clearAll() {
+        igin;
+        this.tasks = [];
     }
 }

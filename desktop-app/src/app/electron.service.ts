@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { AppService } from './app.service';
 import { RepoService } from './repo.service';
 import { StatusBarService } from './status-bar.service';
@@ -65,6 +65,55 @@ export class ElectronService {
         }
     }
 
+    installFromToken(token) {
+        let options = {
+            url: 'https://api.sidequestvr.com/install-from-key',
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Origin: 'https://sidequestvr.com',
+            },
+            rejectUnauthorized: !isDevMode(),
+            json: { token: token },
+        };
+        console.log(options);
+        this.appService.request(options, async (error, response, body) => {
+            console.log(error, body);
+            if (!error && body.data && body.data.apps && body.data.apps.length) {
+                for (let i = 0; i < body.data.apps.length; i++) {
+                    let app = body.data.apps[i];
+                    if (Number(app.app_categories_id) === 1) {
+                        let urls = app.urls.filter(l => l && ~['Github Release', 'APK', 'OBB'].indexOf(l.provider));
+                        for (let i = 0; i < urls.length; i++) {
+                            const etx = urls[i].link_url
+                                .split('?')[0]
+                                .split('.')
+                                .pop()
+                                .toLowerCase();
+                            switch (etx) {
+                                case 'obb':
+                                    await this.adbService.installObb(urls[i].link_url, i + 1, urls.length, app.name);
+                                    break;
+                                default:
+                                    await this.adbService.installAPK(
+                                        urls[i].link_url,
+                                        false,
+                                        false,
+                                        i + 1,
+                                        urls.length,
+                                        false,
+                                        app.name
+                                    );
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     setupIPC() {
         this.appService.electron.ipcRenderer.on('pre-open-url', (event, data) => {
             this.spinnerService.showLoader();
@@ -104,10 +153,14 @@ export class ElectronService {
                 console.log(data.status);
             }
         });
-        this.appService.electron.ipcRenderer.on('open-url', (event, data) => {
+        this.appService.electron.ipcRenderer.on('open-url', async (event, data) => {
             if (data) {
                 let url = data.split('#');
                 switch (url[0]) {
+                    case 'sidequest://i/':
+                        console.log(data);
+                        this.installFromToken(url[1]);
+                        break;
                     case 'sidequest://unload/':
                         this.adbService.uninstallAPK(url[1]);
                         break;

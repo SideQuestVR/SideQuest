@@ -510,76 +510,87 @@ export class AdbClientService {
         shouldUninstall?: boolean,
         number?: number,
         total?: number,
-        deleteAfter?: boolean
+        deleteAfter?: boolean,
+        name?: string
     ) {
-        return this.processService.addItem('apk_install', task => {
-            if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
-                return Promise.reject('Apk install failed: No device connected! ' + filePath);
-            }
-            const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
-            const updateStatus = (text: string): void => {
-                const newStatus = `${showTotal}${text} `;
-                if (task.status !== newStatus) {
-                    task.status = newStatus;
+        return this.processService.addItem(
+            'apk_install',
+            task => {
+                name = name ? name + ': ' : '';
+                if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
+                    return Promise.reject(name + 'Apk install failed - No device connected! ' + filePath);
                 }
-            };
-            const checkReported: Promise<InstallDecision> = isLocal
-                ? this.checkIsAPKReported(updateStatus, filePath)
-                : Promise.resolve('DoInstall');
-            return checkReported.then(installDecision => {
-                if (installDecision === 'DoInstall') {
-                    task.status = showTotal + 'Installing Apk... ';
-                    return this.adbCommand('install', { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal }, status => {
-                        task.status =
-                            (status.percent === 1
-                                ? showTotal + 'Installing Apk... '
-                                : showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ') +
-                            ' <span style="font-style:italic">' +
-                            filePath +
-                            '</span>';
-                    })
-                        .then(r => {
-                            task.status = 'APK file installed ok!! ' + filePath;
-                            if (deleteAfter) {
-                                this.appService.fs.unlink(filePath, err => {});
-                            }
-                            if (filePath.indexOf('com.weloveoculus.BMBF') > -1) {
-                                return this.beatonService.setBeatOnPermission(this);
-                            }
-                            if (filePath.toLowerCase().indexOf('sidequest.legends') > -1) {
-                                return this.setPermission('com.sidequest.legends', 'android.permission.RECORD_AUDIO');
-                            }
-                            if (filePath.toLowerCase().indexOf('pavlov') > -1) {
-                                return this.setPermission('com.vankrupt.pavlov', 'android.permission.RECORD_AUDIO')
-                                    .then(() =>
-                                        this.setPermission('com.vankrupt.pavlov', 'android.permission.READ_EXTERNAL_STORAGE')
-                                    )
-                                    .then(() =>
-                                        this.setPermission('com.vankrupt.pavlov', 'android.permission.WRITE_EXTERNAL_STORAGE')
-                                    )
-                                    .then(() =>
-                                        this.adbCommand('shell', {
-                                            serial: this.deviceSerial,
-                                            command: 'echo null > /sdcard/pavlov.name.txt',
-                                        })
-                                    );
-                            }
-                        })
-                        .catch(e => {
-                            if (deleteAfter) {
-                                this.appService.fs.unlink(filePath, err => {});
-                            }
-                            return Promise.reject(e.message ? e.message : e.code ? e.code : e.toString() + ' ' + filePath);
-                        });
-                } else {
-                    if (deleteAfter) {
-                        this.appService.fs.unlink(filePath, err => {});
+                const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
+                const updateStatus = (text: string): void => {
+                    const newStatus = `${showTotal}${text} `;
+                    if (task.status !== newStatus) {
+                        task.status = newStatus;
                     }
-                    updateStatus('Canceled Install.');
-                    return Promise.resolve();
-                }
-            });
-        });
+                };
+                const checkReported: Promise<InstallDecision> = isLocal
+                    ? this.checkIsAPKReported(updateStatus, filePath)
+                    : Promise.resolve('DoInstall');
+                return checkReported.then(installDecision => {
+                    task.app_name = name;
+                    if (installDecision === 'DoInstall') {
+                        task.status = name + showTotal + 'Installing Apk... ';
+                        return this.adbCommand(
+                            'install',
+                            { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal },
+                            status => {
+                                task.status =
+                                    (status.percent === 1
+                                        ? name + showTotal + 'Installing Apk... '
+                                        : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ') +
+                                    ' <span style="font-style:italic">' +
+                                    filePath +
+                                    '</span>';
+                            }
+                        )
+                            .then(r => {
+                                task.status = name + 'APK file installed ok!! ' + filePath;
+                                if (deleteAfter) {
+                                    this.appService.fs.unlink(filePath, err => {});
+                                }
+                                if (filePath.indexOf('com.weloveoculus.BMBF') > -1) {
+                                    return this.beatonService.setBeatOnPermission(this);
+                                }
+                                if (filePath.toLowerCase().indexOf('sidequest.legends') > -1) {
+                                    return this.setPermission('com.sidequest.legends', 'android.permission.RECORD_AUDIO');
+                                }
+                                if (filePath.toLowerCase().indexOf('pavlov') > -1) {
+                                    return this.setPermission('com.vankrupt.pavlov', 'android.permission.RECORD_AUDIO')
+                                        .then(() =>
+                                            this.setPermission('com.vankrupt.pavlov', 'android.permission.READ_EXTERNAL_STORAGE')
+                                        )
+                                        .then(() =>
+                                            this.setPermission('com.vankrupt.pavlov', 'android.permission.WRITE_EXTERNAL_STORAGE')
+                                        )
+                                        .then(() =>
+                                            this.adbCommand('shell', {
+                                                serial: this.deviceSerial,
+                                                command: 'echo null > /sdcard/pavlov.name.txt',
+                                            })
+                                        );
+                                }
+                            })
+                            .catch(e => {
+                                if (deleteAfter) {
+                                    this.appService.fs.unlink(filePath, err => {});
+                                }
+                                return Promise.reject(e.message ? e.message : e.code ? e.code : e.toString() + ' ' + filePath);
+                            });
+                    } else {
+                        if (deleteAfter) {
+                            this.appService.fs.unlink(filePath, err => {});
+                        }
+                        updateStatus('Canceled Install.');
+                        return Promise.resolve();
+                    }
+                });
+            },
+            name
+        );
     }
     async checkIsAPKReported(updateStatus: (string) => void, filePath: string): Promise<InstallDecision> {
         let isReported: boolean;
@@ -904,33 +915,38 @@ export class AdbClientService {
                 });
         });
     }
-    installObb(url, number?: number, total?: number) {
-        return this.processService.addItem('file_install', async task => {
-            task.status = 'Downloading OBB file...';
-            return this.appService
-                .downloadFile(
-                    url,
-                    url,
-                    url,
-                    downloadUrl => {
-                        return this.appService.path.join(
-                            this.appService.appData,
-                            downloadUrl
-                                .split('/')
-                                .pop()
-                                .split('?')
-                                .shift()
-                        );
-                    },
-                    task
-                )
-                .then((_path: string) => {
-                    task.status = 'Installing OBB file...';
-                    return this.installLocalObb(_path, false, null, number, total, task);
-                });
-        });
+    installObb(url, number?: number, total?: number, name?: string) {
+        return this.processService.addItem(
+            'file_install',
+            async task => {
+                task.app_name = name;
+                task.status = (name ? name + ': ' : '') + 'Downloading OBB file...';
+                return this.appService
+                    .downloadFile(
+                        url,
+                        url,
+                        url,
+                        downloadUrl => {
+                            return this.appService.path.join(
+                                this.appService.appData,
+                                downloadUrl
+                                    .split('/')
+                                    .pop()
+                                    .split('?')
+                                    .shift()
+                            );
+                        },
+                        task
+                    )
+                    .then((_path: string) => {
+                        task.status = name + 'Installing OBB file...';
+                        return this.installLocalObb(_path, false, null, number, total, task, name);
+                    });
+            },
+            name
+        );
     }
-    installLocalObb(filepath: string, dontCatchError = false, cb = null, number?: number, total?: number, task?) {
+    installLocalObb(filepath: string, dontCatchError = false, cb = null, number?: number, total?: number, task?, name?: string) {
         let filename = this.appService.path.basename(filepath);
         let packageId = filename.match(/main.[0-9]{1,}.([a-z]{1,}.[A-z]{1,}.[A-z]{1,}).obb/)[1];
         const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
@@ -941,7 +957,7 @@ export class AdbClientService {
         }
         p = p.then(() => {
             if (task) {
-                task.status = 'File transferred successfully! ' + filepath;
+                task.status = name + 'File transferred successfully! ' + filepath;
             } else {
                 this.statusService.showStatus('File transferred successfully!');
             }
@@ -950,7 +966,7 @@ export class AdbClientService {
             p = p.catch(e => {
                 if (task) {
                     task.failed = true;
-                    task.status = 'Failed to transfer file!! - ' + filepath;
+                    task.status = name + 'Failed to transfer file!! - ' + filepath;
                 } else {
                     this.spinnerService.hideLoader();
                     this.statusService.showStatus(e.toString(), true);

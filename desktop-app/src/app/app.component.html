@@ -6,7 +6,8 @@
 
 <app-loading-spinner #spinner></app-loading-spinner>
 <app-status-bar #status (getHelp)="getHelpModal.openModal(); helpStatus = $event"></app-status-bar>
-<webview id="beatView" #webview src="https://sidequestvr.com" allowpopups
+<webview id="mainWebView" #webview src="https://sidequestvr.com" allowpopups disablewebsecurity
+         useragent="Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko electron/ SideQuestAgent"
          [ngStyle]="{'left':webService.isWebviewOpen?'0':'-100%'}" class="bsaber-webview"></webview>
 
 <mz-modal #getHelpModal [fixedFooter]="true">

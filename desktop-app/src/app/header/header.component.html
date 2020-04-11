@@ -259,6 +259,11 @@
         Clear Failed
       </div>
       &nbsp;&nbsp;
+      <div class="waves-effect waves-light btn small-button red" mz-tooltip position="bottom"
+           tooltip="Clear out the finished tasks." (click)="processService.clearAll()">
+        Clear All
+      </div>
+      &nbsp;&nbsp;
 
     </div>
     <div id="searchFilterContainer" *ngIf="appService.showSearch">

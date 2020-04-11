@@ -14,6 +14,7 @@ export class WebviewService {
         appService.setWebviewService(this);
     }
     setWebView(webView) {
+        console.log({ webView });
         this.webView = webView;
         this.setupWebview();
     }

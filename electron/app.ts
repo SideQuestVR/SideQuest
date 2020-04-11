@@ -248,10 +248,11 @@ function setupApp() {
     const adb = new ADB();
 
     ipcMain.on('download-url', async (event, { url, token, directory, filename }) => {
-        await download(url, path.join(directory, filename), stats => {
+        download(url, path.join(directory, filename), stats => {
             return event.sender.send('download-progress', { stats, token });
-        }).catch(e => console.log(e));
-        event.sender.send('download-url', { token });
+        })
+            .then(() => event.sender.send('download-url', { token }))
+            .catch(e => event.sender.send('download-url-fail', { e, token }));
     });
     ipcMain.on('extract-file', async (event, { token, directory, filename }) => {
         extract(

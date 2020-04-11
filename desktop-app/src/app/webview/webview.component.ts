@@ -14,7 +14,6 @@ export class WebviewComponent implements OnInit {
         appService.resetTop();
         webService.isWebviewOpen = true;
         appService.showBrowserBar = true;
-        appService.setTitle('<img src="assets/images/logo-textual.png" class="logo-img"/>');
     }
 
     ngOnInit() {}

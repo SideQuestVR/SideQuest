@@ -21,7 +21,9 @@ module.exports = function(url, path, progress) {
                 callback(null, response);
             }
         });
-
+        request.on('error', function(err) {
+            callback(err);
+        });
         request.setTimeout(TIMEOUT, function() {
             request.abort();
             callback(new Error(`request timeout after ${TIMEOUT / 1000.0}s`));
@@ -31,7 +33,7 @@ module.exports = function(url, path, progress) {
     return new Promise(function(resolve, reject) {
         get(uri.href, (err, res) => {
             if (err) {
-                return console.log(err);
+                return reject(err);
             }
             const len = parseInt(res.headers['content-length'], 10);
             let downloaded = 0;

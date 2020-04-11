@@ -6,5 +6,5 @@
   </div>
 </div>
 <div class="col s2 package-height centered package-item">
-  <i *ngIf="task.status === 'Waiting...'||(task.running&&!task.succeeded&&!task.failed)" class="material-icons red-text cursor settings" (click)="task.running?processService.skipCurrent(task):deleteItem()">close</i>
+  <i class="material-icons red-text cursor settings" (click)="task.running?processService.skipCurrent(task):deleteItem()">close</i>
 </div>

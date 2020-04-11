@@ -59,6 +59,7 @@ export class AppWindow {
             show: !showAfterSetup,
             frame: false,
             webPreferences: {
+                webviewTag: true,
                 nodeIntegration: true,
             },
         };

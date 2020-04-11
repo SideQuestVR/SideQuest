@@ -211,7 +211,6 @@ export class BeatOnService {
         return this.processService.addItem('song_download', async task => {
             let parts = downloadUrl.split('/');
             let zipPath = this.appService.path.join(this.appService.appData, this.appService.uuidv4() + '.zip');
-            //let name = parts[parts.length - 1].split('.')[0];
             const requestOptions = {
                 timeout: 30000,
                 'User-Agent': this.appService.getUserAgent(),

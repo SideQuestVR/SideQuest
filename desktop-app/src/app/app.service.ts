@@ -104,6 +104,12 @@ export class AppService {
                 this.extractResolves[data.token].scb(data.stats);
             }
         });
+        this.electron.ipcRenderer.on('download-url-fail', (event, data) => {
+            if (!!this.downloadResolves[data.token]) {
+                this.downloadResolves[data.token].reject(data.e);
+                delete this.downloadResolves[data.token];
+            }
+        });
         this.electron.ipcRenderer.on('download-url', (event, data) => {
             if (!!this.downloadResolves[data.token]) {
                 this.downloadResolves[data.token].resolve();
@@ -125,7 +131,7 @@ export class AppService {
             this.extractResolves[token] = {
                 scb: stats => {
                     if (task) {
-                        task.status = 'Extracting... ' + stats;
+                        task.status = (task.app_name ? task.app_name + ': ' : '') + 'Extracting... ' + stats;
                     }
                 },
                 resolve,
@@ -267,15 +273,16 @@ export class AppService {
     }
     downloadFileAPI(url, directory, filename, task?) {
         // Send request to application thread to download a file. Store the callback for the response.
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             let token = this.uuidv4();
             this.downloadResolves[token] = {
                 scb: stats => {
                     if (task) {
-                        task.status = 'Downloading... ' + stats + '%';
+                        task.status = (task.app_name ? task.app_name + ': ' : '') + 'Downloading... ' + stats + '%';
                     }
                 },
                 resolve,
+                reject,
             };
             this.electron.ipcRenderer.send('download-url', { token, url, directory, filename });
         });
