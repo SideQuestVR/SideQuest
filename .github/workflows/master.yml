@@ -7,7 +7,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-      env:
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
@@ -15,12 +14,13 @@ jobs:
       - name: "Install dependencies"
         run: yarn
       - name: "Build application"
-        APPLE_ID: ${{ secrets.APPLE_ID }}
-        APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
-        APPLE_ID_TEAM: ${{ secrets.APPLE_ID_TEAM }}
-        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-        CSC_LINK: ${{ secrets.CSC_LINK }}
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-        WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          APPLE_ID_TEAM: ${{ secrets.APPLE_ID_TEAM }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
         run: yarn dist
