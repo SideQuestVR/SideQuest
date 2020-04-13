@@ -1,70 +1,5 @@
 # SideQuest
-
-
-[Latest Download](https://sidequestvr.com/#/download) | [Discord](https://discord.gg/HNnDPSu) | [Patreon](https://www.patreon.com/TheExpanseVR) | [Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=744A6C394Q8JG&source=url)
-
-![Image](https://i.imgur.com/AlYMbTj.png)
-
-
-
-SideQuest is designed to simplify sideloading apps onto your standalone android based headset. It should include everything you need to get started. When you first open the app it is best to open the setup screen and follow the instructions on screen to get set up.
-
-The quest doesnt show 2D apps normally anywhere in the UI. Thankfully though SideQuest has a launcher ( install on the setup screen - scroll down to the bottom ) which appears in the unknown sources list and lets you open 2d apps. You can pick "SideQuest - Home" or "SideQuest - TV" to use the 2D app in the Oculus Home or Oculus TV environments. 
-
-VR apps dont work when launched from the app launcher currently, only 2d apps. The workaround is to launch the VR apps from the unknown sources list instead - they are usually listed there!
-
-
-## SideQuest Features
-
--   Automatic download of ADB platform-tools for your platform - win/mac/linux.
--   Automatic download of QuestSaberPatch for your platform - win/mac/linux.
--   Automatic download of songe-converter for your platform - win/mac/linux.
--   Setup instructions for enabling developer mode on your device.
--   AppStarter based app launcher in both Oculus Home and Oculus TV for launching and using 2D apps
--   Drag and drop support for installing arbitrary apk/obb files.
--   File manager with drag and drop support ( thanks Mitch ) 
--   Dark mode
--   New installed apps manager with a backup system.
--   Beat Saber song manager for patching songs onto the Oculus Quest - sorting, multi select, remove duplicates and drag and drop
--   Auto downloading via the in-app browser - now works with beatsaver.com, bsaber.com and also any APK downloads too!
-
-
-## Setup
-
-[Very Important setup instructions - 5 steps and only takes minutes](https://sidequestvr.com/#/setup-howto)
-
-When you first launch SideQuest it will download the repositories and also download the ADB tools. Once this is done you should go to the Setup menu option and follow through the one time setup to get your device ready to install apps.
-
-If you have any problems you can hit the bug icon on the top right and then open the console tab in that section to capture any errors - these will really help to find and fix bugs.
-
-## Important
-
-Check your antivirus hasn't blocked some parts of the ADB download - this has happened for some with Avast antivirus in particular. 
-
-
-## ChromeBook Setup
-
-Thanks to [u/przecin/](https://www.reddit.com/user/przecin/) for figuring this out!
-
-
-```bash 
-cd SideQuest-0.7.4 # (or the latest version)
-chmod u+x sidequest # (applies permissions)
-sudo apt-get install libnss3 # (installs libnss3.so library)
-./sidequest # (execute)
-```
-
-
-If you get error: "sidequest: sidequest: cannot execute binary file" this means you didn't apply permissions
-
-
-If you get error ./sidequest: error while loading shared libraries: libnss3.so: cannot open shared object file: No such file or directory" this means you need to install libnss3.so
-
-
-## App Developers: 
-We now have a really easy and powerful app manager portal to be able to manage your app listings on SideQuest. 
-
-[Submit Apps To SideQuest](https://github.com/the-expanse/SideQuest/wiki/How-To-Submit-Games)
+Below is the documentation of SideQuest with instructions for building and signing then application.
 
 ## Build Steps
 
@@ -119,7 +54,25 @@ yarn reset
 "/S" for silent install and "/D=<path>"
 ```
 
-## Contribution Guidelines
 
-We are pretty relaxed at this point, in that we will accept arbitrary PRs, but all collaborators must agree on a way forward. We live by the [Contributor Covenant](https://www.contributor-covenant.org/)
 
+## Code Siging
+
+The app is built and signed/notorized with electron-builder/electron-notorize.
+Below are the required environment variables and their explanations.
+
+APPLE_ID - your apple id eg.  someone@apple.com
+
+APPLE_ID_PASS - A app specific password - https://support.apple.com/en-gb/HT204397
+
+APPLE_ID_TEAM - The app le Team ID found on the apple developer dashboard
+
+CSC_LINK - The base64 encoded .p12 file ( Apple Developer ID cert ) as a string. Do not include the `-----BEGIN CERTIFICATE-----` or `-----END CERTIFICATE-----` parts just the base64 string.
+
+CSC_KEY_PASSWORD - The passphrase used when generating the .p12 file for mac.
+
+GH_TOKEN - The github personal access token used to upload releases
+
+WIN_CSC_LINK - The base64 encoded .p12 file ( Windows Code Signing Cert ). as a string. Do not include the `-----BEGIN CERTIFICATE-----` or `-----END CERTIFICATE-----` parts just the base64 string.
+
+WIN_CSC_KEY_PASSWORD - The passphrase used when generating the .p12 file for windows.
