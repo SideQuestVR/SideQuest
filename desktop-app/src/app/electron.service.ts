@@ -77,9 +77,9 @@ export class ElectronService {
             rejectUnauthorized: !isDevMode(),
             json: { token: token },
         };
-        console.log(options);
+        // console.log(options);
         this.appService.request(options, async (error, response, body) => {
-            console.log(error, body);
+            // console.log(error, body);
             if (!error && body.data && body.data.apps && body.data.apps.length) {
                 for (let i = 0; i < body.data.apps.length; i++) {
                     let app = body.data.apps[i];
@@ -157,8 +157,13 @@ export class ElectronService {
             if (data) {
                 let url = data.split('#');
                 switch (url[0]) {
+                    case 'sidequest://w/':
+                        this.adbService.runAdbCommand('adb shell am start -a android.intent.action.VIEW -d ' + url[1]).then(() => {
+                            this.statusService.showStatus('Launching WebXR in browser...');
+                        });
+                        this.webviewService.isWebviewLoading = false;
+                        break;
                     case 'sidequest://i/':
-                        console.log(data);
                         this.installFromToken(url[1]);
                         break;
                     case 'sidequest://unload/':

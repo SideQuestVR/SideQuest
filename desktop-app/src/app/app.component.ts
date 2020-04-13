@@ -47,7 +47,6 @@ export class AppComponent {
     ngAfterViewInit() {
         this.spinnerService.setSpinner(this.spinner);
         this.statusService.setStatus(this.status);
-        console.log(this.webview);
         this.webService.setWebView(this.webview.nativeElement);
     }
 }

@@ -149,7 +149,6 @@ export class ProcessBucketService {
         this.tasks = this.tasks.filter(t => !t.failed);
     }
     clearAll() {
-        igin;
         this.tasks = [];
     }
 }
