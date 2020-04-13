@@ -15,11 +15,3 @@ jobs:
         run: yarn
       - name: "Build application"
         run: yarn dist
-      - name: "Archive build artifacts"
-        uses: svenstaro/upload-release-action@v1-release
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*
-          tag: ${{ github.run_id }}
-          overwrite: true
-          file_glob: true
