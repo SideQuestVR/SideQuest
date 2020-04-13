@@ -8,7 +8,7 @@ import { ProcessBucketService } from '../process-bucket.service';
 })
 export class CurrentTaskItemComponent implements OnInit {
     @Input() task;
-    constructor(private processService: ProcessBucketService) {}
+    constructor(public processService: ProcessBucketService) {}
 
     ngOnInit() {}
 
