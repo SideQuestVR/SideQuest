@@ -84,28 +84,32 @@ export class ElectronService {
                 for (let i = 0; i < body.data.apps.length; i++) {
                     let app = body.data.apps[i];
                     if (Number(app.app_categories_id) === 1) {
-                        let urls = app.urls.filter(l => l && ~['Github Release', 'APK', 'OBB'].indexOf(l.provider));
+                        let urls = app.urls.filter(l => l && ~['Github Release', 'APK', 'OBB', 'Mod'].indexOf(l.provider));
                         for (let i = 0; i < urls.length; i++) {
-                            const etx = urls[i].link_url
-                                .split('?')[0]
-                                .split('.')
-                                .pop()
-                                .toLowerCase();
-                            switch (etx) {
-                                case 'obb':
-                                    await this.adbService.installObb(urls[i].link_url, i + 1, urls.length, app.name);
-                                    break;
-                                default:
-                                    await this.adbService.installAPK(
-                                        urls[i].link_url,
-                                        false,
-                                        false,
-                                        i + 1,
-                                        urls.length,
-                                        false,
-                                        app.name
-                                    );
-                                    break;
+                            if (urls[i].provider === 'Mod') {
+                                this.beatonService.downloadSong(urls[i].link_url, this.adbService);
+                            } else {
+                                const etx = urls[i].link_url
+                                    .split('?')[0]
+                                    .split('.')
+                                    .pop()
+                                    .toLowerCase();
+                                switch (etx) {
+                                    case 'obb':
+                                        await this.adbService.installObb(urls[i].link_url, i + 1, urls.length, app.name);
+                                        break;
+                                    default:
+                                        await this.adbService.installAPK(
+                                            urls[i].link_url,
+                                            false,
+                                            false,
+                                            i + 1,
+                                            urls.length,
+                                            false,
+                                            app.name
+                                        );
+                                        break;
+                                }
                             }
                         }
                     }
