@@ -1,8 +1,8 @@
 {
     "name": "SideQuest",
-    "version": "0.10.2",
+    "version": "0.10.3",
     "description": "A open app store for mobile android based VR devices such as the Levovo Mirage, Oculus Go, Oculus Quest, Vive Focus.",
-    "repository": "https://github.com/SideQuestVR/SideQuest.git",
+    "repository": "https://github.com/the-expanse/SideQuest.git",
     "license": "MIT",
     "author": "Shane Harris",
     "main": "build-electron/boot.js",
