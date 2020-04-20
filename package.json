@@ -80,6 +80,7 @@
         "adm-zip": "^0.4.14",
         "concurrently": "^4.1.0",
         "cross-env": "^5.2.0",
+        "crypto": "^1.0.1",
         "electron-updater": "^4.1.2",
         "express": "^4.17.1",
         "extract-zip": "^1.6.7",

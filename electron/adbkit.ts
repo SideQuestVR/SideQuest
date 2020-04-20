@@ -1,5 +1,8 @@
+import { environment } from '../desktop-app/src/environments/environment';
+
 const adb = require('adbkit');
 const fs = require('fs');
+const crypto = require('crypto');
 const request = require('request');
 const progress = require('request-progress');
 const Readable = require('stream').Readable;
@@ -14,6 +17,125 @@ export class ADB {
             bin: adbPath,
         });
         cb();
+    }
+    async checkAPK(updateStatus: (string) => void, filePath: string): Promise<boolean> {
+        const hash = await this.computeFileHash(updateStatus, filePath);
+        const url = `https://sdq.st/check-app-hash/${hash}`;
+        updateStatus('Checking APK against blacklist...');
+        return new Promise((resolve, reject) => {
+            let options = {
+                url,
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Origin: 'https://sidequestvr.com',
+                },
+                rejectUnauthorized: process.env.NODE_ENV !== 'dev',
+            };
+            request(options, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    try {
+                        resolve(JSON.parse(body).found);
+                    } catch (e) {
+                        reject(e);
+                    }
+                }
+            });
+        });
+        // const response = await this.http.get<CheckSubmissionResponse>(url).toPromise();
+        // return response.found;
+    }
+    async computeFileHash(updateStatus: (string) => void, filePath: string): Promise<string> {
+        const fileSize = await this.computeFileSize(filePath);
+        return new Promise((resolve, reject) => {
+            let bytesRead: number = 0;
+            const fd = fs.createReadStream(filePath);
+            const hash = crypto.createHash('md5');
+            hash.setEncoding('hex');
+            fd.on('data', chunk => {
+                bytesRead += chunk.length;
+                const percentage = this.formattedPercentageComplete(bytesRead, fileSize);
+                updateStatus(`Computing APK hash (${percentage})...`);
+            });
+            fd.on('end', () => {
+                updateStatus(`Computing APK hash (100%)...`);
+                hash.end();
+                resolve(hash.read());
+            });
+            fd.on('error', error => {
+                reject(error);
+            });
+            fd.pipe(hash);
+        });
+    }
+    async computeFileSize(filePath: string): Promise<number> {
+        return new Promise((resolve, reject) => {
+            fs.stat(filePath, (err, stats) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(stats.size);
+                }
+            });
+        });
+    }
+    formattedPercentageComplete(amount: number, total: number): string {
+        const percentage = Math.round(Math.min(amount / total, 1) * 100);
+        return `${percentage}%`;
+    }
+    hashCheckFile(path, cb, scb, ecb) {
+        return this.checkAPK(scb, path)
+            .then(() => cb())
+            .catch(e => ecb(e));
+    }
+    installFromToken(token, cb, ecb) {
+        let options = {
+            url: 'https://api.sidequestvr.com/install-from-key',
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Origin: 'https://sidequestvr.com',
+            },
+            rejectUnauthorized: process.env.NODE_ENV !== 'dev',
+            json: { token: token },
+        };
+        request(options, (error, response, body) => {
+            if (!error && body.data && body.data.apps && body.data.apps.length) {
+                let tasks = [];
+                for (let i = 0; i < body.data.apps.length; i++) {
+                    let app = body.data.apps[i];
+                    if (Number(app.app_categories_id) === 1) {
+                        let urls = app.urls.filter(l => l && ~['Github Release', 'APK', 'OBB', 'Mod'].indexOf(l.provider));
+                        for (let i = 0; i < urls.length; i++) {
+                            if (urls[i].provider === 'Mod') {
+                                tasks.push({ type: 'Mod', url: urls[i].link_url, name: app.name });
+                            } else {
+                                const etx = urls[i].link_url
+                                    .split('?')[0]
+                                    .split('.')
+                                    .pop()
+                                    .toLowerCase();
+                                switch (etx) {
+                                    case 'obb':
+                                        tasks.push({ type: 'OBB', url: urls[i].link_url, name: app.name });
+                                        break;
+                                    default:
+                                        tasks.push({ type: 'APK', url: urls[i].link_url, name: app.name });
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+                cb(tasks);
+            } else {
+                ecb(error || 'Nothing to install.');
+            }
+        });
     }
     endLogcat() {
         if (this._logcat) {

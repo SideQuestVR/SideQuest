@@ -294,6 +294,12 @@ function setupApp() {
             }
         };
         switch (arg.command) {
+            case 'installFromToken':
+                adb.installFromToken(arg.settings.token, success, reject);
+                break;
+            case 'hashCheck':
+                adb.hashCheckFile(arg.settings.path, success, status, reject);
+                break;
             case 'setupAdb':
                 adb.setupAdb(arg.settings.adbPath, success, reject);
                 break;
