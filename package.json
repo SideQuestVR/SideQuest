@@ -5,7 +5,7 @@
     "repository": "https://github.com/SideQuestVR/SideQuest.git",
     "license": "MIT",
     "author": "Shane Harris",
-    "main": "build-electron/app.js",
+    "main": "build-electron/boot.js",
     "scripts": {
         "concurrently": "concurrently",
         "start": "concurrently \"yarn electron-build && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev electron .\" \"cd desktop-app && ng serve --port 4205\"",
@@ -52,7 +52,12 @@
             "build/**/*",
             "node_modules/**/*",
             "package.json",
-            "build-electron/**/*"
+            "build-electron/boot.js",
+            "build-electron/app.jsc",
+            "build-electron/download.js",
+            "build-electron/setproperties.js",
+            "build-electron/state-storage.js",
+            "build-electron/window.js"
         ],
         "asarUnpack": [
             "build/**/*"
@@ -78,6 +83,7 @@
     "dependencies": {
         "adbkit": "^2.11.1",
         "adm-zip": "^0.4.14",
+        "bytenode": "^1.1.6",
         "concurrently": "^4.1.0",
         "cross-env": "^5.2.0",
         "crypto": "^1.0.1",

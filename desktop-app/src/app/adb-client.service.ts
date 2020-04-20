@@ -521,93 +521,49 @@ export class AdbClientService {
                     return Promise.reject(name + 'Apk install failed - No device connected! ' + filePath);
                 }
                 const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
-                const updateStatus = (text: string): void => {
-                    const newStatus = `${showTotal}${text} `;
-                    if (task.status !== newStatus) {
-                        task.status = newStatus;
-                    }
-                };
-                const checkReported: Promise<InstallDecision> = isLocal
-                    ? this.checkIsAPKReported(updateStatus, filePath)
-                    : Promise.resolve('DoInstall');
-                return checkReported.then(installDecision => {
-                    task.app_name = name;
-                    if (installDecision === 'DoInstall') {
-                        task.status = name + showTotal + 'Installing Apk... ';
-                        return this.adbCommand(
-                            'install',
-                            { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal },
-                            status => {
-                                task.status =
-                                    (status.percent === 1
-                                        ? name + showTotal + 'Installing Apk... '
-                                        : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ') +
-                                    ' <span style="font-style:italic">' +
-                                    filePath +
-                                    '</span>';
-                            }
-                        )
-                            .then(r => {
-                                task.status = name + 'APK file installed ok!! ' + filePath;
-                                if (deleteAfter) {
-                                    this.appService.fs.unlink(filePath, err => {});
-                                }
-                                if (filePath.indexOf('com.weloveoculus.BMBF') > -1) {
-                                    return this.beatonService.setBeatOnPermission(this);
-                                }
-                                if (filePath.toLowerCase().indexOf('sidequest.legends') > -1) {
-                                    return this.setPermission('com.sidequest.legends', 'android.permission.RECORD_AUDIO');
-                                }
-                                if (filePath.toLowerCase().indexOf('pavlov') > -1) {
-                                    return this.setPermission('com.vankrupt.pavlov', 'android.permission.RECORD_AUDIO')
-                                        .then(() =>
-                                            this.setPermission('com.vankrupt.pavlov', 'android.permission.READ_EXTERNAL_STORAGE')
-                                        )
-                                        .then(() =>
-                                            this.setPermission('com.vankrupt.pavlov', 'android.permission.WRITE_EXTERNAL_STORAGE')
-                                        )
-                                        .then(() =>
-                                            this.adbCommand('shell', {
-                                                serial: this.deviceSerial,
-                                                command: 'echo null > /sdcard/pavlov.name.txt',
-                                            })
-                                        );
-                                }
-                            })
-                            .catch(e => {
-                                if (deleteAfter) {
-                                    this.appService.fs.unlink(filePath, err => {});
-                                }
-                                return Promise.reject(e.message ? e.message : e.code ? e.code : e.toString() + ' ' + filePath);
-                            });
-                    } else {
+                task.app_name = name;
+                task.status = name + showTotal + 'Installing Apk... ';
+                return this.adbCommand('install', { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal }, status => {
+                    task.status =
+                        (status.percent === 1
+                            ? name + showTotal + 'Installing Apk... '
+                            : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ') +
+                        ' <span style="font-style:italic">' +
+                        filePath +
+                        '</span>';
+                })
+                    .then(r => {
+                        task.status = name + 'APK file installed ok!! ' + filePath;
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
-                        updateStatus('Canceled Install.');
-                        return Promise.resolve();
-                    }
-                });
+                        if (filePath.indexOf('com.weloveoculus.BMBF') > -1) {
+                            return this.beatonService.setBeatOnPermission(this);
+                        }
+                        if (filePath.toLowerCase().indexOf('sidequest.legends') > -1) {
+                            return this.setPermission('com.sidequest.legends', 'android.permission.RECORD_AUDIO');
+                        }
+                        if (filePath.toLowerCase().indexOf('pavlov') > -1) {
+                            return this.setPermission('com.vankrupt.pavlov', 'android.permission.RECORD_AUDIO')
+                                .then(() => this.setPermission('com.vankrupt.pavlov', 'android.permission.READ_EXTERNAL_STORAGE'))
+                                .then(() => this.setPermission('com.vankrupt.pavlov', 'android.permission.WRITE_EXTERNAL_STORAGE'))
+                                .then(() =>
+                                    this.adbCommand('shell', {
+                                        serial: this.deviceSerial,
+                                        command: 'echo null > /sdcard/pavlov.name.txt',
+                                    })
+                                );
+                        }
+                    })
+                    .catch(e => {
+                        if (deleteAfter) {
+                            this.appService.fs.unlink(filePath, err => {});
+                        }
+                        return Promise.reject(e.message ? e.message : e.code ? e.code : e.toString() + ' ' + filePath);
+                    });
             },
             name
         );
-    }
-    async checkIsAPKReported(updateStatus: (string) => void, filePath: string): Promise<InstallDecision> {
-        let isReported: boolean;
-        try {
-            isReported = await this.safeSideService.checkAPK(updateStatus, filePath);
-        } catch {
-            isReported = false;
-        }
-        if (isReported) {
-            updateStatus('Confirming you want to install APK...');
-            this.appService.headerComponent.safeModal.openModal();
-            return new Promise(resolve => {
-                this.appService.headerComponent.safeResolve = resolve;
-            });
-        } else {
-            return 'DoInstall';
-        }
     }
     uninstallAPK(pkg) {
         return this.processService.addItem('apk_uninstall', task => {

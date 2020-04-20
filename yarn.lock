@@ -491,6 +491,11 @@ builtins@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/builtins/-/builtins-1.0.3.tgz#cb94faeb61c8696451db36534e1422f94f0aee88"
 
+bytenode@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/bytenode/-/bytenode-1.1.6.tgz#bf8defd83e752a817205d23fa0cb10fa717080c6"
+  integrity sha512-hhJqv1GMtTa2q4wlfCWEnC5zWFflbJhh1qaYgaqbs8ta6mQUri2eTD76jER8XlAYPtc7IEw2lc36B3H1GTQRpQ==
+
 bytes@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.0.tgz#f6cf7933a360e0588fa9fde85651cdc7f805d1f6"

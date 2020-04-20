@@ -1,9 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { AppService } from './app.service';
-import { environment } from './../environments/environment';
-import { ElectronService } from './electron.service';
-import { AdbClientService } from './adb-client.service';
 
 interface CheckSubmissionResponse {
     found: boolean;
@@ -13,16 +8,14 @@ interface CheckSubmissionResponse {
     providedIn: 'root',
 })
 export class SafeSideService {
-    constructor(private appService: AppService, private adbService: AdbClientService) {} // private http: HttpClient
-
-    async checkAPK(updateStatus: (string) => void, filePath: string): Promise<boolean> {
-        return this.adbService.adbCommand('hashCheck', { path: filePath }, updateStatus);
-        // const hash = await this.computeFileHash(updateStatus, filePath);
-        // const url = `${environment.safeSideApiUrl}/check-app-hash/${hash}`;
-        // updateStatus('Checking APK against blacklist...');
-        // const response = await this.http.get<CheckSubmissionResponse>(url).toPromise();
-        // return response.found;
-    }
+    //  constructor(private appService: AppService, private adbService: AdbClientService) {} // private http: HttpClient
+    //  async checkAPK(updateStatus: (string) => void, filePath: string): Promise<boolean> {
+    // const hash = await this.computeFileHash(updateStatus, filePath);
+    // const url = `${environment.safeSideApiUrl}/check-app-hash/${hash}`;
+    // updateStatus('Checking APK against blacklist...');
+    // const response = await this.http.get<CheckSubmissionResponse>(url).toPromise();
+    // return response.found;
+    //  }
     // async computeFileHash(updateStatus: (string) => void, filePath: string): Promise<string> {
     //     const fileSize = await this.computeFileSize(filePath);
     //     return new Promise((resolve, reject) => {
