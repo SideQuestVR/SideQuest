@@ -347,7 +347,7 @@ export class AdbClientService {
     }
     async setupAdb() {
         if (!this.isAdbDownloaded()) {
-            this.appService.seedPlatformTools();
+            await this.appService.seedPlatformTools();
         }
         this.appService.electron.ipcRenderer.on('adb-command', (event, arg: any) => {
             if (this.adbResolves[arg.uuid]) {
