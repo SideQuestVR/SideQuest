@@ -240,6 +240,11 @@ export class AppService {
                                 .createReadStream(this.path.join(sourcesPath, file))
                                 .pipe(this.fs.createWriteStream(this.path.join(this.appData, 'platform-tools', file)));
                         });
+                        if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
+                            this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() => resolve());
+                        } else {
+                            return resolve();
+                        }
                         setTimeout(() => resolve(), 5000);
                     });
                 });
