@@ -569,6 +569,13 @@
         <input id="max_size_" [(ngModel)]="scrcpy_options.max_size" type="text" />
         <label for="max_size_" class="active">Max Size</label>
       </div>
+      <div class="col s12" *ngIf="osPlatform === 'darwin'">
+        To use ScrCpy on mac you will need to install Homebrew and then install scrcpy with <span class="chip">brew install scrcpy</span>
+        <br><br>
+      </div>
+      <div class="col s12" *ngIf="osPlatform === 'linux'">
+        TO use ScrCpy on Linux you will need to install snap package manager with <span class="chip">sudo snap install scrcpy</span>
+      </div>
     </div>
   </mz-modal-content>
   <mz-modal-footer>
