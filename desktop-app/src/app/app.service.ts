@@ -226,27 +226,28 @@ export class AppService {
         }
     }
     seedPlatformTools() {
-        return new Promise(resolve => {
+        return new Promise(async resolve => {
             if (!this.fs.existsSync(this.path.join(this.appData, 'platform-tools'))) {
                 let sourcesPath = this.path.join(__dirname, '..', 'platform-tools');
                 if (!this.fs.existsSync(sourcesPath)) {
                     sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
                 }
-                console.log(this.path.join(__dirname, '..', 'platform-tools'), process.cwd(), __dirname);
-                this.fs.mkdir(this.path.join(this.appData, 'platform-tools'), () => {
-                    this.fs.readdir(sourcesPath, (err, files) => {
-                        files.forEach(file => {
-                            this.fs
-                                .createReadStream(this.path.join(sourcesPath, file))
-                                .pipe(this.fs.createWriteStream(this.path.join(this.appData, 'platform-tools', file)));
-                        });
-                        if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
-                            this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() => resolve());
-                        } else {
-                            return resolve();
-                        }
+                // console.log(this.path.join(__dirname, '..', 'platform-tools'), process.cwd(), __dirname);
+                await this.mkdir(this.path.join(this.appData, 'platform-tools'));
+                try {
+                    let files = this.fs.readdirSync(sourcesPath);
+                    files.forEach(file => {
+                        this.fs
+                            .createReadStream(this.path.join(sourcesPath, file))
+                            .pipe(this.fs.createWriteStream(this.path.join(this.appData, 'platform-tools', file)));
                     });
-                });
+                    if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
+                        console.log(this.path.join(this.appData, 'platform-tools', 'adb'));
+                        this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() => resolve());
+                    } else {
+                        return resolve();
+                    }
+                } catch (e) {}
             }
         });
     }
@@ -264,6 +265,9 @@ export class AppService {
     setExecutable(path) {
         return new Promise(resolve => {
             const ls = this.spawn('chmod', ['+x', path]);
+            ls.stdout.on('data', res => {
+                console.log(res);
+            });
             ls.on('close', code => {
                 resolve();
             });
