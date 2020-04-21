@@ -243,9 +243,11 @@ export class AppService {
                     });
                     if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
                         console.log(this.path.join(this.appData, 'platform-tools', 'adb'));
-                        this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() => resolve());
+                        this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() =>
+                            setTimeout(() => resolve(), 5000)
+                        );
                     } else {
-                        return resolve();
+                        setTimeout(() => resolve(), 5000);
                     }
                 } catch (e) {}
             }
