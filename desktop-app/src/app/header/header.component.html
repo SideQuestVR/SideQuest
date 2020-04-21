@@ -154,7 +154,7 @@
         class="material-icons white-text no-outline" position="bottom" tooltip="Forward">
         arrow_forward
       </i>
-      <i mz-tooltip *ngIf="isConnected()&&osPlatform === 'win32'" (click)="scrcpyModal.openModal();"
+      <i mz-tooltip *ngIf="isConnected()" (click)="scrcpyModal.openModal();"
         class="material-icons white-text no-outline top-menu-bar-icon" position="bottom"
         tooltip="Stream from your headset to your PC with ScrCpy.">
         live_tv

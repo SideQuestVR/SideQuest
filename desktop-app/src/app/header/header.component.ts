@@ -42,14 +42,9 @@ export class HeaderComponent implements OnInit {
     safeResolve: any = val => val;
     folder = FolderType;
     addrepoUrl: string = '';
-    colorA: string;
-    colorB: string;
-    beatOnLoading: boolean;
     isAlive: boolean = true;
     isAliveChecking: boolean = false;
     replaceText: ReplaceText[] = [];
-    addkey: string;
-    addvalue: string;
     adbCommandToRun: string;
     osPlatform: string;
     favourites: {

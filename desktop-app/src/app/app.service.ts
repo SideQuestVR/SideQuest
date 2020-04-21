@@ -300,7 +300,7 @@ export class AppService {
         return `${packageString} ${nodeString} ${computerString}`;
     }
 
-    runScrCpy(options: any) {
+    startScrCpy(options: any) {
         return new Promise((resolve, reject) => {
             let command =
                 '"' +
@@ -327,6 +327,24 @@ export class AppService {
                 resolve(stdout);
             });
         });
+    }
+
+    runScrCpy(options: any) {
+        let platform = this.os.platform();
+        if (platform === 'linux' || platform === 'darwin') {
+            return new Promise((resolve, reject) => {
+                this.exec('scrcpy -v', (err, stdout, stderr) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    this.startScrCpy(options)
+                        .then(resolve)
+                        .catch(reject);
+                });
+            });
+        } else {
+            return this.startScrCpy(options);
+        }
     }
 
     downloadScrCpyBinary() {
@@ -364,6 +382,8 @@ export class AppService {
                     this.scrcpyBinaryPath = downloadPath;
                 });
             });
+        } else {
+            this.scrcpyBinaryPath = 'scrcpy';
         }
     }
     deleteFolderRecursive(path) {
