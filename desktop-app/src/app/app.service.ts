@@ -232,11 +232,13 @@ export class AppService {
                 sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
             }
             console.log(this.path.join(__dirname, '..', 'platform-tools'), process.cwd(), __dirname);
-            this.fs.readdir(sourcesPath, (err, files) => {
-                files.forEach(file => {
-                    this.fs
-                        .createReadStream(this.path.join(sourcesPath, file))
-                        .pipe(this.fs.createWriteStream(this.path.join(this.appData, file)));
+            this.fs.mkdir(this.path.join(this.appData, 'platform-tools'), () => {
+                this.fs.readdir(sourcesPath, (err, files) => {
+                    files.forEach(file => {
+                        this.fs
+                            .createReadStream(this.path.join(sourcesPath, file))
+                            .pipe(this.fs.createWriteStream(this.path.join(this.appData, 'platform-tools', file)));
+                    });
                 });
             });
         }
