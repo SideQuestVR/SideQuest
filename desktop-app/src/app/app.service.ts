@@ -231,7 +231,7 @@ export class AppService {
             if (!this.fs.existsSync(sourcesPath)) {
                 sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
             }
-            console.log(sourcesPath);
+            console.log(sourcesPath, process.cwd(), __dirname);
             this.fs.readdir(sourcesPath, (err, files) => {
                 files.forEach(file => {
                     this.fs
