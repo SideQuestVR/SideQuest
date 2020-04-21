@@ -245,7 +245,6 @@ export class AppService {
                         } else {
                             return resolve();
                         }
-                        setTimeout(() => resolve(), 5000);
                     });
                 });
             }
