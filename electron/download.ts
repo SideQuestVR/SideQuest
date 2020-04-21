@@ -1,5 +1,6 @@
 const https = require('https');
 const http = require('http');
+const _fs = require('fs');
 const { basename } = require('path');
 const Url = require('url');
 
@@ -10,7 +11,7 @@ module.exports = function(url, path, progress) {
     if (!path) {
         path = basename(uri.path);
     }
-    const file = fs.createWriteStream(path);
+    const file = _fs.createWriteStream(path);
 
     function get(url, callback) {
         let request = (uri.protocol === 'https:' ? https : http).get(url, function(response) {

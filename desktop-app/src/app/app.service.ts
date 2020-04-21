@@ -225,13 +225,19 @@ export class AppService {
                 break;
         }
     }
-    seedSources() {
-        if (!this.fs.existsSync(this.path.join(this.appData, 'sources.txt'))) {
-            let sourcesPath = this.path.join(__dirname, 'assets', 'sources.txt');
+    seedPlatformTools() {
+        if (!this.fs.existsSync(this.path.join(this.appData, 'platform-tools'))) {
+            let sourcesPath = this.path.join(__dirname, 'platform-tools');
             if (!this.fs.existsSync(sourcesPath)) {
-                sourcesPath = this.path.join(process.cwd(), 'desktop-app', 'src', 'assets', 'sources.txt');
+                sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
             }
-            this.fs.createReadStream(sourcesPath).pipe(this.fs.createWriteStream(this.path.join(this.appData, 'sources.txt')));
+            this.fs.readdir(sourcesPath, (err, files) => {
+                files.forEach(file => {
+                    this.fs
+                        .createReadStream(this.path.join(sourcesPath, file))
+                        .pipe(this.fs.createWriteStream(this.path.join(this.appData, file)));
+                });
+            });
         }
     }
     makeFolders() {

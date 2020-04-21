@@ -33,11 +33,10 @@ jspm_packages/
 .env.test
 
 build/app
+build/platform-tools
 build-electron
-!build-electron/*.jsc
 .idea
 .vscode
-platform-tools
 dist
 /app
 desktop-app/sources/*.json

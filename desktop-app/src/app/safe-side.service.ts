@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 
-interface CheckSubmissionResponse {
-    found: boolean;
-}
-
 @Injectable({
     providedIn: 'root',
 })
