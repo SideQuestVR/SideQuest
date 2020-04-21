@@ -227,11 +227,11 @@ export class AppService {
     }
     seedPlatformTools() {
         if (!this.fs.existsSync(this.path.join(this.appData, 'platform-tools'))) {
-            let sourcesPath = this.path.join(__dirname, 'platform-tools');
+            let sourcesPath = this.path.join(__dirname, '..', 'platform-tools');
             if (!this.fs.existsSync(sourcesPath)) {
                 sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
             }
-            console.log(sourcesPath, process.cwd(), __dirname);
+            console.log(this.path.join(__dirname, '..', 'platform-tools'), process.cwd(), __dirname);
             this.fs.readdir(sourcesPath, (err, files) => {
                 files.forEach(file => {
                     this.fs
