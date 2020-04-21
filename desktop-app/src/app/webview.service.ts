@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { AppService } from './app.service';
 
 @Injectable({
@@ -57,7 +57,9 @@ export class WebviewService {
             this.isWebviewLoading = false;
             this.webView.insertCSS(customCss);
             this.isLoaded();
-            this.webView.openDevTools();
+            if (isDevMode()) {
+                this.webView.openDevTools();
+            }
         });
     }
     back() {
