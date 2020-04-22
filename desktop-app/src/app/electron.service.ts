@@ -134,6 +134,7 @@ export class ElectronService {
 
     setupIPC() {
         this.appService.electron.ipcRenderer.on('pre-open-url', (event, data) => {
+            console.log('here', data);
             this.spinnerService.showLoader();
             this.spinnerService.setMessage('Do you want to install this file?<br><br>' + data.name);
             this.spinnerService.setupConfirm().then(() => {

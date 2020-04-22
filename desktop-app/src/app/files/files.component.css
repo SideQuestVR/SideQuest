@@ -1,6 +1,10 @@
 .breadcrumb-wrapper{
   position: fixed;
-  top: 200px;
+  top: 165px;
+  width: 100%;
+  height: auto;
+  z-index: 1;
+  line-height: 40px;
 }
 
 .drag-indicator{

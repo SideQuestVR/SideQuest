@@ -12,6 +12,7 @@ export interface ProcessTask {
     failed?: boolean;
     succeeded?: boolean;
     cancelled?: boolean;
+    reported?: boolean;
     resolve: (task: ProcessTask) => Promise<void>;
 }
 @Injectable({
@@ -105,7 +106,8 @@ export class ProcessBucketService {
                 });
             this.tasks = this.tasks.filter(t => t !== task);
         } else {
-            let failed = this.tasks.filter(t => t.failed);
+            let failed = this.tasks.filter(t => t.failed && !t.reported);
+            failed.forEach(f => (f.reported = true));
             this.failed_length = failed.length;
             let hasFailed = !!this.failed_length;
             if (this.is_running) {

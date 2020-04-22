@@ -57,6 +57,25 @@
     </span><br>
         <div *ngIf="currentPackage.package.name" class="small-text">{{currentPackage.package.packageName}}</div>
         <div *ngIf="currentPackage.versionCode" class="small-text">Version: {{currentPackage.versionCode}}</div><br><br>
+
+        <h4>Game Data Backups</h4>
+        Backup data files from your SD Card for this app/game.<br><br>
+        <a class="waves-effect waves-light btn backup-this-package"
+           (click)="backupData(currentPackage.package.packageName)">Backup Game Data</a><br><br>
+        <div class="row" *ngFor="let backup of dataBackups">
+          <div class="col s3 m2 l1">
+            <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
+                 (click)="restoreBackup(showBackupFileName(backup))">
+              <i class="material-icons">sync</i>
+            </div>
+          </div>
+          <div class="col s6 s10 l11">
+            <div class="chip">
+              <span class="backup-name">{{showBackupFileName(backup)}}</span>
+            </div>
+          </div>
+        </div>
+        <br><br>
         <h4>APK Backups</h4>
         Backup your APK file from your device.<br><br>
         <a class="waves-effect waves-light btn backup-this-package margin-right"
@@ -67,24 +86,6 @@
           <div class="col s1">
             <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
                  (click)="installBackupApk(backup)">
-              <i class="material-icons">sync</i>
-            </div>
-          </div>
-          <div class="col s11">
-            <div class="chip">
-              <span class="backup-name">{{showBackupFileName(backup)}}</span>
-            </div>
-          </div>
-        </div>
-        <br><br>
-        <h4>Game Data Backups</h4>
-        Backup data files from your SD Card for this app/game.<br><br>
-        <a class="waves-effect waves-light btn backup-this-package"
-           (click)="backupData(currentPackage.package.packageName)">Backup Game Data</a><br><br>
-        <div class="row" *ngFor="let backup of dataBackups">
-          <div class="col s1">
-            <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
-                 (click)="restoreBackup(showBackupFileName(backup))">
               <i class="material-icons">sync</i>
             </div>
           </div>

@@ -13,12 +13,14 @@ const request = require('request');
 const progress = require('request-progress');
 const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';
-
+let has_port = process.argv.indexOf('--port');
+let valid_port = has_port > -1 && process.argv[has_port + 1] && Number.isInteger(Number(process.argv[has_port + 1]));
 class ADB {
     client;
     _logcat;
     setupAdb(adbPath, cb, ecb) {
         if (this.client) return;
+        let port = valid_port ? Number(process.argv[has_port + 1]) : process.env.ANDROID_ADB_SERVER_PORT || 5037;
         this.client = adb.createClient({
             bin: adbPath,
         });
@@ -427,7 +429,10 @@ function createWindow() {
 
     mainWindow.webContents.session.on('will-download', (_evt, item, _webContents) => {
         let url = item.getURL();
+        let urls = item.getURLChain();
+        let name = item.getFilename();
         let etx = path.extname(url.split('?')[0]).toLowerCase();
+        let etx2 = urls.length ? path.extname(urls[0].split('?')[0]).toLowerCase() : etx;
         if (~url.indexOf('https://beatsaver.com/cdn')) {
             // beat saber mods /songs
             mainWindow.webContents.send('open-url', 'sidequest://bsaber/#' + url);
@@ -440,12 +445,14 @@ function createWindow() {
         } else if (etx === '.audica') {
             // audica custom song format
             mainWindow.webContents.send('open-url', 'sidequest://audica/#' + url);
-        } else if (etx === '.apk') {
+        } else if (etx === '.apk' || etx2 === '.apk') {
             // any file ending with apk.
-            mainWindow.webContents.send('pre-open-url', url);
+            mainWindow.webContents.send('pre-open-url', { url, name });
+            BrowserWindow.getAllWindows()
+                .filter(b => b !== mainWindow)
+                .forEach(b => b.close());
         } else if (~url.indexOf('ssl.hwcdn.net/') || ~url.indexOf('patreonusercontent.com/')) {
             //itch.io & patreon
-            let name = item.getFilename();
             mainWindow.webContents.send('pre-open-url', { url, name });
             BrowserWindow.getAllWindows()
                 .filter(b => b !== mainWindow)

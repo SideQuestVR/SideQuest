@@ -33,6 +33,7 @@ export class FilesComponent implements OnInit {
     isOpen: boolean = false;
     currentPath: string;
     folderName: string;
+    folderSize: string;
     currentFile: FileFolderListing;
     quickSaveModels: string[] = ['Quest', 'Go'];
     constructor(
@@ -296,11 +297,10 @@ export class FilesComponent implements OnInit {
         this.breadcrumbs.push({ path, name });
     }
     open(path: string) {
-        //this.spinnerService.showLoader();
-        //this.spinnerService.setMessage('Loading files...');
         this.currentPath = path;
         this.breadcrumbs = [];
         this.selectedFiles.length = 0;
+        this.files.length = 0;
         this.getCrumb(
             this.currentPath
                 .split('/')
@@ -318,7 +318,6 @@ export class FilesComponent implements OnInit {
                 return textA < textB ? -1 : textA > textB ? 1 : 0;
             });
             this.files = this.files.filter(d => d.icon === 'folder').concat(this.files.filter(d => d.icon !== 'folder'));
-            //this.spinnerService.hideLoader();
         });
     }
     openSaveLocation() {
@@ -326,6 +325,16 @@ export class FilesComponent implements OnInit {
     }
     async readdir(path: String) {
         let dirContents: FileFolderListing[];
+        let isRoot = ['/sdcard/', 'sdcard', 'sdcard/', '/sdcard'].indexOf(path) > -1;
+        if (isRoot) {
+            this.folderSize = null;
+        } else {
+            this.folderSize = await this.adbService.adbCommand('shell', {
+                serial: this.adbService.deviceSerial,
+                command: 'du -sh "' + path + '"',
+            });
+            this.folderSize = this.folderSize.split('\t')[0];
+        }
         await this.adbService.adbCommand('readdir', { serial: this.adbService.deviceSerial, path }).then(files => {
             dirContents = files.map(file => {
                 const name = file.name;

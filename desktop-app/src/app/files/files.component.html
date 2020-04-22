@@ -1,15 +1,14 @@
-<div *ngIf="isConnected()">
-  <br><br><br>
+<div *ngIf="isConnected()" class="top-bar">
   <nav class="pink lighten-2 breadcrumb-wrapper ">
     <div class="nav-wrapper container">
       <div class="col s12">
-        <a *ngFor="let breadcrumb of breadcrumbs" href="javascript:void(0)" class="breadcrumb"
-          (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}</a>
+        <a *ngFor="let breadcrumb of breadcrumbs; let i = index" href="javascript:void(0)" class="breadcrumb"
+          (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}<span *ngIf="i === breadcrumbs.length-1 && folderSize"> ({{folderSize}})</span> </a>
       </div>
     </div>
   </nav>
 </div>
-<div class="container">
+<div class="container files-section">
   <div *ngIf="!isConnected()">
     <h4
       [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
@@ -54,12 +53,13 @@
         class="btn-floating blue"><i class="material-icons">folder</i></a></li>
     <li mz-tooltip position="left" tooltip="Open current save location" (click)="openSaveLocation()"><a
         class="btn-floating yellow darken-2"><i class="material-icons">folder</i></a></li>
-    <li *ngIf="selectedFiles.length > 0" mz-tooltip position="left" tooltip="Delete selected items"
-      (click)="filesToBeDeleted = selectedFiles; confirmModal.openModal()"><a class="btn-floating red darken-2"><i
-          class="material-icons">delete</i></a></li>
     <li *ngIf="quickSaveSupported()" mz-tooltip position="left" tooltip="Save screenshots and recordings"
       (click)="downloadMediaModal.openModal()"><a class="btn-floating green"><i class="material-icons">get_app</i></a>
     </li>
+    <li *ngIf="selectedFiles.length > 0" class="divider"></li>
+    <li *ngIf="selectedFiles.length > 0" mz-tooltip position="left" tooltip="Delete selected items"
+        (click)="filesToBeDeleted = selectedFiles; confirmModal.openModal()"><a class="btn-floating red darken-2"><i
+      class="material-icons">delete</i></a></li>
     <li *ngIf="selectedFiles.length > 0" mz-tooltip position="left" tooltip="Save selected items to computer"
       (click)="filesToBeSaved = selectedFiles; filesModal.openModal()">
       <a class="btn-floating orange"><i class="material-icons">get_app</i></a>
@@ -149,7 +149,7 @@
       </div>
     </div>
     <br>
-    <h5><em>WARNING: This cannot be undone!!</em></h5>
+    WARNING: This cannot be undone!!
   </mz-modal-content>
   <mz-modal-footer>
     <button mz-button [flat]="true" mz-modal-close>Close</button>

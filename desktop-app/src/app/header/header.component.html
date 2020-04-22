@@ -21,8 +21,8 @@
       <!--<div class="logo no-outline" (click)="webService.webView.loadURL('http://localhost:4201');" routerLink="webview"></div>-->
       <!--<div class="header-title" #header><img src="assets/images/logo-textual.png" class="responsive-img"/></div>-->
       <!--<div class="apk-install">Drag and drop your APK/OBB files <br>over this message to install!</div>-->
-      <div class="apk-install" *ngIf="appService.isFilesOpen">Manage the files on your headset.<br>Drag and drop to move
-        files onto your headset.</div>
+      <!--<div class="apk-install" *ngIf="appService.isFilesOpen">Manage the files on your headset.<br>Drag and drop to move-->
+        <!--files onto your headset.</div>-->
       <div class="apk-install" *ngIf="appService.isPackagesOpen">Manage the apps on your headset.<br>Click Show All to
         see all apps including system apps.</div>
       <div class="apk-install" *ngIf="appService.isSettingsOpen">Manage settings on your headset.</div>
@@ -353,6 +353,7 @@
 <mz-modal #logcatModal [fixedFooter]="true" [options]="{dismissible: false}">
   <mz-modal-header>
     <button mz-button class="right" [flat]="true" mz-modal-close (click)="stopLogcat(); currentLogCat.length = 0; isStarted = false;">Stop & Close</button>
+    <button mz-button class="right" [flat]="true" (click)="stopLogcat(); currentLogCat.length = 0; isStarted = false;">Stop Only</button>
     <h4>ADB Logcat</h4>
   </mz-modal-header>
   <mz-modal-content>
@@ -574,7 +575,7 @@
         <br><br>
       </div>
       <div class="col s12" *ngIf="osPlatform === 'linux'">
-        TO use ScrCpy on Linux you will need to install snap package manager with <span class="chip">sudo snap install scrcpy</span>
+        To use ScrCpy on Linux you will need to install snap package manager with <span class="chip">sudo snap install scrcpy</span>
       </div>
     </div>
   </mz-modal-content>

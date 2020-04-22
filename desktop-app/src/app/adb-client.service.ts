@@ -904,7 +904,8 @@ export class AdbClientService {
     }
     installLocalObb(filepath: string, dontCatchError = false, cb = null, number?: number, total?: number, task?, name?: string) {
         let filename = this.appService.path.basename(filepath);
-        let packageId = filename.match(/main.[0-9]{1,}.([a-z]{1,}.[A-z]{1,}.[A-z]{1,}).obb/)[1];
+        let packageId = filename.match(/main.[0-9]{1,}.([A-z0-9.]{1,}).obb/)[1];
+        console.log(packageId);
         const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
         if (!task) this.spinnerService.showLoader();
         let p = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename);
