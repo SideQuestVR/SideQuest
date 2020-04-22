@@ -323,7 +323,7 @@ export class FilesComponent implements OnInit {
     openSaveLocation() {
         this.appService.electron.remote.shell.openItem(this.adbService.savePath);
     }
-    async readdir(path: String) {
+    async readdir(path: string) {
         let dirContents: FileFolderListing[];
         let isRoot = ['/sdcard/', 'sdcard', 'sdcard/', '/sdcard'].indexOf(path) > -1;
         if (isRoot) {
