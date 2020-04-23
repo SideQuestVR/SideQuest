@@ -149,7 +149,7 @@
         public
       </i>
       <div mz-tooltip *ngIf="webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
-           class="loader-tiny" position="bottom"
+           class="loader-tiny pointer" position="bottom"
         tooltip="Web Browser Loading..."></div>
       <i mz-tooltip routerLink="/webview" (click)="webService.forward()"
         class="material-icons white-text no-outline" position="bottom" tooltip="Forward">
