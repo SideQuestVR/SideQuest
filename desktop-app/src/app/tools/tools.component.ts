@@ -114,7 +114,7 @@ export class ToolsComponent implements OnInit {
     }
     setFullRate(fullRate: GU) {
         this.adbService.runAdbCommand('adb shell setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0)).then(() => {
-            this.statusService.showStatus('Guardian pause set OK!!');
+            this.statusService.showStatus('Full Rate Capture set OK!!');
         });
     }
     setGuardian(guardian: GU) {
