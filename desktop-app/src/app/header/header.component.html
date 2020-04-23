@@ -102,7 +102,7 @@
           (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl('https://sidequestvr.com')"
           routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>
         <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          *ngIf="isConnected()&&osPlatform === 'win32'"
+          *ngIf="isConnected()"
           (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">
           <i class="material-icons left">live_tv</i>Streaming</div>
         <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"
