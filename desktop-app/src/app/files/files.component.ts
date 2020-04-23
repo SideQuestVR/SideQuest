@@ -152,19 +152,22 @@ export class FilesComponent implements OnInit {
                     Math.round((stats.bytesTransferred / 1024 / 1024) * 100) / 100 +
                     'MB';
             })
-            .then(() => setTimeout(() => this.uploadFile(files, task), 500));
+            .then(() => {
+                return new Promise(resolve => {
+                    setTimeout(() => this.uploadFile(files, task).then(() => resolve()), 500);
+                });
+            });
     }
     uploadFilesFromList(files: string[]) {
         if (files !== undefined && files.length) {
             return this.processService.addItem('restore_files', async task => {
                 task.status = 'Starting Upload to ' + this.currentPath;
-                this.uploadFile(files, task)
+                return this.uploadFile(files, task)
                     .then(() => {
                         setTimeout(() => {
                             this.open(this.currentPath);
-                            task.status = 'Upload complete! ' + this.currentPath;
-                            this.statusService.showStatus('Files/Folders uploaded successfully!');
                         }, 1500);
+                        task.status = 'Upload complete!';
                     })
                     .catch(e => this.statusService.showStatus(e.toString(), true));
             });

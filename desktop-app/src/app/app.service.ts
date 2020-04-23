@@ -363,7 +363,7 @@ export class AppService {
         }
     }
 
-    downloadScrCpyBinary() {
+    downloadScrCpyBinary(adbClientService) {
         if (this.os.platform() === 'win32') {
             this.spinnerService.showLoader();
             let task = { status: 'Downloading/Extracting ScrCpy...' };
@@ -399,7 +399,7 @@ export class AppService {
                 });
             });
         } else {
-            this.scrcpyBinaryPath = 'scrcpy';
+            this.scrcpyBinaryPath = ' ADB=' + adbClientService.adbPath + ' scrcpy';
         }
     }
     deleteFolderRecursive(path) {

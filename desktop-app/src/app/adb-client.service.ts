@@ -399,31 +399,6 @@ export class AdbClientService {
             return 'adb';
         }
     }
-    async downloadTools() {
-        let url = 'https://dl.google.com/android/repository/platform-tools-latest-';
-        this.spinnerService.showLoader();
-        let task = { status: 'Downloading/Extracting ADB...' };
-        this.spinnerService.setMessage('', task);
-        return new Promise((resolve, reject) => {
-            this.appService
-                .downloadFile(url + 'windows.zip', url + 'linux.zip', url + 'darwin.zip', url => this.adbPath + '.zip', task)
-                .then(path => {
-                    task.status = 'Extracting ADB...';
-                    this.appService.extract(path, { dir: this.appService.appData }, error => {
-                        if (error) {
-                            console.log(error);
-                            reject(error);
-                        } else {
-                            this.appService.fs.unlink(path.toString(), err => {
-                                if (err) return reject(err);
-                                this.spinnerService.hideLoader();
-                                return resolve();
-                            });
-                        }
-                    });
-                });
-        }).catch(e => console.log(e));
-    }
     getFilenameDate() {
         return JSON.stringify(new Date())
             .split('"')

@@ -66,6 +66,7 @@ export class ToolsComponent implements OnInit {
     CA = CA;
     CR = CR;
     GPU = GPU;
+    FR = GU;
     pavlovName;
     constructor(
         public appService: AppService,
@@ -110,6 +111,11 @@ export class ToolsComponent implements OnInit {
             .then(() => {
                 this.statusService.showStatus('CPU/GPU level set OK!!');
             });
+    }
+    setFullRate(fullRate: GU) {
+        this.adbService.runAdbCommand('adb shell setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0)).then(() => {
+            this.statusService.showStatus('Guardian pause set OK!!');
+        });
     }
     setGuardian(guardian: GU) {
         this.adbService.runAdbCommand('adb shell setprop debug.oculus.guardian_pause ' + (guardian === GU.ON ? 1 : 0)).then(() => {
@@ -249,12 +255,5 @@ export class ToolsComponent implements OnInit {
                 return this.inputCharacters();
             }
         });
-    }
-    setHideNSFW() {
-        if (this.appService.hideNSFW) {
-            localStorage.setItem('hideNSFW', 'true');
-        } else {
-            localStorage.removeItem('hideNSFW');
-        }
     }
 }

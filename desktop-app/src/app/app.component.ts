@@ -1,4 +1,4 @@
-import { Component, isDevMode, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, isDevMode, OnInit, ViewChild } from '@angular/core';
 import { AppService } from './app.service';
 import { LoadingSpinnerService } from './loading-spinner.service';
 import { StatusBarService } from './status-bar.service';
@@ -11,11 +11,12 @@ import { AdbClientService } from './adb-client.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
     @ViewChild('spinner', { static: false }) spinner;
     @ViewChild('status', { static: false }) status;
     @ViewChild('webview', { static: false }) webview;
     helpStatus: string;
+    extraHelpStatus: string;
     devMode: boolean;
     constructor(
         private spinnerService: LoadingSpinnerService,
@@ -31,7 +32,7 @@ export class AppComponent {
     ngOnInit() {
         this.adbService
             .setupAdb()
-            .then(() => this.appService.downloadScrCpyBinary())
+            .then(() => this.appService.downloadScrCpyBinary(this.adbService))
             .then(() => this.adbService.connectedStatus())
             .then(() => {
                 if (!localStorage.getItem('first_run')) {
@@ -40,7 +41,6 @@ export class AppComponent {
                         'Thanks for downloading SideQuest! Please click "Setup" on the top menu to begin and then "Sign Up" to get app updates, remote installing and more!'
                     );
                 }
-
                 this.dragService.setupDragAndDrop(this.webview.nativeElement);
             });
     }
@@ -48,5 +48,28 @@ export class AppComponent {
         this.spinnerService.setSpinner(this.spinner);
         this.statusService.setStatus(this.status);
         this.webService.setWebView(this.webview.nativeElement);
+    }
+    setExterHelp() {
+        let uninstall_instructions = `
+      <div class="card-panel grey lighten-2 z-depth-1">
+        <div class="row valign-wrapper">
+          <div class="col s2">
+            <img src="assets/images/app-icon.png" alt="" class="circle responsive-img">
+          </div>
+          <div class="col s10">
+            <span class="black-text">
+              SOLUTION: You may be able to resolve this issue by uninstalling the app first.<br><br>Click the <i class="material-icons vertical-align">apps</i> icon at the top, then click the <i class="material-icons vertical-align">settings</i> icon beside this app and finally click "Uninstall". You can then try to install this app again.
+            </span>
+          </div>
+        </div>
+      </div>`;
+        switch (true) {
+            case this.helpStatus.indexOf('INSTALL_FAILED_UPDATE_INCOMPATIBLE') > -1:
+                this.extraHelpStatus = uninstall_instructions;
+                break;
+            default:
+                this.extraHelpStatus = null;
+                break;
+        }
     }
 }

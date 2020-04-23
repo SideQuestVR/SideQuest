@@ -68,7 +68,18 @@
              (click)="setGuardian(GU.OFF)">OFF</div>
       </div>
 
-
+      <div class="section-title"
+           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        Full Rate Capture</div>
+      This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.
+      <div class="button-section">
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
+             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+             (click)="setFullRate(GU.ON)">ON</div>
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
+             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+             (click)="setFullRate(GU.OFF)">OFF</div>
+      </div>
       <div class="section-title"
         [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
         Paste Text to your device</div>

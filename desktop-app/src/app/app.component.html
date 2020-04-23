@@ -5,7 +5,7 @@
 </div>
 
 <app-loading-spinner #spinner></app-loading-spinner>
-<app-status-bar #status (getHelp)="getHelpModal.openModal(); helpStatus = $event"></app-status-bar>
+<app-status-bar #status (getHelp)="getHelpModal.openModal(); helpStatus = $event; setExterHelp()"></app-status-bar>
 <webview id="mainWebView" #webview src="https://sidequestvr.com" allowpopups disablewebsecurity
          useragent="Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko electron/ SideQuestAgent"
          [ngStyle]="{'left':webService.isWebviewOpen?'0':'-100%'}" class="bsaber-webview"></webview>
@@ -15,9 +15,13 @@
     <h4>Get Help</h4>
   </mz-modal-header>
   <mz-modal-content>
-    We have a great community on discord and we have already faced most problems there. Please reach out on discord with the following error.<br><br>
+    We have a great community on discord and we have already faced most problems there. Please check our FAQ for info on the following error.<br><br>
     <div class="code">
       {{helpStatus}}
+    </div>
+    <br>
+    <div class="green-text" *ngIf="extraHelpStatus" [innerHTML]="extraHelpStatus">
+
     </div>
     <br><br>
     <div class="center-align">
