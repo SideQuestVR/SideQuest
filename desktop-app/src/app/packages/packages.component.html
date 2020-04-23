@@ -63,14 +63,14 @@
         <a class="waves-effect waves-light btn backup-this-package"
            (click)="backupData(currentPackage.package.packageName)">Backup Game Data</a><br><br>
         <div class="row" *ngFor="let backup of dataBackups">
-          <div class="col s3 m2 l1">
+          <div class="col s3">
             <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
                  (click)="restoreBackup(showBackupFileName(backup))">
               <i class="material-icons">sync</i>
             </div>
           </div>
-          <div class="col s6 s10 l11">
-            <div class="chip">
+          <div class="col s9">
+            <div class="">
               <span class="backup-name">{{showBackupFileName(backup)}}</span>
             </div>
           </div>
@@ -83,14 +83,14 @@
         <a class="waves-effect waves-light btn"
            (click)="appService.openFolder(folder.APP_BACKUP,currentPackage.package.packageName)">Open Backups</a><br><br>
         <div class="row" *ngFor="let backup of backups">
-          <div class="col s1">
+          <div class="col s3">
             <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
                  (click)="installBackupApk(backup)">
               <i class="material-icons">sync</i>
             </div>
           </div>
-          <div class="col s11">
-            <div class="chip">
+          <div class="col s9">
+            <div class="">
               <span class="backup-name">{{showBackupFileName(backup)}}</span>
             </div>
           </div>

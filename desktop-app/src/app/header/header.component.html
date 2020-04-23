@@ -353,7 +353,7 @@
 <mz-modal #logcatModal [fixedFooter]="true" [options]="{dismissible: false}">
   <mz-modal-header>
     <button mz-button class="right" [flat]="true" mz-modal-close (click)="stopLogcat(); currentLogCat.length = 0; isStarted = false;">Stop & Close</button>
-    <button mz-button class="right" [flat]="true" (click)="stopLogcat(); currentLogCat.length = 0; isStarted = false;">Stop Only</button>
+    <button mz-button class="right" [flat]="true" (click)="stopLogcat(); isStarted = false;">Stop Only</button>
     <h4>ADB Logcat</h4>
   </mz-modal-header>
   <mz-modal-content>
@@ -425,8 +425,7 @@
     Thank you and have a great day!
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button mz-modal-close [flat]="true" (click)="safeResolve('DoInstall')">Continue ( Not Recommended )</button>
-    <button mz-button class="pink-button" mz-modal-close (click)="safeResolve('DontInstall')">Back to Safety</button>
+    <button mz-button class="pink-button" mz-modal-close>Back to Safety</button>
   </mz-modal-footer>
 </mz-modal>
 
@@ -585,7 +584,6 @@
     <button mz-button [flat]="true" mz-modal-close>Close</button>
   </mz-modal-footer>
 </mz-modal>
-
 
 <mz-modal #manageFavs [fixedFooter]="true">
   <mz-modal-header>

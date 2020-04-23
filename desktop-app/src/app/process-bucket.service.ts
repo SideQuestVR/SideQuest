@@ -20,6 +20,7 @@ export interface ProcessTask {
 })
 export class ProcessBucketService {
     tasks: ProcessTask[];
+    currentTask: ProcessTask;
     is_running: boolean;
     left_length: number;
     failed_length: number;
@@ -84,12 +85,14 @@ export class ProcessBucketService {
         if (objects.length) {
             this.is_running = true;
             let task = objects[0];
+            this.currentTask = task;
             task.running = true;
             await task
                 .resolve(task)
                 .then(() => {
                     task.running = false;
                     task.succeeded = true;
+                    this.currentTask = null;
                     if (!task.cancelled) {
                         return timeout.then(() => this.processBucket());
                     }
@@ -99,6 +102,7 @@ export class ProcessBucketService {
                     task.status =
                         (task.app_name ? task.app_name + ': ' : '') + (e.message ? e.message : e.code ? e.code : e.toString());
                     task.failed = true;
+                    this.currentTask = null;
                     this.statusService.showStatus(task.status, true);
                     if (!task.cancelled) {
                         return timeout.then(() => this.processBucket());
@@ -151,6 +155,9 @@ export class ProcessBucketService {
         this.tasks = this.tasks.filter(t => !t.failed);
     }
     clearAll() {
+        if (this.currentTask) {
+            this.skipCurrent(this.currentTask);
+        }
         this.tasks = [];
     }
 }

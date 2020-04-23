@@ -39,11 +39,8 @@ export class HeaderComponent implements OnInit {
     @ViewChild('beatOnModal', { static: false }) beatOnModal;
     @ViewChild('mainLogo', { static: false }) mainLogo;
     @ViewChild('safeModal', { static: false }) safeModal;
-    safeResolve: any = val => val;
     folder = FolderType;
-    addrepoUrl: string = '';
-    isAlive: boolean = true;
-    isAliveChecking: boolean = false;
+    isAlive = true;
     replaceText: ReplaceText[] = [];
     adbCommandToRun: string;
     osPlatform: string;
@@ -97,11 +94,8 @@ export class HeaderComponent implements OnInit {
         public webService: WebviewService,
         public spinnerService: LoadingSpinnerService,
         public statusService: StatusBarService,
-        public repoService: RepoService,
         public beatonService: BeatOnService,
         public dragAndDropService: DragAndDropService,
-        // private dragulaService: DragulaService,
-        public router: Router,
         public processService: ProcessBucketService
     ) {
         this.osPlatform = this.appService.os.platform();

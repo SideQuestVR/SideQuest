@@ -8,7 +8,7 @@
     "main": "build-electron/boot.js",
     "scripts": {
         "concurrently": "concurrently",
-        "start": "concurrently \"yarn electron-build && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev electron .\" \"cd desktop-app && ng serve --port 4205\"",
+        "start": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev electron .\" \"cd desktop-app && ng serve --port 4205\"",
         "postinstall": "electron-builder install-app-deps && cd desktop-app && yarn install",
         "dist": "yarn electron-build && yarn platform-tools && yarn app-build && electron-builder",
         "angular": "cd desktop-app && ng serve --port 4205",

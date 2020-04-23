@@ -57,8 +57,7 @@ export class AdbClientService {
         private statusService: StatusBarService,
         private beatonService: BeatOnService,
         private webService: WebviewService,
-        public processService: ProcessBucketService,
-        public safeSideService: SafeSideService
+        public processService: ProcessBucketService
     ) {
         this.lastConnectionCheck = performance.now() - 4000;
         this.adbPath = appService.path.join(appService.appData, 'platform-tools');
@@ -122,11 +121,10 @@ export class AdbClientService {
             case '.apk':
                 return this.installAPK(filepath, true);
             case '.obb':
-                if (this.appService.path.basename(filepath).match(/main.[0-9]{1,}.[a-z]{1,}.[A-z]{1,}.[A-z]{1,}.obb/)) {
-                    return this.installLocalObb(filepath).then(() => this.spinnerService.hideLoader());
-                } else {
-                    return Promise.reject('Invalid OBB');
-                }
+                return this.processService.addItem('file_install', async task => {
+                    task.status = 'Transferring OBB file...';
+                    return this.installLocalObb(filepath, false, null, 0, 0, task);
+                });
             case '.zip':
                 return this.processService.addItem('file_install', async task => {
                     return this.installLocalZip(filepath, false, () => this.spinnerService.hideLoader(), task, true);
@@ -518,22 +516,19 @@ export class AdbClientService {
             task => {
                 name = name ? name + ': ' : '';
                 if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
-                    return Promise.reject(name + 'Apk install failed - No device connected! ' + filePath);
+                    return Promise.reject(name + 'Apk install failed - No device connected!');
                 }
                 const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
                 task.app_name = name;
                 task.status = name + showTotal + 'Installing Apk... ';
                 return this.adbCommand('install', { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal }, status => {
                     task.status =
-                        (status.percent === 1
-                            ? name + showTotal + 'Installing Apk... '
-                            : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ') +
-                        ' <span style="font-style:italic">' +
-                        filePath +
-                        '</span>';
+                        status.percent === 1
+                            ? name + showTotal + 'Installing Apk...'
+                            : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ';
                 })
                     .then(r => {
-                        task.status = name + 'APK file installed ok!! ' + filePath;
+                        task.status = name + 'APK file installed ok!!';
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
@@ -559,7 +554,11 @@ export class AdbClientService {
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
-                        return Promise.reject(e.message ? e.message : e.code ? e.code : e.toString() + ' ' + filePath);
+                        let er = e.message ? e.message : e.code ? e.code : e.toString();
+                        if (er === 'SAFESIDE') {
+                            this.appService.headerComponent.safeModal.openModal();
+                        }
+                        return Promise.reject(er);
                     });
             },
             name
@@ -905,7 +904,7 @@ export class AdbClientService {
     installLocalObb(filepath: string, dontCatchError = false, cb = null, number?: number, total?: number, task?, name?: string) {
         let filename = this.appService.path.basename(filepath);
         let packageId = filename.match(/main.[0-9]{1,}.([A-z0-9.]{1,}).obb/)[1];
-        console.log(packageId);
+        name = name || packageId;
         const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
         if (!task) this.spinnerService.showLoader();
         let p = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename);
@@ -914,7 +913,7 @@ export class AdbClientService {
         }
         p = p.then(() => {
             if (task) {
-                task.status = name + 'File transferred successfully! ' + filepath;
+                task.status = name + ' File transferred successfully! ';
             } else {
                 this.statusService.showStatus('File transferred successfully!');
             }
@@ -923,7 +922,7 @@ export class AdbClientService {
             p = p.catch(e => {
                 if (task) {
                     task.failed = true;
-                    task.status = name + 'Failed to transfer file!! - ' + filepath;
+                    task.status = name + ' Failed to transfer file!!';
                 } else {
                     this.spinnerService.hideLoader();
                     this.statusService.showStatus(e.toString(), true);
@@ -940,7 +939,7 @@ export class AdbClientService {
             '.obb': filepath => {
                 if (this.appService.path.basename(filepath).match(/main.[0-9]{1,}.[a-z]{1,}.[A-z]{1,}.[A-z]{1,}.obb/)) {
                     this.processService.addItem('file_install', async task => {
-                        return this.installLocalObb(filepath, false, null, 1, 1, task).then(() => {
+                        return this.installLocalObb(filepath, false, null, 1, 1, task, '').then(() => {
                             if (deleteAfter) {
                                 this.appService.fs.unlink(filepath, err => {});
                             }
@@ -951,8 +950,6 @@ export class AdbClientService {
                 }
             },
         };
-
-        //this.cleanUpFolder();
         return new Promise(resolve => {
             if (task) {
                 task.status = 'Extracting zip file download...';
