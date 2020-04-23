@@ -399,7 +399,7 @@ export class AppService {
                 });
             });
         } else {
-            this.scrcpyBinaryPath = ' ADB=' + adbClientService.adbPath + ' scrcpy';
+            this.scrcpyBinaryPath = 'ADB=' + adbClientService.adbPath + ' scrcpy';
         }
     }
     deleteFolderRecursive(path) {

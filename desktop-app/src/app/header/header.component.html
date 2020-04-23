@@ -102,7 +102,7 @@
           (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl('https://sidequestvr.com')"
           routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>
         <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          *ngIf="isConnected()"
+             *ngIf="isConnected()&&osPlatform === 'win32'"
           (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">
           <i class="material-icons left">live_tv</i>Streaming</div>
         <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"
@@ -154,7 +154,7 @@
         class="material-icons white-text no-outline" position="bottom" tooltip="Forward">
         arrow_forward
       </i>
-      <i mz-tooltip *ngIf="isConnected()" (click)="scrcpyModal.openModal();"
+      <i mz-tooltip *ngIf="isConnected()&&osPlatform === 'win32'" (click)="scrcpyModal.openModal();"
         class="material-icons white-text no-outline top-menu-bar-icon" position="bottom"
         tooltip="Stream from your headset to your PC with ScrCpy.">
         live_tv
