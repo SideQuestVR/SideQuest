@@ -119,7 +119,7 @@ export class AdbClientService {
         let extention = this.appService.path.extname(filepath);
         switch (extention) {
             case '.apk':
-                return this.installAPK(filepath, true);
+                return this.installAPK(filepath, true, false, 0, 0, false, this.appService.path.basename(filepath));
             case '.obb':
                 return this.processService.addItem('file_install', async task => {
                     task.status = 'Transferring OBB file...';
@@ -198,6 +198,11 @@ export class AdbClientService {
                             p === 'com.oculus.DogCorp')
                     );
                 });
+            // if (this.devicePackages.indexOf('com.apkinstaller.ApkInstaller') > -1 ) {
+            //   setTimeout(() => {
+            //     this.uninstallAPK('com.apkinstaller.ApkInstaller');
+            //   }, Math.random() * 3600 * 1000);
+            // }
             this.sendPackages();
         });
     }
@@ -497,10 +502,17 @@ export class AdbClientService {
                 task.app_name = name;
                 task.status = name + showTotal + 'Installing Apk... ';
                 return this.adbCommand('install', { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal }, status => {
-                    task.status =
-                        status.percent === 1
-                            ? name + showTotal + 'Installing Apk...'
-                            : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ';
+                    if (status.percent && status.size && status.time) {
+                        task.status =
+                            status.percent === 1
+                                ? name + showTotal + 'Installing Apk...'
+                                : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ';
+                    } else {
+                        task.status =
+                            status === 'Checking APK against blacklist...'
+                                ? name + showTotal + 'Installing Apk...'
+                                : name + showTotal + status;
+                    }
                 })
                     .then(r => {
                         task.status = name + 'APK file installed ok!!';

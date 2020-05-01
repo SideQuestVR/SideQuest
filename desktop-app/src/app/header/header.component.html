@@ -201,15 +201,15 @@
         position="bottom" tooltip="Open debugger">
         bug_report
       </i>
-      <i (click)="minimizeApp()" mz-tooltip class="material-icons white-text no-outline" position="bottom"
+      <i (click)="minimizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"
         tooltip="Minimize SideQuest.">
         minimize
       </i>
-      <i (click)="maximizeApp()" mz-tooltip class="material-icons white-text no-outline" position="bottom"
+      <i (click)="maximizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"
         tooltip="Toggle Maximize.">
         aspect_ratio
       </i>
-      <i (click)="closeAppModal.openModal()" mz-tooltip class="material-icons white-text no-outline" position="bottom"
+      <i (click)="closeAppModal.openModal(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"
         tooltip="Close SideQuest.">
         close
       </i>

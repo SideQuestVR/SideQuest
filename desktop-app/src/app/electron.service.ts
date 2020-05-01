@@ -80,56 +80,6 @@ export class ElectronService {
                     break;
             }
         });
-        // let options = {
-        //     url: 'https://api.sidequestvr.com/install-from-key',
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //         Origin: 'https://sidequestvr.com',
-        //     },
-        //     rejectUnauthorized: !isDevMode(),
-        //     json: { token: token },
-        // };
-        // // console.log(options);
-        // this.appService.request(options, async (error, response, body) => {
-        //     // console.log(error, body);
-        //     if (!error && body.data && body.data.apps && body.data.apps.length) {
-        //         for (let i = 0; i < body.data.apps.length; i++) {
-        //             let app = body.data.apps[i];
-        //             if (Number(app.app_categories_id) === 1) {
-        //                 let urls = app.urls.filter(l => l && ~['Github Release', 'APK', 'OBB', 'Mod'].indexOf(l.provider));
-        //                 for (let i = 0; i < urls.length; i++) {
-        //                     if (urls[i].provider === 'Mod') {
-        //                         this.beatonService.downloadSong(urls[i].link_url, this.adbService);
-        //                     } else {
-        //                         const etx = urls[i].link_url
-        //                             .split('?')[0]
-        //                             .split('.')
-        //                             .pop()
-        //                             .toLowerCase();
-        //                         switch (etx) {
-        //                             case 'obb':
-        //                                 await this.adbService.installObb(urls[i].link_url, i + 1, urls.length, app.name);
-        //                                 break;
-        //                             default:
-        //                                 await this.adbService.installAPK(
-        //                                     urls[i].link_url,
-        //                                     false,
-        //                                     false,
-        //                                     i + 1,
-        //                                     urls.length,
-        //                                     false,
-        //                                     app.name
-        //                                 );
-        //                                 break;
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // });
     }
 
     setupIPC() {
@@ -184,6 +134,7 @@ export class ElectronService {
                         break;
                     case 'sidequest://i/':
                         this.installFromToken(url[1]);
+                        this.webviewService.isWebviewLoading = false;
                         break;
                     case 'sidequest://unload/':
                         this.adbService.uninstallAPK(url[1]);

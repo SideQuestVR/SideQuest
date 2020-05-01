@@ -237,10 +237,6 @@ export class HeaderComponent implements OnInit {
             }
         );
     }
-    ngAfterViewInit() {
-        //this.appService.setTitleEle(this.header.nativeElement);
-        //this.dragAndDropService.setupDragAndDrop(this.mainLogo.nativeElement);
-    }
     closeApp() {
         this.appService.remote.getCurrentWindow().close();
     }

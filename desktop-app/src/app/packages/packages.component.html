@@ -30,8 +30,8 @@
     <div class="row">
       <ng-container *ngFor="let package of myApps;">
         <app-package-item *ngIf="!search
-          || (package.name && package.name.indexOf(search)) > -1
-          || package.packageName.indexOf(search) > -1" [package]="package"
+          || (package.name && package.name.toLowerCase().indexOf(search.toLowerCase())) > -1
+          || package.packageName.toLowerCase().indexOf(search.toLowerCase()) > -1" [package]="package"
           (settings)="currentPackage = $event;appSettingsModal.openModal();getCurrentInstalledInfo()">
         </app-package-item>
       </ng-container>

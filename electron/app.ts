@@ -8,18 +8,21 @@ const extract = require('extract-zip');
 
 const adb = require('adbkit');
 const fs = require('fs');
+const exec = require('child_process').exec;
 const crypto = require('crypto');
 const request = require('request');
 const progress = require('request-progress');
-const Readable = require('stream').Readable;
+// const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';
 let has_port = process.argv.indexOf('--port');
 let valid_port = has_port > -1 && process.argv[has_port + 1] && Number.isInteger(Number(process.argv[has_port + 1]));
 class ADB {
     client;
     _logcat;
+    adbPath;
     setupAdb(adbPath, cb, ecb) {
         if (this.client) return;
+        this.adbPath = adbPath;
         let port = valid_port ? Number(process.argv[has_port + 1]) : process.env.ANDROID_ADB_SERVER_PORT || 5037;
         this.client = adb.createClient({
             bin: adbPath,
@@ -162,13 +165,14 @@ class ADB {
             .then(cb)
             .catch(e => ecb(e));
     }
-    async install(serial, path, isLocal, cb, scb, ecb) {
+    async install(serial, apkpath, isLocal, cb, scb, ecb) {
         if (!this.client) return ecb('Not connected.');
-        let stream;
+        let outpath = isLocal ? apkpath : path.join(app.getPath('appData'), 'SideQuest', new Date().getTime() + '.apk');
+        let promise;
         if (isLocal) {
             let found;
             try {
-                found = await this.checkAPK(scb, path);
+                found = await this.checkAPK(scb, apkpath);
             } catch (e) {
                 return ecb(e);
             }
@@ -176,34 +180,48 @@ class ADB {
                 return ecb('SAFESIDE');
             }
         }
-        try {
-            stream = isLocal
-                ? fs.createReadStream(path)
-                : new Readable().wrap(
-                      progress(request(path), {
-                          throttle: 60,
+        promise = isLocal
+            ? Promise.resolve()
+            : new Promise(resolve => {
+                  progress(request(apkpath), {
+                      throttle: 60,
+                  })
+                      .on('progress', state => {
+                          scb(state);
                       })
-                          .on('progress', state => {
-                              scb(state);
-                          })
-                          .on('end', () => {
-                              scb({
-                                  percent: 1,
-                              });
-                          })
-                  );
-        } catch (e) {
-            const isInvalidURI = e && typeof e.message === 'string' && e.message.startsWith('Invalid URI "');
-            if (isInvalidURI) {
-                return ecb("Can't download file. Invalid URL:");
-            } else {
-                throw e;
-            }
-        }
-        this.client
-            .install(serial, stream)
+                      .on('end', () => {
+                          scb({
+                              percent: 1,
+                              size: 1,
+                              time: 1,
+                          });
+                          resolve();
+                      })
+                      .on('error', () => {
+                          ecb('Download error! Please try again!');
+                      })
+                      .pipe(fs.createWriteStream(outpath));
+              });
+        promise
+            .then(
+                () =>
+                    new Promise((resolve, reject) => {
+                        exec(this.adbPath + ' -s ' + serial + ' install -r -d ' + outpath, {}, (error, stdout, stderr) => {
+                            console.log(error, stdout, stderr);
+                            if (error) {
+                                reject(error.message ? error.message : error.toString());
+                            } else {
+                                resolve();
+                            }
+                        });
+                    })
+            )
+            .then(() => (isLocal ? null : fs.unlinkSync(outpath)))
             .then(cb)
-            .catch(e => ecb(e));
+            .catch(e => {
+                if (!isLocal) fs.unlinkSync(outpath);
+                ecb(e);
+            });
     }
     uninstall(serial, packageName, cb, ecb) {
         if (!this.client) return ecb('Not connected.');
@@ -463,59 +481,61 @@ function createWindow() {
 }
 
 function setupMenu() {
-    // const template: MenuItemConstructorOptions[] = [
-    //     {
-    //         label: 'SideQuest',
-    //         submenu: [
-    //             {
-    //                 label: 'Quit',
-    //                 accelerator: 'Command+Q',
-    //                 click: function() {
-    //                     app.quit();
-    //                 },
-    //             },
-    //         ],
-    //     },
-    //     {
-    //         label: 'Edit',
-    //         submenu: [
-    //             {
-    //                 label: 'Undo',
-    //                 accelerator: 'CmdOrCtrl+Z',
-    //                 // selector: 'undo:',
-    //             },
-    //             {
-    //                 label: 'Redo',
-    //                 accelerator: 'Shift+CmdOrCtrl+Z',
-    //                 // selector: 'redo:',
-    //             },
-    //             { type: 'separator' },
-    //             {
-    //                 label: 'Cut',
-    //                 accelerator: 'CmdOrCtrl+X',
-    //                 // selector: 'cut:'
-    //             },
-    //             {
-    //                 label: 'Copy',
-    //                 accelerator: 'CmdOrCtrl+C',
-    //                 // selector: 'copy:',
-    //             },
-    //             {
-    //                 label: 'Paste',
-    //                 accelerator: 'CmdOrCtrl+V',
-    //                 // selector: 'paste:',
-    //             },
-    //             {
-    //                 label: 'Select All',
-    //                 accelerator: 'CmdOrCtrl+A',
-    //                 // selector: 'selectAll:',
-    //             },
-    //         ],
-    //     },
-    // ];
-    //
-    // Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-    Menu.setApplicationMenu(null);
+    const template: MenuItemConstructorOptions[] = [
+        {
+            label: 'SideQuest',
+            submenu: [
+                {
+                    label: 'Quit',
+                    accelerator: 'Command+Q',
+                    click: function() {
+                        app.quit();
+                    },
+                },
+            ],
+        },
+        {
+            label: 'Edit',
+            submenu: [
+                {
+                    label: 'Undo',
+                    accelerator: 'CmdOrCtrl+Z',
+                    // selector: 'undo:',
+                },
+                {
+                    label: 'Redo',
+                    accelerator: 'Shift+CmdOrCtrl+Z',
+                    // selector: 'redo:',
+                },
+                { type: 'separator' },
+                {
+                    label: 'Cut',
+                    accelerator: 'CmdOrCtrl+X',
+                    // selector: 'cut:'
+                },
+                {
+                    label: 'Copy',
+                    accelerator: 'CmdOrCtrl+C',
+                    // selector: 'copy:',
+                },
+                {
+                    label: 'Paste',
+                    accelerator: 'CmdOrCtrl+V',
+                    // selector: 'paste:',
+                },
+                {
+                    label: 'Select All',
+                    accelerator: 'CmdOrCtrl+A',
+                    // selector: 'selectAll:',
+                },
+            ],
+        },
+    ];
+    if (process.platform === 'darwin') {
+        Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+    } else {
+        Menu.setApplicationMenu(null);
+    }
 }
 
 function setupApp() {

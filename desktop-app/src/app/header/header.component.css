@@ -286,9 +286,10 @@
   height: 100%;
   top: 0;
   left: 0;
-  position: absolute;
+  position: fixed;
   z-index: 998;
   display:none;
+  background-color: rgba(0,0,0,0.8);
 }
 .user-menu{
   position: absolute;

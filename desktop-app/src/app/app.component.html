@@ -1,6 +1,5 @@
 <app-header></app-header>
 <div class="app-container full-height">
-  <!--<app-side-menu></app-side-menu>-->
   <app-content class="full-height"></app-content>
 </div>
 
@@ -8,7 +7,7 @@
 <app-status-bar #status (getHelp)="getHelpModal.openModal(); helpStatus = $event; setExterHelp()"></app-status-bar>
 <webview id="mainWebView" #webview src="https://sidequestvr.com" allowpopups disablewebsecurity
          useragent="Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko electron/ SideQuestAgent"
-         [ngStyle]="{'left':webService.isWebviewOpen?'0':'-100%'}" class="bsaber-webview"></webview>
+         [ngStyle]="{'left':webService.isWebviewOpen?'0':'-100%'}" class="bsaber-webview" ></webview>
 
 <mz-modal #getHelpModal [fixedFooter]="true">
   <mz-modal-header>
@@ -20,9 +19,7 @@
       {{helpStatus}}
     </div>
     <br>
-    <div class="green-text" *ngIf="extraHelpStatus" [innerHTML]="extraHelpStatus">
-
-    </div>
+    <div class="green-text" *ngIf="extraHelpStatus" [innerHTML]="extraHelpStatus"></div>
     <br><br>
     <div class="center-align">
       <div class="btn pink-button waves-effect waves-light" (click)="statusService.copyStatus();statusService.showStatus('Copied to your clipboard!')">Copy To Clipboard</div><br><br>
