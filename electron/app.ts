@@ -206,6 +206,7 @@ class ADB {
             .then(
                 () =>
                     new Promise((resolve, reject) => {
+                        console.log('"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"');
                         exec(
                             '"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"',
                             {},
