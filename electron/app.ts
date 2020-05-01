@@ -206,14 +206,17 @@ class ADB {
             .then(
                 () =>
                     new Promise((resolve, reject) => {
-                        exec(this.adbPath + ' -s ' + serial + ' install -r -d ' + outpath, {}, (error, stdout, stderr) => {
-                            console.log(error, stdout, stderr);
-                            if (error) {
-                                reject(error.message ? error.message : error.toString());
-                            } else {
-                                resolve();
+                        exec(
+                            '"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"',
+                            {},
+                            (error, stdout, stderr) => {
+                                if (error) {
+                                    reject(error.message ? error.message : error.toString());
+                                } else {
+                                    resolve();
+                                }
                             }
-                        });
+                        );
                     })
             )
             .then(() => (isLocal ? null : fs.unlinkSync(outpath)))
