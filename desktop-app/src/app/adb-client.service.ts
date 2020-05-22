@@ -5,9 +5,6 @@ import { StatusBarService } from './status-bar.service';
 import { BeatOnService } from './beat-on.service';
 import { WebviewService } from './webview.service';
 import { ProcessBucketService } from './process-bucket.service';
-import { SafeSideService } from './safe-side.service';
-
-type InstallDecision = 'DoInstall' | 'DontInstall';
 
 declare const process;
 export enum ConnectionStatus {

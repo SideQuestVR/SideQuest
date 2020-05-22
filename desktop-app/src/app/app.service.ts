@@ -236,13 +236,13 @@ export class AppService {
                 await this.mkdir(this.path.join(this.appData, 'platform-tools'));
                 try {
                     let files = this.fs.readdirSync(sourcesPath);
-                    files.forEach(file => {
-                        this.fs
-                            .createReadStream(this.path.join(sourcesPath, file))
-                            .pipe(this.fs.createWriteStream(this.path.join(this.appData, 'platform-tools', file)));
-                    });
+                    for (let i = 0; i < files.length; i++) {
+                        this.fs.copyFileSync(
+                            this.path.join(sourcesPath, files[i]),
+                            this.path.join(this.appData, 'platform-tools', files[i])
+                        );
+                    }
                     if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
-                        console.log(this.path.join(this.appData, 'platform-tools', 'adb'));
                         this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() =>
                             setTimeout(() => resolve(), 5000)
                         );
