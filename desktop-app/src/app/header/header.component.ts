@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
     replaceText: ReplaceText[] = [];
     adbCommandToRun: string;
     osPlatform: string;
+    saveLogcatPath: string;
     favourites: {
         browserFavourites: FavouriteItem[];
         fileFavourites: FavouriteItem[];
@@ -192,15 +193,61 @@ export class HeaderComponent implements OnInit {
                 if (this.logcatSearch) {
                     if (!!~stats.message.indexOf(this.logcatSearch) || !!~stats.tag.indexOf(this.logcatSearch)) {
                         this.currentLogCat.unshift(stats);
+                        this.attemptToSaveLogcat(stats);
                     }
                 } else {
                     this.currentLogCat.unshift(stats);
+                    this.attemptToSaveLogcat(stats);
                 }
-                if (this.currentLogCat.length > 200) {
-                    this.currentLogCat.length = 200;
+                if (this.currentLogCat.length > 4000) {
+                    this.currentLogCat.length = 4000;
                 }
             }
         );
+    }
+    cancelLogcatOutput() {
+        this.saveLogcatPath = null;
+    }
+    selectLogcatOutput() {
+        this.appService.electron.remote.dialog.showOpenDialog(
+            {
+                properties: ['openDirectory'],
+                defaultPath: this.adbService.savePath,
+            },
+            files => {
+                files.forEach(filepath => {
+                    this.saveLogcatPath = filepath;
+                });
+            }
+        );
+    }
+    clearLogcatFile() {
+        if (this.saveLogcatPath) {
+            if (this.appService.fs.existsSync(this.saveLogcatPath)) {
+                this.appService.fs.writeFile(this.appService.path.join(this.saveLogcatPath, 'logcat.log'), '', () => {});
+            }
+        }
+    }
+    attemptToSaveLogcat(logcat) {
+        if (this.saveLogcatPath) {
+            if (this.appService.fs.existsSync(this.saveLogcatPath)) {
+                this.appService.fs.appendFile(
+                    this.appService.path.join(this.saveLogcatPath, 'logcat.log'),
+                    logcat.date +
+                        ':' +
+                        this.priorities[logcat.priority] +
+                        logcat.tid +
+                        '/' +
+                        logcat.pid +
+                        ' ' +
+                        logcat.tag +
+                        '\n' +
+                        logcat.message +
+                        '\n',
+                    () => {}
+                );
+            }
+        }
     }
 
     stopLogcat() {

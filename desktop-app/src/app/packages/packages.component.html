@@ -59,7 +59,7 @@
         <div *ngIf="currentPackage.versionCode" class="small-text">Version: {{currentPackage.versionCode}}</div><br><br>
 
         <h4>Game Data Backups</h4>
-        Backup data files from your SD Card for this app/game.<br><br>
+        Backup data files from your SD Card for this app/game. This will attempt to save game data and OBB files for the game from the SD Card and not the internal storage. Does not work for all games.<br><br>
         <a class="waves-effect waves-light btn backup-this-package"
            (click)="backupData(currentPackage.package.packageName)">Backup Game Data</a><br><br>
         <div class="row" *ngFor="let backup of dataBackups">
@@ -79,9 +79,7 @@
         <h4>APK Backups</h4>
         Backup your APK file from your device.<br><br>
         <a class="waves-effect waves-light btn backup-this-package margin-right"
-           (click)="backupApk(currentPackage.package.packageName)">Backup APK File</a>
-        <a class="waves-effect waves-light btn"
-           (click)="appService.openFolder(folder.APP_BACKUP,currentPackage.package.packageName)">Open Backups</a><br><br>
+           (click)="backupApk(currentPackage.package.packageName)">Backup APK File</a><br><br>
         <div class="row" *ngFor="let backup of backups">
           <div class="col s3">
             <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
@@ -104,8 +102,10 @@
         <a class="waves-effect waves-light btn orange " (click)="forceClose()">Force Close App</a><br><br>
         <a class="waves-effect waves-light btn orange " (click)="clearData()">Clear App Data</a><br><br>
         <a class="waves-effect waves-light btn red " (click)="uninstallApk()">Uninstall App</a><br><br>
+        <a class="waves-effect waves-light btn"
+           (click)="appService.openFolder(folder.APP_BACKUP,currentPackage.package.packageName)">Open Backups</a>
 
-        <br><br>
+        <br><br><br><br>
 
 
         <h4>Permissions</h4>

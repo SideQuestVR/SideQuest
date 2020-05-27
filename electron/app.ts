@@ -6,6 +6,7 @@ const { autoUpdater } = require('electron-updater');
 const download = require('./download');
 const extract = require('extract-zip');
 
+const Readable = require('stream').Readable;
 const adb = require('adbkit');
 const fs = require('fs');
 const exec = require('child_process').exec;
@@ -167,8 +168,6 @@ class ADB {
     }
     async install(serial, apkpath, isLocal, cb, scb, ecb) {
         if (!this.client) return ecb('Not connected.');
-        let outpath = isLocal ? apkpath : path.join(app.getPath('appData'), 'SideQuest', new Date().getTime() + '.apk');
-        let promise;
         if (isLocal) {
             let found;
             try {
@@ -180,52 +179,95 @@ class ADB {
                 return ecb('SAFESIDE');
             }
         }
-        promise = isLocal
-            ? Promise.resolve()
-            : new Promise(resolve => {
-                  progress(request(apkpath), {
-                      throttle: 60,
-                  })
-                      .on('progress', state => {
-                          scb(state);
+        let stream;
+        try {
+            stream = isLocal
+                ? fs.createReadStream(apkpath)
+                : new Readable().wrap(
+                      progress(request(apkpath), {
+                          throttle: 60,
                       })
-                      .on('end', () => {
-                          scb({
-                              percent: 1,
-                              size: 1,
-                              time: 1,
-                          });
-                          resolve();
-                      })
-                      .on('error', () => {
-                          ecb('Download error! Please try again!');
-                      })
-                      .pipe(fs.createWriteStream(outpath));
-              });
-        promise
-            .then(
-                () =>
-                    new Promise((resolve, reject) => {
-                        console.log('"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"');
-                        exec(
-                            '"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"',
-                            {},
-                            (error, stdout, stderr) => {
-                                if (error) {
-                                    reject(error.message ? error.message : error.toString());
-                                } else {
-                                    resolve();
-                                }
-                            }
-                        );
-                    })
-            )
-            .then(() => (isLocal ? null : fs.unlinkSync(outpath)))
+                          .on('progress', state => {
+                              scb(state);
+                          })
+                          .on('end', () => {
+                              scb({
+                                  percent: 1,
+                              });
+                          })
+                  );
+        } catch (e) {
+            const isInvalidURI = e && typeof e.message === 'string' && e.message.startsWith('Invalid URI "');
+            if (isInvalidURI) {
+                return ecb("Can't download file. Invalid URL:");
+            } else {
+                throw e;
+            }
+        }
+        this.client
+            .install(serial, stream)
             .then(cb)
-            .catch(e => {
-                if (!isLocal) fs.unlinkSync(outpath);
-                ecb(e);
-            });
+            .catch(e => ecb(e));
+
+        // let outpath = isLocal ? apkpath : path.join(app.getPath('appData'), 'SideQuest', new Date().getTime() + '.apk');
+        // let promise;
+        // if (isLocal) {
+        //     let found;
+        //     try {
+        //         found = await this.checkAPK(scb, apkpath);
+        //     } catch (e) {
+        //         return ecb(e);
+        //     }
+        //     if (found) {
+        //         return ecb('SAFESIDE');
+        //     }
+        // }
+        // promise = isLocal
+        //     ? Promise.resolve()
+        //     : new Promise(resolve => {
+        //           progress(request(apkpath), {
+        //               throttle: 60,
+        //           })
+        //               .on('progress', state => {
+        //                   scb(state);
+        //               })
+        //               .on('end', () => {
+        //                   scb({
+        //                       percent: 1,
+        //                       size: 1,
+        //                       time: 1,
+        //                   });
+        //                   resolve();
+        //               })
+        //               .on('error', () => {
+        //                   ecb('Download error! Please try again!');
+        //               })
+        //               .pipe(fs.createWriteStream(outpath));
+        //       });
+        // promise
+        //     .then(
+        //         () =>
+        //             new Promise((resolve, reject) => {
+        //                 console.log('"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"');
+        //                 exec(
+        //                     '"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"',
+        //                     {},
+        //                     (error, stdout, stderr) => {
+        //                         if (error) {
+        //                             reject(error.message ? error.message : error.toString());
+        //                         } else {
+        //                             resolve();
+        //                         }
+        //                     }
+        //                 );
+        //             })
+        //     )
+        //     .then(() => (isLocal ? null : fs.unlinkSync(outpath)))
+        //     .then(cb)
+        //     .catch(e => {
+        //         if (!isLocal) fs.unlinkSync(outpath);
+        //         ecb(e);
+        //     });
     }
     uninstall(serial, packageName, cb, ecb) {
         if (!this.client) return ecb('Not connected.');

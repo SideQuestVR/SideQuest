@@ -26,7 +26,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { HttpClientModule } from '@angular/common/http';
 import { CurrentTasksComponent } from './current-tasks/current-tasks.component';
 import { CurrentTaskItemComponent } from './current-task-item/current-task-item.component';
-
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 @NgModule({
     declarations: [
         AppComponent,
@@ -59,6 +59,7 @@ import { CurrentTaskItemComponent } from './current-task-item/current-task-item.
         MzCheckboxModule,
         ColorPickerModule,
         BrowserAnimationsModule,
+        VirtualScrollerModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

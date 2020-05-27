@@ -353,27 +353,35 @@
 
 <mz-modal #logcatModal [fixedFooter]="true" [options]="{dismissible: false}">
   <mz-modal-header>
-    <button mz-button class="right" [flat]="true" mz-modal-close (click)="stopLogcat(); currentLogCat.length = 0; isStarted = false;">Stop & Close</button>
-    <button mz-button class="right" [flat]="true" (click)="stopLogcat(); isStarted = false;">Stop Only</button>
+    <button mz-button class="right red" mz-modal-close (click)="stopLogcat(); currentLogCat.length = 0; isStarted = false;">Close</button>
+    <button mz-button class="right red margin-right" (click)="stopLogcat(); isStarted = false;">Stop</button>
+    <button mz-button class="right margin-right" *ngIf="!saveLogcatPath" (click)="selectLogcatOutput();">Pick Output Folder</button>
+    <button mz-button class="right red margin-right" *ngIf="saveLogcatPath" (click)="cancelLogcatOutput();">Cancel Output</button>
     <h4>ADB Logcat</h4>
   </mz-modal-header>
   <mz-modal-content>
     Select your options and click start to begin receiving logcat messages.
-    <br><br>
+    <div class="truncate">{{saveLogcatPath ? 'Saving to: ' + appService.path.join(saveLogcatPath,'logcat.log')  : ''}}
+
+      <button mz-button class="red small-button margin-left" *ngIf="saveLogcatPath" (click)="clearLogcatFile();">Clear File</button>
+    </div>
+    <br>
     <div class="button-section">
       <div class="code logcat-block">
         <div *ngIf="!currentLogCat.length">
           {{isStarted ? 'Waiting for messages...' : 'Click start to begin streaming logcat messages.'}}
         </div>
-        <div *ngFor="let logcat of currentLogCat">
-          <div class="row no-margin">
-            <div class="col s2 logcat-smaller green-text no-padding">{{logcat.date}}: {{priorities[logcat.priority]}}</div>
-            <div class="col s2 logcat-smaller purple-text no-padding">{{logcat.tid}}/{{logcat.pid}} {{logcat.tag}} </div>
-            <div class="col s8 logcat-small no-padding"
-                 [ngClass]="{'red-text': logcat.priority === 6, 'orange-text': logcat.priority === 5}" [innerHTML]="logcat.message">
+<!--        <virtual-scroller #scroll [items]="currentLogCat">-->
+          <div class="child-item" *ngFor="let logcat of currentLogCat">
+            <div class="row no-margin">
+              <div class="col s2 logcat-smaller green-text no-padding">{{logcat.date}}: {{priorities[logcat.priority]}}</div>
+              <div class="col s2 logcat-smaller purple-text no-padding">{{logcat.tid}}/{{logcat.pid}} {{logcat.tag}} </div>
+              <div class="col s8 logcat-small no-padding"
+                   [ngClass]="{'red-text': logcat.priority === 6, 'orange-text': logcat.priority === 5}" [innerHTML]="logcat.message">
+              </div>
             </div>
           </div>
-        </div>
+<!--        </virtual-scroller>-->
       </div>
     </div>
   </mz-modal-content>
@@ -412,7 +420,8 @@
     <img class="right margin-left" src="assets/images/bigman.gif" style="width: 430px"/>
     WARNING: We have stopped this install because it may may harm your device.
     <br><br>
-    If you continue with the install you risk the following:<br><br>
+    If you think this has happened in error, please contact us on Discord with a link to the apk file.<br><br>
+    We have protected you from:<br><br>
      - Causing physical damage to your headset.<br>
      - Having your personal information stolen ( including tracking your movments in VR )<br>
      - Being banned from the Oculus platform.<br>

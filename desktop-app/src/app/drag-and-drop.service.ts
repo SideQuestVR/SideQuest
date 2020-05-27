@@ -52,11 +52,18 @@ export class DragAndDropService {
                 let file = e.dataTransfer.files[i] as any;
                 let filepath = file.path;
                 if (['.apk', '.obb'].includes(this.appService.path.extname(filepath))) {
-                    if (this.appService.path.extname(filepath) === '.apk') {
-                        await this.adbService.installAPK(filepath, true);
-                    } else {
-                        await this.adbService.installLocalObb(filepath);
+                    this.adbService.savePath = this.appService.path.dirname(filepath);
+                    let install = this.adbService.installMultiFile(filepath);
+                    if (install) {
+                        await install.catch(_e => {
+                            this.statusService.showStatus(_e.toString(), true);
+                        });
                     }
+                    // if (this.appService.path.extname(filepath) === '.apk') {
+                    //     await this.adbService.installAPK(filepath, true);
+                    // } else {
+                    //     await this.adbService.installLocalObb(filepath);
+                    // }
                 } else {
                     this.statusService.showStatus('Unrecognised File: ' + filepath, true);
                 }
