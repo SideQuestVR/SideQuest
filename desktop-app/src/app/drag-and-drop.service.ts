@@ -59,11 +59,6 @@ export class DragAndDropService {
                             this.statusService.showStatus(_e.toString(), true);
                         });
                     }
-                    // if (this.appService.path.extname(filepath) === '.apk') {
-                    //     await this.adbService.installAPK(filepath, true);
-                    // } else {
-                    //     await this.adbService.installLocalObb(filepath);
-                    // }
                 } else {
                     this.statusService.showStatus('Unrecognised File: ' + filepath, true);
                 }

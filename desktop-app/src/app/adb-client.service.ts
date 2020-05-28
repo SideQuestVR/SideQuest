@@ -507,8 +507,8 @@ export class AdbClientService {
                     } else {
                         task.status =
                             status === 'Checking APK against blacklist...'
-                                ? name + showTotal + 'Installing Apk...'
-                                : name + showTotal + status;
+                                ? name + showTotal + status
+                                : name + showTotal + 'Installing Apk...';
                     }
                 })
                     .then(r => {
