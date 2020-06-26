@@ -99,38 +99,57 @@ export class ToolsComponent implements OnInit {
                 value = 4;
                 break;
         }
-        this.adbService.runAdbCommand('adb shell debug.oculus.foveation.level ' + value).then(() => {
-            this.statusService.showStatus('Fixed Foveated Rendering set OK!!');
-        });
+        this.runAdbCommand('adb shell debug.oculus.foveation.level ' + value)
+            .then(() => {
+                this.statusService.showStatus('Fixed Foveated Rendering set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
+    }
+    runAdbCommand(command: string) {
+        return this.adbService.runAdbCommand(command);
     }
     setGPU(gpu: GPU) {
         let value = gpu === GPU._2 ? 2 : 4;
-        this.adbService
-            .runAdbCommand('adb shell setprop debug.oculus.cpuLevel ' + value)
-            .then(() => this.adbService.runAdbCommand('adb shell setprop debug.oculus.gpuLevel ' + value))
+        this.runAdbCommand('adb shell setprop debug.oculus.cpuLevel ' + value)
+            .then(() => this.runAdbCommand('adb shell setprop debug.oculus.gpuLevel ' + value))
             .then(() => {
                 this.statusService.showStatus('CPU/GPU level set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
             });
     }
     setFullRate(fullRate: GU) {
-        this.adbService.runAdbCommand('adb shell setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0)).then(() => {
-            this.statusService.showStatus('Full Rate Capture set OK!!');
-        });
+        this.runAdbCommand('adb shell setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0))
+            .then(() => {
+                this.statusService.showStatus('Full Rate Capture set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
     }
     setGuardian(guardian: GU) {
-        this.adbService.runAdbCommand('adb shell setprop debug.oculus.guardian_pause ' + (guardian === GU.ON ? 1 : 0)).then(() => {
-            this.statusService.showStatus('Guardian pause set OK!!');
-        });
+        this.runAdbCommand('adb shell setprop debug.oculus.guardian_pause ' + (guardian === GU.ON ? 1 : 0))
+            .then(() => {
+                this.statusService.showStatus('Guardian pause set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
     }
     setCa(ca: CA) {
-        this.adbService
-            .runAdbCommand('adb shell setprop debug.oculus.forceChroma ' + (ca === CA.ON ? 1 : ca === CA.APP ? -1 : 0))
+        this.runAdbCommand('adb shell setprop debug.oculus.forceChroma ' + (ca === CA.ON ? 1 : ca === CA.APP ? -1 : 0))
             .then(() => {
                 this.statusService.showStatus('Chromatic Aberration set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
             });
     }
     setSSO(sso: SSO) {
-        let value: number = 0;
+        let value = 0;
         switch (sso) {
             case SSO._512:
                 value = 512;
@@ -158,11 +177,13 @@ export class ToolsComponent implements OnInit {
                 break;
         }
 
-        this.adbService
-            .runAdbCommand('adb shell setprop debug.oculus.textureWidth ' + value)
-            .then(() => this.adbService.runAdbCommand('adb shell setprop debug.oculus.textureHeight ' + value))
+        this.runAdbCommand('adb shell setprop debug.oculus.textureWidth ' + value)
+            .then(() => this.runAdbCommand('adb shell setprop debug.oculus.textureHeight ' + value))
             .then(() => {
                 this.statusService.showStatus('Texture Resolution set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
             });
     }
     setSVB(svb: SVB) {
@@ -178,9 +199,13 @@ export class ToolsComponent implements OnInit {
                 value = 25000000;
                 break;
         }
-        this.adbService.runAdbCommand('adb shell setprop debug.oculus.videoBitrate ' + value).then(() => {
-            this.statusService.showStatus('Video Bitrate set OK!!');
-        });
+        this.runAdbCommand('adb shell setprop debug.oculus.videoBitrate ' + value)
+            .then(() => {
+                this.statusService.showStatus('Video Bitrate set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
     }
     setCR(svr: CR) {
         let width: number = 1280;
@@ -199,11 +224,13 @@ export class ToolsComponent implements OnInit {
                 height = 1080;
                 break;
         }
-        this.adbService
-            .runAdbCommand('adb shell setprop debug.oculus.capture.width ' + width)
-            .then(() => this.adbService.runAdbCommand('adb shell setprop debug.oculus.capture.height ' + height))
+        this.runAdbCommand('adb shell setprop debug.oculus.capture.width ' + width)
+            .then(() => this.runAdbCommand('adb shell setprop debug.oculus.capture.height ' + height))
             .then(() => {
                 this.statusService.showStatus('Capture Resolution set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
             });
     }
     setSVR(svr: SVR) {
@@ -216,9 +243,13 @@ export class ToolsComponent implements OnInit {
                 value = 1536;
                 break;
         }
-        this.adbService.runAdbCommand('adb shell setprop debug.oculus.videoResolution ' + value).then(() => {
-            this.statusService.showStatus('Video Resolution set OK!!');
-        });
+        this.runAdbCommand('adb shell setprop debug.oculus.videoResolution ' + value)
+            .then(() => {
+                this.statusService.showStatus('Video Resolution set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
     }
     setPavlovPermission() {
         return this.adbService
@@ -227,10 +258,14 @@ export class ToolsComponent implements OnInit {
             .then(() => this.adbService.setPermission('com.vankrupt.pavlov', 'android.permission.WRITE_EXTERNAL_STORAGE'));
     }
     setPavlovName() {
-        this.adbService.adbCommand('shell', {
-            serial: this.adbService.deviceSerial,
-            command: 'echo ' + this.pavlovName + ' > /sdcard/pavlov.name.txt',
-        });
+        this.adbService
+            .adbCommand('shell', {
+                serial: this.adbService.deviceSerial,
+                command: 'echo ' + this.pavlovName + ' > /sdcard/pavlov.name.txt',
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
     }
     pasteToDevice() {
         this._textToSend = this.textToSend.split('');
@@ -250,7 +285,7 @@ export class ToolsComponent implements OnInit {
     }
     inputCharacters() {
         let character = this._textToSend.shift();
-        return this.adbService.runAdbCommand('adb shell input text "' + character + '"').then(() => {
+        return this.runAdbCommand('adb shell input text "' + character + '"').then(() => {
             if (this._textToSend.length) {
                 return this.inputCharacters();
             }

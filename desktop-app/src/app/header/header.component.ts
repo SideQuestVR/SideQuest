@@ -152,7 +152,9 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() {}
     runAdbCommand() {
-        return this.adbService.runAdbCommand(this.adbCommandToRun);
+        return this.adbService.runAdbCommand(this.adbCommandToRun).catch(e => {
+            this.statusService.showStatus(e, true);
+        });
     }
     connectWifi() {
         this.adbCommandToRun = 'adb tcpip 5555';
@@ -164,7 +166,6 @@ export class HeaderComponent implements OnInit {
             }, 5000);
         });
     }
-
     isConnected() {
         return this.adbService.deviceStatus === ConnectionStatus.CONNECTED;
     }

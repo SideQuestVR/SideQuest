@@ -74,6 +74,9 @@ export class AdbClientService {
         };
     }
     runAdbCommand(adbCommandToRun) {
+        if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
+            return Promise.reject('Adb command failed - No device connected!');
+        }
         this.adbResponse = 'Loading...';
         let command = adbCommandToRun.trim();
         if (command.substr(0, 3).toLowerCase() === 'adb') {
@@ -83,6 +86,7 @@ export class AdbClientService {
             this.appService.exec(
                 '"' + this.appService.path.join(this.adbPath, this.getAdbBinary()) + '" -s ' + this.deviceSerial + ' ' + command,
                 function(err, stdout, stderr) {
+                    console.log(err, stdout, stderr);
                     if (err) {
                         return reject(err);
                     }
@@ -90,13 +94,9 @@ export class AdbClientService {
                     return resolve(stdout);
                 }
             );
-        })
-            .then((resp: string) => {
-                this.adbResponse = resp.trim() || 'Command Completed.';
-            })
-            .catch(e => {
-                this.statusService.showStatus(e, true);
-            });
+        }).then((resp: string) => {
+            this.adbResponse = resp.trim() || 'Command Completed.';
+        });
     }
     launchApp(packageName) {
         return this.adbCommand('shell', {
@@ -896,6 +896,7 @@ export class AdbClientService {
             cb();
         }
         p = p.then(() => {
+            console.log('here');
             if (task) {
                 task.status = name + ' File transferred successfully! ';
             } else {
@@ -906,7 +907,7 @@ export class AdbClientService {
             p = p.catch(e => {
                 if (task) {
                     task.failed = true;
-                    task.status = name + ' Failed to transfer file!!';
+                    task.status = name + ' - Failed to transfer file: ' + e.toString();
                 } else {
                     this.spinnerService.hideLoader();
                     this.statusService.showStatus(e.toString(), true);

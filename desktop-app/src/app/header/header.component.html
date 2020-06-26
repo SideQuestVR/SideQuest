@@ -73,7 +73,7 @@
              ><i class="material-icons left">toc</i>Logcat</div><br>
         <ng-container *ngFor="let favourite of favourites.commandFavourites">
           <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-               (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';adbService.runAdbCommand(favourite.uri); adbModal.openModal()"
+               (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';adbCommandToRun = favourite.uri; runAdbCommand(); adbModal.openModal()"
                ><img *ngIf="favourite.icon" class="left browser-menu-image" src="{{favourite.icon}}"/>{{favourite.name}}</div><br>
         </ng-container>
       </div>
@@ -458,7 +458,7 @@
     </div>
     <br>
     <ng-container *ngFor="let favourite of favourites.commandFavourites">
-      <span class="chip margin-right pointer" (click)="adbService.runAdbCommand(favourite.uri)"><img *ngIf="favourite.icon" src="{{favourite.icon}}"/>{{favourite.name}}</span>
+      <span class="chip margin-right pointer" (click)="this.adbCommandToRun = favourite.uri; runAdbCommand()"><img *ngIf="favourite.icon" src="{{favourite.icon}}"/>{{favourite.name}}</span>
     </ng-container>
     <br><br>
   </mz-modal-content>
