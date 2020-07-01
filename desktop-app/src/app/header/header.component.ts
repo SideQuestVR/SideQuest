@@ -171,13 +171,13 @@ export class HeaderComponent implements OnInit {
     }
 
     updateAvailable() {
-        if (process.platform == 'win32') {
-            this.spinnerService.setMessage('Downloading update...');
-            this.spinnerService.showLoader();
-            this.appService.electron.ipcRenderer.send('automatic-update', {});
-        } else {
-            this.appService.opn('https://sidequestvr.com/#/download');
-        }
+        // if (process.platform == 'win32') {
+        // this.spinnerService.setMessage('Downloading update...');
+        //     this.spinnerService.showLoader();
+        //     this.appService.electron.ipcRenderer.send('automatic-update', {});
+        // } else {
+        this.appService.opn('https://sidequestvr.com/download');
+        //  }
     }
 
     startLogcat() {
