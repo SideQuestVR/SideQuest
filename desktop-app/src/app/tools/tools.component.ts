@@ -99,7 +99,7 @@ export class ToolsComponent implements OnInit {
                 value = 4;
                 break;
         }
-        this.runAdbCommand('adb shell debug.oculus.foveation.level ' + value)
+        this.runAdbCommand('adb shell setprop debug.oculus.foveation.level ' + value)
             .then(() => {
                 this.statusService.showStatus('Fixed Foveated Rendering set OK!!');
             })

@@ -538,7 +538,6 @@ export class AdbClientService {
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
-                        console.log(e);
                         let er = e.message ? e.message : e.code ? e.code : e.reason ? e.reason : JSON.stringify(e);
                         if (er === 'SAFESIDE') {
                             this.appService.headerComponent.safeModal.openModal();
