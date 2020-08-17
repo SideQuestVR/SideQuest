@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+
+    <PreferenceCategory android:title="@string/system_informative">
+
+        <Preference
+            android:key="prefVirtualDeviceDetails"
+            android:summary="@string/notfound"
+            android:title="@string/devicedetailstitle" />
+
+        <Preference
+            android:key="prefVirtualHostname"
+            android:summary="@string/notfound"
+            android:title="@string/hostnametitle" />
+
+        <Preference
+            android:key="prefVirtualWifiName"
+            android:summary="@string/notfound"
+            android:title="@string/wifissidtitle" />
+
+        <Preference
+            android:key="prefVirtualIpAddress"
+            android:summary="@string/notfound"
+            android:title="@string/iptitle" />
+
+        <Preference
+            android:key="prefVirtualDeviceUpTime"
+            android:summary="@string/notfound"
+            android:title="@string/deviceuptime" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

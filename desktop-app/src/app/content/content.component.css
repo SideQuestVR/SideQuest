@@ -1,0 +1,34 @@
+.body-content {
+  height: calc(100% - 200px);
+  width: 100%;
+  background: #f0f0f0;
+  position: relative;
+  overflow: auto;
+}
+
+.content {
+  width: 100%;
+  height: calc(100% - 200px);
+  padding-top: 1em;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  overflow: auto;
+  transition: background-color 350ms ease-out;
+  background-color:#0c0c0c;
+}
+/*.content-dark-theme{*/
+  /*background-color:#211c23;*/
+/*}*/
+/*.content-light-theme{*/
+  /*background-color:#f0f0f0;*/
+/*}*/
+.loader-initial {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #0094ca; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+  margin-bottom: 20px;
+}

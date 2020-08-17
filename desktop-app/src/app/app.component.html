@@ -1,0 +1,31 @@
+<app-header></app-header>
+<div class="app-container full-height">
+  <!--<app-side-menu></app-side-menu>-->
+  <app-content class="full-height"></app-content>
+</div>
+
+<app-loading-spinner #spinner></app-loading-spinner>
+<app-status-bar #status (getHelp)="getHelpModal.openModal(); helpStatus = $event"></app-status-bar>
+<webview id="beatView" #webview src="https://sidequestvr.com" allowpopups
+         [ngStyle]="{'left':webService.isWebviewOpen?'0':'-100%'}" class="bsaber-webview"></webview>
+
+<mz-modal #getHelpModal [fixedFooter]="true">
+  <mz-modal-header>
+    <h4>Get Help</h4>
+  </mz-modal-header>
+  <mz-modal-content>
+    We have a great community on discord and we have already faced most problems there. Please reach out on discord with the following error.<br><br>
+    <div class="code">
+      {{helpStatus}}
+    </div>
+    <br><br>
+    <div class="center-align">
+      <div class="btn pink-button waves-effect waves-light" (click)="statusService.copyStatus();statusService.showStatus('Copied to your clipboard!')">Copy To Clipboard</div><br><br>
+      <div class="btn pink-button waves-effect waves-light" (click)="appService.opn('https://discord.gg/r38T5rR')">Open Discord</div><br><br>
+    </div>
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Close</button>
+  </mz-modal-footer>
+</mz-modal>
+

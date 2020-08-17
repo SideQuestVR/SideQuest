@@ -1,0 +1,18 @@
+.restore-backup {
+  padding-top: 4px;
+}
+.restore-backup i{
+  font-size: 2em;
+  margin-left: 6px;
+  margin-top: -3px;
+}
+.show-all {
+  margin-top: 25px;
+}
+.small-text{
+  font-size: 0.7rem;
+  line-height: 25px;
+}
+#SearchPackage{
+  color: white!important;
+}

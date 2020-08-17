@@ -1,0 +1,212 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.no-wrap{
+  white-space: nowrap;
+}
+.btn{
+  -webkit-app-region: no-drag;
+}
+.text-light-theme{
+  color:#0d3349!important;;
+  transition: color 350ms ease-out;
+}
+.text-dark-theme{
+  color: #ffffff!important;
+  transition: color 350ms ease-out;
+}
+.pink-button{
+  background-color: #ed4e7a!important;
+}
+.button-dark-theme{
+  color: #000000 !important;
+  background-color: #fff !important;
+}
+.full-height{
+  height: 100%;
+}
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=80)';
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=20)';
+  filter: alpha(opacity=20);
+}
+
+.loader-tiny {
+  border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid #ed4e7a; /* Pink */
+  border-radius: 50%;
+  width: 23px;
+  height: 23px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+  margin-right: 11px;
+}
+.loader-small {
+  border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid #ed4e7a; /* Pink */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+}
+
+.loader-initial {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #ed4e7a; /* Pink */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.modal, .modal-content, .modal-overlay{
+  -webkit-app-region: no-drag;
+}
+
+::-webkit-scrollbar {
+  height: 16px;
+  width: 16px;
+  background: #e0e0e0;
+}
+::-webkit-scrollbar-corner {
+  background: #cfcfcf;
+}
+::-webkit-scrollbar-thumb {
+  background: #ed4e7a;
+}
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.well-lg {
+  padding: 24px;
+  border-radius: 6px;
+}
+.no-margin {
+  margin: 0!important;
+}
+.no-padding {
+  padding: 0!important;
+}
+.vertical-align {
+  vertical-align: middle;
+}
+.text-center {
+  text-align: center;
+}
+.input-dark-theme:focus {
+  border-bottom: 1px solid white !important;
+  box-shadow: 0 1px 0 0 white !important;
+  color:white;
+}
+.input-field .label-dark-theme {
+  color: white !important;
+}
+.chip-icon {
+  padding-top: 4px!important;
+}
+.cursor{
+  cursor:pointer;
+}
+.section-title {
+  font-size: 2rem;
+  margin-top: 0.4em;
+  margin-left: 1em;
+  font-family: 'PT Sans', sans-serif;
+}
+.link,
+.sort-link {
+  color: lightseagreen;
+  cursor: pointer;
+}
+.link-white {
+  color: lightcyan;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.inline{
+  display: inline-block;
+}
+.margin-bottom {
+  margin-bottom: 1em;
+}
+.margin-right{
+  margin-right: 1em;
+}
+.no-outline{
+  outline: none;
+}
+.relative{
+  position:relative;
+}
+.small-button {
+  padding: 5px!important;
+  line-height: 16px!important;
+  height: 24px!important;
+  color: white;
+}
+.no-cursor{
+  cursor: initial!important;
+}
+
+.chip>i {
+  float: left;
+  margin: 0 8px 0 -8px;
+  font-size: 28px;
+  line-height: 32px;
+  border-radius: 50%;
+}
+.logo-img{
+  width: 200px;
+  margin-top: 20px;
+  margin-left: -10px;
+}
+code > pre, .code{
+  background:#0c0c0c;
+  color: white;
+  border-radius: 4px;
+  padding: 5px;
+  display: block;
+}
+.modal-fixed-footer{
+  overflow: hidden!important;
+}

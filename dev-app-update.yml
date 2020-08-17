@@ -1,0 +1,6 @@
+owner: the-expanse
+repo: SideQuest
+provider: github
+updaterCacheDirName: sidequest-updater
+publisherName:
+  - The Expanse VR Ltd

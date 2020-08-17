@@ -1,0 +1,13 @@
+.package-height {
+  height: 40px;
+}
+.package-item{
+  border-bottom: 1px solid #cfcfcf;
+}
+.settings{
+  font-size: 2.7rem;
+  float: right;
+}
+.chip-padding {
+  padding-top: 3px !important;
+}

@@ -1,0 +1,20 @@
+.breadcrumb-wrapper{
+  position: fixed;
+  top: 200px;
+}
+
+.drag-indicator{
+  font-size: 2rem;
+  line-height: 3rem;
+  vertical-align: middle;
+}
+
+.selected{
+  background: #e93c96;
+  border-radius: 10px;
+}
+
+.save-icon{
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+}

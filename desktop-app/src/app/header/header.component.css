@@ -1,0 +1,440 @@
+
+#connection-refresh,
+#connection-refresh-loading {
+  display: none;
+}
+.title-menu-container{
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  -webkit-app-region: no-drag;
+  vertical-align: middle;
+  z-index: 999;
+}
+.title-menu-container i{
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#device-settings {
+  font-size: 1.2rem;
+  vertical-align:top;
+  margin-top: 4px;
+}
+.browser-input {
+  width: calc(100% - 200px);
+  display: inline-block;
+  margin-right: 13px;
+  margin-left: 13px
+}
+.margin-left{
+  margin-left: 1em;
+}
+.pointer{
+  cursor: pointer;
+}
+.process-badge{
+  border-radius: 4px;
+  padding: 0 3px;
+  color: white;
+  display: inline-block;
+  margin-right: 10px;
+  margin-left: -36px;
+  vertical-align: super;
+  width: 29px;
+  text-align: center;
+  cursor: pointer;
+}
+#browser-bar {
+  position: absolute;
+  top: 65px;
+  left: 400px;
+  width: calc(100% - 487px);
+  -webkit-app-region: no-drag;
+}
+.synthrideerz{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.topper{
+  background: #202225;
+  height: 35px;
+  width: 100%;
+  -webkit-app-region: drag;
+}
+.logo img{
+  height: 90px;
+  position:absolute;
+  top: 55px;
+  left: 20px;
+  transition: 0.35s;
+}
+
+#nav-mobile{
+  margin-left: 60px;
+}
+.top-banner{
+  background: #100e11 url(../../assets/images/TopBack.png) bottom right no-repeat;
+  background-size: cover;
+  height: 170px;
+  width: 100%;
+  border-bottom: 1px solid #8f8f8f;
+  transition: 0.35s;
+}
+.spider-image{
+  margin-top: 50px;
+  margin-left: -17px;
+  position: relative;
+  z-index: 99999;
+}
+.over-menu{
+  position:absolute;
+  top: 20px;
+  left: 20px;
+}
+.top-buttons{
+  position: absolute;
+  top: 120px;
+  left: 120px;
+}
+.header {
+  height: 205px;
+  /*background: #312249 url(../../assets/images/bg-header.png) left bottom no-repeat;*/
+  position: relative;
+  -webkit-user-select: none;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+  /*overflow:hidden;*/
+}
+.header-title{
+  position:absolute;
+  top: 40px;
+  left: 115px;
+  font-size: 2.5rem;
+  margin-top: 0.4em;
+  margin-left: 1em;
+  color: #ffffff;
+  font-family: 'PT Sans', sans-serif;
+}
+.apk-install {
+  font-size: 0.9rem;
+  position: absolute;
+  top: 150px;
+  left: 140px;
+  color: #ffffff;
+  font-family: 'PT Sans', sans-serif;
+  -webkit-app-region: no-drag;
+}
+.filter {
+  width: 200px;
+}
+.filters {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  -webkit-app-region: no-drag;
+}
+.search {
+  position: absolute;
+  top: 60px;
+  right: -10px;
+  -webkit-app-region: no-drag;
+}
+.search-box {
+  width: 400px;
+}
+.search-button-margin {
+  margin-right: 2em;
+  margin-left: 1em;
+}
+.content-section {
+  border: 1px solid #dde1e2;
+  background: white;
+}
+.content-section-header {
+  border-bottom: 1px solid #dde1e2;
+  padding: 1em 2em;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-transform: capitalize;
+  height: 60px;
+}
+.content-section-inner {
+  padding: 1em;
+}
+.content-padding {
+  padding: 2em;
+}
+#connection-status-message {
+  text-align: left;
+  white-space: nowrap;
+  float: left;
+  margin-left: 30px;
+  margin-top: -2px;
+  color: white;
+}
+#connection-status-container{
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  -webkit-app-region: no-drag;
+}
+.connection-device-select{
+  vertical-align: top;
+}
+#connection-status {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: inline-block;
+}
+.connection-status-connected {
+  background-color: #4caf50;
+}
+.connection-status-unauthorized {
+  background-color: #ff9800;
+}
+.connection-status-disconnected {
+  background-color: #f44336;
+}
+.connection-status-too-many {
+  background-color: #9c27b0;
+}
+.beast-saber-buttons{
+  width: calc(100% - 500px);
+}
+.add-repo,
+.sync-songs,
+.sync-songs-now,
+.beast-saber-buttons,
+.back-webserver{
+  position: absolute;
+  top: 115px;
+  right: 120px;
+  text-decoration:none;
+  -webkit-app-region: no-drag;
+}
+.update-available {
+  margin-top: -16px;
+  margin-right: 10px;
+}
+.sync-songs{
+  right: 15px;
+}
+.fixed-height{
+  height: 120px;
+}
+.sync-songs-now,.beast-saber-buttons {
+  top: 83px;
+  right: 73px;
+  text-align: right;
+}
+.beaton-icon{
+  height: 22px;
+  margin-right: 8px;
+  cursor: pointer;
+  vertical-align: initial;
+
+}
+.update-repo,
+.delete-repo,
+.restore-backup {
+  padding-top: 4px;
+}
+.edit-repo {
+  font-size: 14px;
+}
+.browser-loading {
+  transform: scale(0.3);
+}
+.bookmark{
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+.logo {
+  background: transparent url('../../assets/images/score-logo.png') center center no-repeat;
+  background-size: 110px 110px;
+  width: 135px;
+  height: 150px;
+  -webkit-user-select: none;
+  cursor: pointer;
+  border-top-left-radius: 5px;
+  -webkit-app-region: no-drag;
+}
+.top-dnd-backing{
+  position:absolute;
+  width: 100%;
+  height: 200px;
+}
+.padding-top{
+  padding-top: 2em;
+}
+.drop-message{
+  position:absolute;
+  top: 16px;
+  left: 16px;
+  width: 300px;
+  height: 120px;
+  z-index: 9999;
+}
+.top-menu-bar-icon-down{
+  display: none;
+}
+.user-menu-back{
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 998;
+  display:none;
+}
+.user-menu{
+  position: absolute;
+  top: 25px;
+  right: 240px;
+  width: 220px;
+  z-index: 999;
+  overflow: hidden;
+  transition: height 250ms;
+  background: #4e555b;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 3px;
+  display: none;
+}
+.browser-menu{
+  right: 400px;
+}
+.device-menu{
+  right: initial;
+  left: 16px;
+  width: 300px;
+}
+.code{
+
+}
+.command-menu{
+  width: 240px;
+}
+.smaller-menu{
+  top: 44px;
+}
+.top-badge{
+  position: absolute;
+  top: 40px;
+  right: 42px;
+}
+.smaller-badge{
+  top: 20px;
+  right: 38px;
+}
+
+.smaller-buttons-avatar{
+  margin-top: 2px;
+}
+.avatar-menu{
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border-radius: 20px;
+  vertical-align: middle;
+  border: 3px solid #312249;
+}
+.smaller-buttons-avatar .avatar-menu{
+  width: 40px;
+  height: 40px;
+}
+.avatar-menu-margin{
+  margin-right: 16px;
+}
+
+.top-buttons-avatar{
+  margin-top: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.fav-manage-icon{
+  font-size: 2.5rem;
+}
+
+.drag-indicator, .delete-button{
+  position: absolute;
+  left: -20px;
+  top: 5px;
+  font-size: 2rem;
+  cursor: pointer;
+}
+.delete-button{
+  left: initial;
+  right: -20px;
+}
+.fav-padding{
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 0;
+}
+.logcat-block{
+  height: 520px;
+  overflow: auto;
+}
+.logcat-small{
+  font-size: 0.9rem;
+}
+.logcat-smaller{
+  font-size: 0.7rem;
+}
+.browser-menu-image{
+  width: 22px;
+  height: 22px;
+  vertical-align: text-top;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+@media only screen and (max-width: 1023px){
+  .top-menu-bar-icon {
+    display: none;
+  }
+  .browser-menu {
+    right: 25px;
+  }
+  .top-menu-bar-icon-down{
+    display: inline-block;
+    font-size: 1.8rem;
+  }
+}
+
+.warning {
+  height: 35px;
+  background-color: #004a7f;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Arial;
+  font-size: 14px;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  animation: glowing 1500ms infinite;
+}
+
+@-webkit-keyframes glowing {
+  0% {
+    background-color: #b20000;
+    -webkit-box-shadow: 0 0 3px #b20000;
+  }
+  50% {
+    background-color: #ff0000;
+    -webkit-box-shadow: 0 0 40px #ff0000;
+  }
+  100% {
+    background-color: #b20000;
+    -webkit-box-shadow: 0 0 3px #b20000;
+  }
+}

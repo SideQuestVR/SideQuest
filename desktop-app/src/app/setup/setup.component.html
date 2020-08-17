@@ -1,0 +1,167 @@
+<div class="row">
+  <div class="col s12 m6">
+    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title">
+        Step 1: Create Organisation
+      </div>
+      <div>
+        Put the Oculus Headset in developer mode to be able to sideload to the Headset. To do this,
+        you have to be a registered "developer". This process is free. Go to
+        <app-link url="https://dashboard.oculus.com"
+                  text="dashboard.oculus.com"></app-link>
+        on your PC and create an 'organization'. You'll be asked to accept the developer agreement.
+      </div>
+      <br><br>
+      <img class="setup-image" src="assets/images/CreateOrganisation.png" />
+      <img class="setup-image" src="assets/images/OculusDashboardDeveloperCreate.png" />
+    </div>
+  </div>
+  <div class="col s12 m6">
+    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title">
+        Step 2: Install Drivers ( Windows Only - skip this on Mac / Linux )
+      </div>
+      <div>
+        Install the driver software for your device. Go to
+        <app-link url="https://developer.oculus.com/downloads/package/oculus-go-adb-drivers/"
+                  text="developer.oculus.com"></app-link>
+        on your PC and download the drivers for your headset. The Oculus Go drivers work for the
+        quest also. To install the drivers extract the zip folder, right click the
+        <div class="chip">android_winusb.inf</div>
+        file and click install.
+      </div>
+      <br><br>
+      <img class="setup-image" src="assets/images/ADB Drivers.png" />
+    </div>
+  </div>
+</div>
+<div class="clear-fix"></div>
+<div class="row">
+  <div class="col s12 m6">
+    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title">
+        Step 3: Enable Developer Mode and Reboot
+      </div>
+      <p>
+        Now that you’re a "developer", open the Oculus app on your smartphone or tablet. In the
+        Settings tab, tap on the Go headset and tap 'More settings'. In the list, you should now see
+        Developer Mode. Once you have enabled developer mode it is a good idea to reboot your headset
+        to be able to see it on the device.
+      </p>
+      <br><br>
+      <img class="setup-image" src="assets/images/OculusAppDevModeSteps.png" />
+    </div>
+  </div>
+  <div class="col s12 m6">
+    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title">
+        Step 4: Connect USB Cable and Allow USB Debugging
+      </div>
+      <div>
+        Now its time to connect the USB cable. Once you are connected you will have to allow USB
+        debugging access on your headset. If you put your headset on at this point you will see
+        something like the below. You should also select 'Always allow from this computer' to prevent
+        this message from coming up every time you connect.
+      </div>
+      <br><br>
+      <img class="setup-image" src="assets/images/allow-auth.png" />
+    </div>
+  </div>
+</div>
+<div class="clear-fix"></div>
+<div class="row">
+  <div class="col s12">
+    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        Step 5: Install App Launcher
+      </div>
+      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        Install a launcher to make finding apps easier on your headset. This launcher will be found in
+        the library under 'Unknown Sources' on the menu on the left. Open it to find all the apps that
+        have been installed on your device.
+      </div><br>
+      <span class="chip" *ngIf="isLauncherInstalled()">SideQuest Launcher Installed!</span>
+      <app-loading-spinner-small *ngIf="isInstallingLauncher"></app-loading-spinner-small>
+      <div class="waves-effect waves-light btn pink-button"
+           *ngIf="!isInstalledLauncher&&!isInstallingLauncher"
+           [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+           (click)="installLauncher()">
+        Install App Launcher
+      </div>
+      <br><br>
+      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        You will then be able to install apps to your headset and open them from the launcher. You can
+        find it in the side menu of the library under the Unknown Sources section called
+        <span class="chip">SideQuest - TV</span> and <span class="chip">SideQuest - Home</span>.  This will show you all the apps on the device even hidden
+        ones you would otherwise not see.
+      </div><br>
+      <span class="chip" *ngIf="isExpanseInstalled()">The Expanse VR Installed!</span>
+      <app-loading-spinner-small *ngIf="isInstallingExpanse"></app-loading-spinner-small>
+      <div class="waves-effect waves-light btn pink-button"
+           *ngIf="!isInstalledExpanse&&!isInstallingExpanse"
+           [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+           (click)="installExpanse()">
+        Install Your First App - The Expanse
+      </div><br><br>
+      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        If you want to install your own APK files just drag and drop them over this window.
+      </div>
+      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        Check your antivirus hasn't blocked some parts of the ADB download - this has happened for some
+        with Avast antivirus in particular. <br />If you have any problems or want to say hi drop us a
+        line on discord - <app-link url="https://discord.gg/HNnDPSu" text="discord"></app-link>.
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clear-fix"></div>
+<div class="row" style="display: none;">
+  <div class="col s12">
+    <div class="section-title" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      App Developers Link to your apps!
+    </div>
+    <div style="text-align: center"  [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      Use our custom protocol to be able to install APK files, add repos and even load custom beat
+      saber songs direct from your website.
+    </div>
+    <span
+      class="chip"
+      mz-tooltip
+      position="right"
+      tooltip="Example: sidequest://repo#https://example.com/fdroid/repo"
+    >sidequest://repo#URL_OF_REPO</span
+    ><br />
+    <span
+      class="chip tooltipped"
+      data-position="right"
+      data-tooltip="Example: sidequest://sideload#https://example.com/file.apk"
+    >sidequest://sideload#URL_OF_APK</span
+    ><br />
+    <span
+      class="chip tooltipped"
+      data-position="right"
+      data-tooltip="Example: sidequest://bsaber#12345-12345 or sidequest://bsaber#https://example.com/12345-12345.zip"
+    >sidequest://bsaber#URL_OR_ID_OF_SONG</span
+    ><br />
+    <br /><br />
+    <div class="row">
+      <div class="col s8">
+        <div class="input-field inline browser-input">
+          <input id="protocol_url" type="text" placeholder="Address" />
+          <label class="active" for="protocol_url">Address</label>
+        </div>
+      </div>
+      <div class="input-field col 4">
+        <select id="protocol_type">
+          <option selected>repo</option>
+          <option>sideload</option>
+          <option>bsaber</option>
+        </select>
+        <label>Link Type</label>
+      </div>
+    </div>
+    <div style="text-align: center">
+      <a href="#" class="waves-effect waves-light btn">Copy Embed Code</a>
+    </div>
+  </div>
+</div>

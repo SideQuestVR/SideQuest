@@ -1,0 +1,8 @@
+<div class="status-bar" [ngClass]="{'status-bar-warning':isWarning}" *ngIf="isActive">
+  <i class="material-icons right white-text cursor" (click)="statusService.hideStatus()" mz-tooltip position="top"
+    tooltip="Close this status.">close</i>
+  <div *ngIf="isWarning" class="right btn small-button green" (click)="getHelp.emit(statusMessage)">Get Help</div>
+  <span class="status-message truncate" [innerHTML]="statusMessage | sanitizeHtml">
+
+  </span>
+</div>

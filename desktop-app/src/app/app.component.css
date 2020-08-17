@@ -1,0 +1,36 @@
+
+.add-to-drag {
+  width: 100%;
+  padding: 1em;
+  border: 2px dashed #3f3f3f;
+  text-align: center;
+}
+
+.spinner,
+.spinner-drag {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: none;
+}
+.spinner-background {
+  background-color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  border-top-left-radius: 40px;
+  z-index: 9;
+}
+#beatView{
+  width: 100%;
+  height: calc(100% - 35px);
+  top: 35px;
+  left: 0;
+  position: fixed;
+  z-index: 8;
+  background:#0c0c0c;
+}

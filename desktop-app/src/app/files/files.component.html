@@ -1,0 +1,159 @@
+<div *ngIf="isConnected()">
+  <br><br><br>
+  <nav class="pink lighten-2 breadcrumb-wrapper ">
+    <div class="nav-wrapper container">
+      <div class="col s12">
+        <a *ngFor="let breadcrumb of breadcrumbs" href="javascript:void(0)" class="breadcrumb"
+          (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}</a>
+      </div>
+    </div>
+  </nav>
+</div>
+<div class="container">
+  <div *ngIf="!isConnected()">
+    <h4
+      [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      No device connected...</h4>
+
+  </div>
+  <div *ngIf="isConnected()">
+    <div *ngIf="!files.length">
+      <h4
+        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        No files here...</h4>
+
+    </div>
+    <div *ngFor="let file of files" class="vertical-align cursor"
+      [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="file" (click)="selectFile($event, file);  $event.stopPropagation()">
+        <div class="right">
+          <span *ngIf="file.icon !== 'folder'">{{file.size|number:'1.2-2'}}MB | </span>{{file.time|date:'short'}}
+
+          <i class="material-icons cursor white-text drag-indicator save-icon"
+            (click)="filesToBeSaved = [file]; filesModal.openModal();">save</i>
+          <i class="material-icons cursor orange-text drag-indicator right delete"
+            (click)="filesToBeDeleted = [file]; confirmModal.openModal()">close</i>
+        </div>
+        <div>
+          <i class="material-icons medium vertical-align"
+            [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">{{file.icon}}</i>{{file.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
+</div>
+<div class="fixed-action-btn" #fixedAction *ngIf="isConnected()">
+  <a class="btn-floating btn-large pink lightn-2" mz-tooltip position="left" tooltip="Add a file.">
+    <i class="large material-icons">add</i>
+  </a>
+  <ul>
+    <li mz-tooltip position="left" tooltip="Copy file to this folder" (click)="uploadFiles()"><a
+        class="btn-floating purple"><i class="material-icons">insert_drive_file</i></a></li>
+    <li mz-tooltip position="left" tooltip="Make folder in this folder" (click)="mkDirModal.openModal()"><a
+        class="btn-floating blue"><i class="material-icons">folder</i></a></li>
+    <li mz-tooltip position="left" tooltip="Open current save location" (click)="openSaveLocation()"><a
+        class="btn-floating yellow darken-2"><i class="material-icons">folder</i></a></li>
+    <li *ngIf="selectedFiles.length > 0" mz-tooltip position="left" tooltip="Delete selected items"
+      (click)="filesToBeDeleted = selectedFiles; confirmModal.openModal()"><a class="btn-floating red darken-2"><i
+          class="material-icons">delete</i></a></li>
+    <li *ngIf="quickSaveSupported()" mz-tooltip position="left" tooltip="Save screenshots and recordings"
+      (click)="downloadMediaModal.openModal()"><a class="btn-floating green"><i class="material-icons">get_app</i></a>
+    </li>
+    <li *ngIf="selectedFiles.length > 0" mz-tooltip position="left" tooltip="Save selected items to computer"
+      (click)="filesToBeSaved = selectedFiles; filesModal.openModal()">
+      <a class="btn-floating orange"><i class="material-icons">get_app</i></a>
+    </li>
+  </ul>
+</div>
+
+<mz-modal #mkDirModal [fixedFooter]="true">
+  <mz-modal-header>
+    <h4>Make Folder</h4>
+  </mz-modal-header>
+  <mz-modal-content>
+    Please enter a folder name.
+    <div class="input-field ">
+      <input id="devicePaste" type="text" [(ngModel)]="folderName" autofocus />
+      <label for="devicePaste">Folder Name</label>
+    </div>
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Close</button>
+    <button mz-button class="pink-button" mz-modal-close (click)="makeFolder()">Make Folder</button>
+  </mz-modal-footer>
+</mz-modal>
+
+<mz-modal #filesModal [fixedFooter]="true">
+  <mz-modal-header>
+    <h4>Save selected file(s) to your PC</h4>
+  </mz-modal-header>
+  <mz-modal-content>
+    Pick a location on your PC to save the following file(s):<br><br>
+    <div *ngFor="let file of filesToBeSaved">
+      <div class="file">
+        <div>
+          <i class="material-icons cursor orange-text drag-indicator" (click)="filesToBeSaved.splice(filesToBeSaved.indexOf(file), 1);
+                clearSelection([file]);
+                filesToBeSaved.length === 0 && filesModal.closeModal()">close</i>
+          {{file.name}}
+        </div>
+      </div>
+    </div>
+    <br><br>
+    <button mz-button class="pink-button" (click)="pickLocation()">Select Location</button><br><br>
+    Current Location: {{adbService.savePath}}
+
+
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Close</button>
+    <button mz-button class="pink-button" mz-modal-close
+      (click)="saveFiles(filesToBeSaved); clearSelection(filesToBeSaved)">Save To PC</button>
+  </mz-modal-footer>
+</mz-modal>
+
+<mz-modal #downloadMediaModal [fixedFooter]="true">
+  <mz-modal-header>
+    <h4>Save local media to your PC</h4>
+  </mz-modal-header>
+  <mz-modal-content>
+    Pick a location on your PC to save screenshots and recordings:<br><br>
+    <button mz-button class="pink-button" (click)="pickLocation()">Select Location</button><br><br>
+    Current Location: {{adbService.savePath}}
+
+
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Close</button>
+    <button mz-button class="pink-button" mz-modal-close (click)="downloadMedia()">Save To PC</button>
+  </mz-modal-footer>
+</mz-modal>
+
+<mz-modal #confirmModal [fixedFooter]="true">
+  <mz-modal-header>
+    <h4>Delete selected file(s)</h4>
+  </mz-modal-header>
+  <mz-modal-content>
+    Are you sure you want to delete the selected file(s)? <br>
+    <em>Click <i class="material-icons orange-text" style="font-size: 16px">close</i> to remove files</em>
+    <br><br>
+    <div *ngFor="let file of filesToBeDeleted">
+      <div class="file">
+        <div>
+          <i class="material-icons cursor orange-text drag-indicator" (click)="filesToBeDeleted.splice(filesToBeDeleted.indexOf(file), 1);
+                clearSelection([file]);
+                filesToBeDeleted.length === 0 && confirmModal.closeModal()">close</i>
+          {{file.name}}
+        </div>
+      </div>
+    </div>
+    <br>
+    <h5><em>WARNING: This cannot be undone!!</em></h5>
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Close</button>
+    <button mz-button class="red" mz-modal-close
+      (click)="deleteFiles(filesToBeDeleted); clearSelection(filesToBeDeleted)">Delete Items</button>
+  </mz-modal-footer>
+</mz-modal>

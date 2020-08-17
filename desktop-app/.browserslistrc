@@ -1,0 +1,6 @@
+# Browsers that we support
+last 1 version
+> 5%
+not dead
+not ie > 1
+not ie_mob > 1
