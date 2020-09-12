@@ -12,7 +12,7 @@
     <h4>Get Help</h4>
   </mz-modal-header>
   <mz-modal-content>
-    We have a great community on discord and we have already faced most problems there. Please check our FAQ for info on the following error.<br><br>
+    We have a great community and we have already faced most problems and found solutions. Please check out our Service Desk for info on the following error.<br><br>
     <div class="code">
       {{helpStatus}}
     </div>
@@ -21,8 +21,7 @@
     <br><br>
     <div class="center-align">
       <div class="btn pink-button waves-effect waves-light" (click)="statusService.copyStatus();statusService.showStatus('Copied to your clipboard!')">Copy To Clipboard</div><br><br>
-      <div class="btn pink-button waves-effect waves-light" (click)="appService.opn('https://github.com/the-expanse/SideQuest/wiki/FAQ')">Open Help & FAQ</div><br><br>
-      <div class="btn btn-flat waves-effect waves-dark" (click)="appService.opn('https://discord.gg/r38T5rR')">Open Discord</div><br><br>
+      <div class="btn btn-flat waves-effect waves-dark" (click)="appService.opn('https://sdq.st/support')">Open Service Desk</div><br><br>
     </div>
   </mz-modal-content>
   <mz-modal-footer>

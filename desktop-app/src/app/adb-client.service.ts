@@ -896,7 +896,6 @@ export class AdbClientService {
             cb();
         }
         p = p.then(() => {
-            console.log('here');
             if (task) {
                 task.status = name + ' File transferred successfully! ';
             } else {
