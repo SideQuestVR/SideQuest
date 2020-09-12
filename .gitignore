@@ -34,7 +34,6 @@ jspm_packages/
 
 build/app
 build/platform-tools
-!build-electron/app.jsc
 build-electron
 .idea
 .vscode
