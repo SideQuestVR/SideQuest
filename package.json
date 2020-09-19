@@ -101,7 +101,7 @@
     },
     "devDependencies": {
         "@angular/cli": "^8.0.3",
-        "electron": "^4.1.4",
+        "electron": "^7.2.4",
         "electron-builder": "^22.4.0",
         "electron-notarize": "^0.1.1",
         "husky": "^2.3.0",
