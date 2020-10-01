@@ -93,10 +93,10 @@ export class ElectronService {
                         this.adbService.installZip(data.url, 0, 0, true);
                         break;
                     case '.obb':
-                        this.adbService.installObb(data.url);
+                        this.adbService.installObb(data.url, 0, 0, data.name);
                         break;
                     case '.apk':
-                        this.adbService.installAPK(data.url);
+                        this.adbService.installAPK(data.url, false, false, 0, 0, true, data.name);
                         break;
                 }
             });
