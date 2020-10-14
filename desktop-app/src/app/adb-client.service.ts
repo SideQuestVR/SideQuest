@@ -413,7 +413,7 @@ export class AdbClientService {
         return this.adbCommand('shell', { serial: this.deviceSerial, command: 'pm list packages -f ' + packageName }).then(res => {
             let parts = res.split(':');
             if (parts.length > 1) {
-                return parts[1].split('=')[0];
+                return parts[1].split('base.apk=')[0] + 'base.apk';
             } else {
                 return false;
             }

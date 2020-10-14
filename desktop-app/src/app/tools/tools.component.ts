@@ -48,6 +48,10 @@ enum SVB {
     _15Mbps,
     _25Mbps,
 }
+enum RR {
+    _72,
+    _90,
+}
 @Component({
     selector: 'app-tools',
     templateUrl: './tools.component.html',
@@ -67,6 +71,7 @@ export class ToolsComponent implements OnInit {
     CR = CR;
     GPU = GPU;
     FR = GU;
+    RR = RR;
     pavlovName;
     constructor(
         public appService: AppService,
@@ -143,6 +148,24 @@ export class ToolsComponent implements OnInit {
         this.runAdbCommand('adb shell setprop debug.oculus.forceChroma ' + (ca === CA.ON ? 1 : ca === CA.APP ? -1 : 0))
             .then(() => {
                 this.statusService.showStatus('Chromatic Aberration set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
+    }
+    setRR(rr: RR) {
+        let value = 72;
+        switch (rr) {
+            case RR._72:
+                value = 72;
+                break;
+            case RR._90:
+                value = 90;
+                break;
+        }
+        this.runAdbCommand('adb shell setprop debug.oculus.refreshRate ' + value)
+            .then(() => {
+                this.statusService.showStatus('Refresh Rate set OK!!');
             })
             .catch(e => {
                 this.statusService.showStatus(e, true);
