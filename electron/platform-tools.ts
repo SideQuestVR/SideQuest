@@ -17,44 +17,48 @@ switch (os.platform()) {
         break;
 }
 console.log('Platform: ' + os.platform());
-let outputPath = path.join(__dirname, '..', 'build', 'platform-tools');
+var outputPath = path.join(__dirname, '..', 'build', 'platform-tools');
 if (!__fs.existsSync(outputPath)) {
-    __fs.mkdir(outputPath, { recursive: true }, err => {
+    __fs.mkdir(outputPath, { recursive: true }, function(err) {
         if (err) console.log(err);
     });
     console.log('Downloading platform tools...');
-    download(downloadUrl, path.join(__dirname, 'platform-tools.zip'), stats => {
+    download(downloadUrl, path.join(__dirname, 'platform-tools.zip'), function(stats) {
         // console.log(stats);
     })
-        .then(() => {
+        .then(function() {
             console.log('Downloaded platform tools.');
             console.log('Extracting platform tools...');
-            extract(
-                path.join(__dirname, 'platform-tools.zip'),
-                {
-                    dir: __dirname,
-                    onEntry: entry => {
-                        let stats = entry.fileName;
-                        // console.log(stats);
+            setTimeout(() => {
+                extract(
+                    path.join(__dirname, 'platform-tools.zip'),
+                    {
+                        dir: __dirname,
+                        onEntry: function(entry) {
+                            var stats = entry.fileName;
+                            // console.log(stats);
+                        },
                     },
-                },
-                err => {
-                    if (err) console.log(err);
-                    console.log('Extracted platform tools.');
-                    __fs.readdir(path.join(__dirname, 'platform-tools'), (err, files) => {
-                        files.forEach(file => {
-                            let curPath = path.join(__dirname, 'platform-tools', file);
-                            if (!__fs.lstatSync(curPath).isDirectory()) {
-                                __fs.rename(curPath, path.join(outputPath, file), function(err) {
-                                    if (err) console.log(err);
-                                });
-                            }
+                    function(err) {
+                        if (err) {
+                            return console.log(err);
+                        }
+                        console.log('Extracted platform tools.');
+                        __fs.readdir(path.join(__dirname, 'platform-tools'), function(err, files) {
+                            files.forEach(function(file) {
+                                var curPath = path.join(__dirname, 'platform-tools', file);
+                                if (!__fs.lstatSync(curPath).isDirectory()) {
+                                    __fs.rename(curPath, path.join(outputPath, file), function(err) {
+                                        if (err) console.log(err);
+                                    });
+                                }
+                            });
                         });
-                    });
-                }
-            );
+                    }
+                );
+            }, 5000);
         })
-        .catch(e => {
+        .catch(function(e) {
             console.log(e);
         });
 }
