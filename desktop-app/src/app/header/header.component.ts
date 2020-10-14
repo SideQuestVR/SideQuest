@@ -306,12 +306,14 @@ export class HeaderComponent implements OnInit {
         this.appService.remote.getCurrentWindow().toggleDevTools();
     }
     selectAppToInstall() {
+        console.log('selectAppToInstall');
         this.appService.electron.remote.dialog.showOpenDialog(
             {
                 properties: ['openFile', 'multiSelections'],
                 defaultPath: this.adbService.savePath,
             },
             files => {
+                console.log('done!');
                 files.forEach(filepath => {
                     this.adbService.savePath = this.appService.path.dirname(filepath);
                     let install = this.adbService.installMultiFile(filepath);
