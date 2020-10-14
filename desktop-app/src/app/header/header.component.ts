@@ -305,26 +305,20 @@ export class HeaderComponent implements OnInit {
     openDebugger() {
         this.appService.remote.getCurrentWindow().toggleDevTools();
     }
-    selectAppToInstall() {
-        console.log('selectAppToInstall');
-        this.appService.electron.remote.dialog.showOpenDialog(
-            {
-                properties: ['openFile', 'multiSelections'],
-                defaultPath: this.adbService.savePath,
-            },
-            files => {
-                console.log('done!');
-                files.forEach(filepath => {
-                    this.adbService.savePath = this.appService.path.dirname(filepath);
-                    let install = this.adbService.installMultiFile(filepath);
-                    if (install) {
-                        install.catch(e => {
-                            this.statusService.showStatus(e.toString(), true);
-                        });
-                    }
+    async selectAppToInstall() {
+        let files = await this.appService.electron.remote.dialog.showOpenDialog({
+            properties: ['openFile', 'multiSelections'],
+            defaultPath: this.adbService.savePath,
+        });
+        files.forEach(filepath => {
+            this.adbService.savePath = this.appService.path.dirname(filepath);
+            let install = this.adbService.installMultiFile(filepath);
+            if (install) {
+                install.catch(e => {
+                    this.statusService.showStatus(e.toString(), true);
                 });
             }
-        );
+        });
     }
     confirmRestore() {
         this.spinnerService.showLoader();
