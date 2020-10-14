@@ -310,7 +310,7 @@ export class HeaderComponent implements OnInit {
             properties: ['openFile', 'multiSelections'],
             defaultPath: this.adbService.savePath,
         });
-        files.forEach(filepath => {
+        files.filePaths.forEach(filepath => {
             this.adbService.savePath = this.appService.path.dirname(filepath);
             let install = this.adbService.installMultiFile(filepath);
             if (install) {
