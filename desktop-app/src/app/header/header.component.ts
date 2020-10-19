@@ -209,18 +209,14 @@ export class HeaderComponent implements OnInit {
     cancelLogcatOutput() {
         this.saveLogcatPath = null;
     }
-    selectLogcatOutput() {
-        this.appService.electron.remote.dialog.showOpenDialog(
-            {
-                properties: ['openDirectory'],
-                defaultPath: this.adbService.savePath,
-            },
-            files => {
-                files.forEach(filepath => {
-                    this.saveLogcatPath = filepath;
-                });
-            }
-        );
+    async selectLogcatOutput() {
+        const res = await this.appService.electron.remote.dialog.showOpenDialog({
+            properties: ['openDirectory'],
+            defaultPath: this.adbService.savePath,
+        });
+        res.filePaths.forEach(filepath => {
+            this.saveLogcatPath = filepath;
+        });
     }
     clearLogcatFile() {
         if (this.saveLogcatPath) {

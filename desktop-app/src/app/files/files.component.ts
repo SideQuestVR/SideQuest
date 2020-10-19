@@ -56,7 +56,7 @@ export class FilesComponent implements OnInit {
     }
     async makeFolder() {
         if (
-            ~this.files
+            !!~this.files
                 .filter(f => f.icon === 'folder')
                 .map(f => f.name)
                 .indexOf(this.folderName)
@@ -173,14 +173,12 @@ export class FilesComponent implements OnInit {
             });
         }
     }
-    uploadFiles() {
-        this.appService.electron.remote.dialog.showOpenDialog(
-            {
-                properties: ['openFile', 'multiSelections'],
-                defaultPath: this.adbService.savePath,
-            },
-            files => this.uploadFilesFromList(files)
-        );
+    async uploadFiles() {
+        let res = await this.appService.electron.remote.dialog.showOpenDialog({
+            properties: ['openFile', 'multiSelections'],
+            defaultPath: this.adbService.savePath,
+        });
+        this.uploadFilesFromList(res.filePaths);
     }
     quickSaveSupported() {
         return this.quickSaveModels.includes(this.adbService.deviceModel);
@@ -268,19 +266,15 @@ export class FilesComponent implements OnInit {
                 .then(() => this.statusService.showStatus('Folder Saved OK!'));
         });
     }
-    pickLocation() {
-        this.appService.electron.remote.dialog.showOpenDialog(
-            {
-                properties: ['openDirectory'],
-                defaultPath: this.adbService.savePath,
-            },
-            files => {
-                if (files !== undefined && files.length === 1) {
-                    this.adbService.savePath = files[0];
-                    this.adbService.setSavePath();
-                }
-            }
-        );
+    async pickLocation() {
+        let res = await this.appService.electron.remote.dialog.showOpenDialog({
+            properties: ['openDirectory'],
+            defaultPath: this.adbService.savePath,
+        });
+        if (res && res.filePaths && res.filePaths.length === 1) {
+            this.adbService.savePath = res.filePaths[0];
+            this.adbService.setSavePath();
+        }
     }
     isConnected() {
         const isConnected = this.adbService.deviceStatus === ConnectionStatus.CONNECTED;

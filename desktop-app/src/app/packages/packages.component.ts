@@ -79,19 +79,15 @@ export class PackagesComponent implements OnInit {
         this.adbService.setPermission(this.currentPackage.package.packageName, perm.permission, !perm.enabled);
     }
 
-    pickBackupLocation() {
-        this.appService.electron.remote.dialog.showOpenDialog(
-            {
-                properties: ['openDirectory'],
-                defaultPath: this.appService.backupPath,
-            },
-            files => {
-                if (files !== undefined && files.length === 1) {
-                    this.appService.backupPath = files[0];
-                    localStorage.setItem('backup-path', this.appService.backupPath);
-                }
-            }
-        );
+    async pickBackupLocation() {
+        const res = await this.appService.electron.remote.dialog.showOpenDialog({
+            properties: ['openDirectory'],
+            defaultPath: this.appService.backupPath,
+        });
+        if (res && res.filePaths && res.filePaths.length === 1) {
+            this.appService.backupPath = res.filePaths[0];
+            localStorage.setItem('backup-path', this.appService.backupPath);
+        }
     }
 
     backupAll() {
