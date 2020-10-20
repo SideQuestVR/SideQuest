@@ -535,7 +535,11 @@ function setupMenu() {
                     label: 'Quit',
                     accelerator: 'Command+Q',
                     click: function() {
-                        app.quit();
+                        // Mac users expect an application to quit immediately with Command+Q. However, app.quit() is
+                        // being interrupted by the main window while it's closing. So instead, let's asynchronously
+                        // trigger the quit once the main window is done closing.
+                        mainWindow.once('closed', app.quit);
+                        mainWindow.close();
                     },
                 },
             ],
@@ -546,33 +550,33 @@ function setupMenu() {
                 {
                     label: 'Undo',
                     accelerator: 'CmdOrCtrl+Z',
-                    // selector: 'undo:',
+                    role: 'undo',
                 },
                 {
                     label: 'Redo',
                     accelerator: 'Shift+CmdOrCtrl+Z',
-                    // selector: 'redo:',
+                    role: 'redo',
                 },
                 { type: 'separator' },
                 {
                     label: 'Cut',
                     accelerator: 'CmdOrCtrl+X',
-                    // selector: 'cut:'
+                    role: 'cut',
                 },
                 {
                     label: 'Copy',
                     accelerator: 'CmdOrCtrl+C',
-                    // selector: 'copy:',
+                    role: 'copy',
                 },
                 {
                     label: 'Paste',
                     accelerator: 'CmdOrCtrl+V',
-                    // selector: 'paste:',
+                    role: 'paste',
                 },
                 {
                     label: 'Select All',
                     accelerator: 'CmdOrCtrl+A',
-                    // selector: 'selectAll:',
+                    role: 'selectAll',
                 },
             ],
         },
@@ -605,6 +609,10 @@ function setupApp() {
     // Quit when all windows are closed.
     app.on('window-all-closed', function() {
         if (process.platform !== 'darwin') app.quit();
+    });
+
+    // Kill the adb client when the app is definitely quitting, regardless of how it quit.
+    app.on('will-quit', () => {
         if (adb.client) adb.client.kill();
     });
 
