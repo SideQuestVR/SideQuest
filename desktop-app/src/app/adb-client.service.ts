@@ -96,6 +96,7 @@ export class AdbClientService {
             );
         }).then((resp: string) => {
             this.adbResponse = resp.trim() || 'Command Completed.';
+            return resp.trim();
         });
     }
     launchApp(packageName) {
@@ -895,11 +896,11 @@ export class AdbClientService {
         name = name || packageId;
         const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
         if (!task) this.spinnerService.showLoader();
-        let p = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename);
+        let pAdb = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename);
         if (cb) {
             cb();
         }
-        p = p.then(() => {
+        let p = pAdb.then(() => {
             if (task) {
                 task.status = name + ' File transferred successfully! ';
             } else {

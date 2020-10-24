@@ -171,6 +171,22 @@ export class ToolsComponent implements OnInit {
                 this.statusService.showStatus(e, true);
             });
     }
+    setSSOToDefault() {
+        this.runAdbCommand('adb shell getprop ro.product.model')
+            .then(model => {
+                switch (model) {
+                    case 'Quest 2':
+                        return this.setSSO(SSO._1536);
+                    case 'Quest':
+                        return this.setSSO(SSO._1024);
+                    default:
+                        throw new Error(`Unrecognized device model: ${model}`);
+                }
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
+    }
     setSSO(sso: SSO) {
         let value = 0;
         switch (sso) {
