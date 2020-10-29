@@ -33,6 +33,7 @@ enum SSO {
     _2048,
     _2560,
     _3072,
+    _1440,
 }
 enum SVR {
     _1024,
@@ -197,6 +198,9 @@ export class ToolsComponent implements OnInit {
                 break;
             case SSO._3072:
                 value = 3072;
+                break;
+            case SSO._1440:
+                value = 1440;
                 break;
         }
 
