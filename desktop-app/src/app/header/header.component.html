@@ -525,6 +525,8 @@
       <div class="col s6 input-field fixed-height">
         <input id="crop_" [(ngModel)]="scrcpy_options.crop" type="text" />
         <label for="crop_" class="active">Crop</label>
+        <div class="btn pink-button small-button waves-light waves-effect margin-right" (click)="scrcpy_options.crop = '1280:720:1500:350'">Quest 1 Crop</div>
+        <div class="btn pink-button small-button waves-light waves-effect margin-right" (click)="scrcpy_options.crop = '1600:900:2017:510'">Quest 2 Crop</div>
       </div>
       <div class="col s6 fixed-height">
         Fullscreen
