@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.adbService
             .setupAdb()
-            .then(() => this.appService.downloadScrCpyBinary(this.adbService))
+            // .then(() => this.appService.downloadScrCpyBinary(this.adbService))
             .then(() => this.adbService.connectedStatus())
             .then(() => {
                 if (!localStorage.getItem('first_run')) {

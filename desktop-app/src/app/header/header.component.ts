@@ -61,15 +61,6 @@ export class HeaderComponent implements OnInit {
     favoritePathType = 'Path';
     favouriteImportExport: boolean;
     favouriteMax: number;
-    scrcpy_options: any = {
-        always_on_top: false,
-        bit_rate: '8000000',
-        crop: '1280:720:1500:350',
-        no_control: true,
-        fullscreen: false,
-        max_size: '0',
-        max_fps: '0',
-    };
     // BAG = 'FAVS';
     subs = new Subscription();
     logcatTag: string = '';
@@ -171,13 +162,7 @@ export class HeaderComponent implements OnInit {
     }
 
     updateAvailable() {
-        // if (process.platform == 'win32') {
-        // this.spinnerService.setMessage('Downloading update...');
-        //     this.spinnerService.showLoader();
-        //     this.appService.electron.ipcRenderer.send('automatic-update', {});
-        // } else {
         this.appService.opn('https://sidequestvr.com/download');
-        //  }
     }
 
     startLogcat() {
@@ -249,13 +234,6 @@ export class HeaderComponent implements OnInit {
 
     stopLogcat() {
         this.adbService.adbCommand('endLogcat');
-    }
-
-    runscrcpy() {
-        this.appService
-            .runScrCpy(this.scrcpy_options)
-            .then(() => this.statusService.showStatus('Stream closed.'))
-            .catch(e => this.statusService.showStatus('ScrCpy Error: ' + JSON.stringify(e), true));
     }
 
     gogo(e) {
