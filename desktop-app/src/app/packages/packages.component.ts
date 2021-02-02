@@ -134,8 +134,13 @@ export class PackagesComponent implements OnInit {
                             };
                         })
                         .sort((a, b) => {
-                            let textA = (a.name || a.packageName).toUpperCase();
-                            let textB = (b.name || b.packageName).toUpperCase();
+                            const getGameName = (packageName: string) => {
+                                const split = packageName.split('.');
+
+                                return split[split.length - 1];
+                            };
+                            let textA = (a.name || getGameName(a.packageName)).toUpperCase();
+                            let textB = (b.name || getGameName(b.packageName)).toUpperCase();
                             return textA < textB ? -1 : textA > textB ? 1 : 0;
                         });
                     this.myApps.forEach(p => {
