@@ -206,6 +206,7 @@ export class ToolsComponent implements OnInit {
 
         this.runAdbCommand('adb shell setprop debug.oculus.textureWidth ' + value)
             .then(() => this.runAdbCommand('adb shell setprop debug.oculus.textureHeight ' + value))
+            .then(() => this.runAdbCommand('adb shell "settings put system font_scale 0.85 && settings put system font_scale 1.0"'))
             .then(() => {
                 this.statusService.showStatus('Texture Resolution set OK!!');
             })
