@@ -363,45 +363,45 @@ export class AppService {
         }
     }
 
-    // downloadScrCpyBinary(adbClientService) {
-    //     if (this.os.platform() === 'win32') {
-    //         this.spinnerService.showLoader();
-    //         let task = { status: 'Downloading/Extracting ScrCpy...' };
-    //         this.spinnerService.setMessage('', task);
-    //         let url = 'https://github.com/Genymobile/scrcpy/releases/download/v1.11/scrcpy-win64-v1.11.zip';
-    //         let downloadPath = this.path.join(this.appData, 'scrcpy', 'scrcpy.exe');
-    //         if (this.doesFileExist(downloadPath)) {
-    //             this.scrcpyBinaryPath = downloadPath;
-    //             this.spinnerService.hideLoader();
-    //             return Promise.resolve();
-    //         }
-    //         return new Promise<void>((resolve, reject) => {
-    //             this.downloadFile(
-    //                 url,
-    //                 url,
-    //                 url,
-    //                 () => {
-    //                     return this.path.join(this.appData, 'scrcpy.zip');
-    //                 },
-    //                 task
-    //             ).then((path: any) => {
-    //                 let callback = error => {
-    //                     if (error) return reject(error);
-    //                     this.fs.unlink(path, err => {
-    //                         // if(err) return reject(err);
-    //                         this.spinnerService.hideLoader();
-    //                         resolve(path.split('.')[0]);
-    //                     });
-    //                 };
-    //
-    //                 this.extract(path, { dir: this.path.join(this.appData, 'scrcpy') }, callback);
-    //                 this.scrcpyBinaryPath = downloadPath;
-    //             });
-    //         });
-    //     } else {
-    //         this.scrcpyBinaryPath = 'ADB=' + adbClientService.adbPath + ' scrcpy';
-    //     }
-    // }
+    downloadScrCpyBinary(adbClientService) {
+        if (this.os.platform() === 'win32') {
+            this.spinnerService.showLoader();
+            let task = { status: 'Downloading/Extracting ScrCpy...' };
+            this.spinnerService.setMessage('', task);
+            let url = 'https://github.com/Genymobile/scrcpy/releases/download/v1.11/scrcpy-win64-v1.11.zip';
+            let downloadPath = this.path.join(this.appData, 'scrcpy', 'scrcpy.exe');
+            if (this.doesFileExist(downloadPath)) {
+                this.scrcpyBinaryPath = downloadPath;
+                this.spinnerService.hideLoader();
+                return Promise.resolve();
+            }
+            return new Promise<void>((resolve, reject) => {
+                this.downloadFile(
+                    url,
+                    url,
+                    url,
+                    () => {
+                        return this.path.join(this.appData, 'scrcpy.zip');
+                    },
+                    task
+                ).then((path: any) => {
+                    let callback = error => {
+                        if (error) return reject(error);
+                        this.fs.unlink(path, err => {
+                            // if(err) return reject(err);
+                            this.spinnerService.hideLoader();
+                            resolve(path.split('.')[0]);
+                        });
+                    };
+    
+                    this.extract(path, { dir: this.path.join(this.appData, 'scrcpy') }, callback);
+                    this.scrcpyBinaryPath = downloadPath;
+                });
+            });
+        } else {
+            this.scrcpyBinaryPath = 'ADB=' + adbClientService.adbPath + ' scrcpy';
+        }
+    }
     deleteFolderRecursive(path) {
         if (this.fs.existsSync(path)) {
             this.fs.readdirSync(path).forEach(file => {
