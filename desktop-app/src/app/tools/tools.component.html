@@ -25,22 +25,6 @@
           Open ADB Folder
         </div>
       </div>
-      <div class="section-title"
-           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
-        Refresh Rate</div>
-      This will allow you to change to 90Hz refresh rate for 90fps support in games on Quest 2.<br>
-      WARNING: This does not work in all games, and does not work with Oculus Link. This setting may also reset to default when you restart your headset. You may need to press the power button twice to turn the screen off and on to enable this setting for apps that dont have it natively enabled.
-      <div class="button-section">
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
-             (click)="setRR(RR._72)">Default</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
-             (click)="setRR(RR._72)">72Hz</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
-             (click)="setRR(RR._90)">90Hz</div>
-      </div>
 
       <div class="section-title"
         [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
