@@ -77,6 +77,15 @@ export class HeaderComponent implements OnInit {
         7: 'fatal',
         8: 'silent',
     };
+    scrcpy_options: any = {
+        always_on_top: false,
+        bit_rate: '8000000',
+        crop: '1280:720:1500:350',
+        no_control: true,
+        fullscreen: false,
+        max_size: '0',
+        max_fps: '0',
+    };
     currentLogCat: LogCatEntry[] = [];
     isStarted: boolean;
     showAddFavourite: boolean;
@@ -136,7 +145,12 @@ export class HeaderComponent implements OnInit {
             favouriteList.push(favourite);
         }
     }
-
+    runscrcpy() {
+        this.appService
+            .runScrCpy(this.scrcpy_options)
+            .then(() => this.statusService.showStatus('Stream closed.'))
+            .catch(e => this.statusService.showStatus('ScrCpy Error: ' + JSON.stringify(e), true));
+    }
     saveFavourites(type: string) {
         localStorage.setItem(type, JSON.stringify(this.favourites[type]));
     }
