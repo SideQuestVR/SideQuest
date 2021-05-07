@@ -126,10 +126,12 @@ export class HeaderComponent implements OnInit {
             {"name":"Song Beater", "uri": "/sdcard/Android/data/com.Playito.SongBeater/CustomSongs/", "icon": "https://i.imgur.com/dOx0OEl.png"},
             {"name":"VRtuos", "uri": "/sdcard/Android/data/com.PavelMarceluch.VRtuos/files/Midis/", "icon": "https://i.imgur.com/7G0OpJi.png"},
             {"name":"Audica", "uri": "/sdcard/Audica/", "icon": "https://i.imgur.com/40sUjye.png"},
+            {"name":"Audio Trip", "uri": "/sdcard/Android/data/com.KinemotikStudios.AudioTripQuest/files/Songs/", "icon": "https://i.imgur.com/5EgzxTl.png"},
             {"name":"OhShape", "uri": "/sdcard/OhShape/Songs/", "icon": "https://i.imgur.com/yIu0sSQ.png"},
             {"name":"Oculus", "uri": "/sdcard/Oculus/", "icon": "https://i.imgur.com/LORDvYK.png"}
           ]`;
         }
+
         this.favourites[type] = localStorage.getItem(type) || defaultFavs;
         this.favourites[type] = JSON.parse(this.favourites[type]);
     }

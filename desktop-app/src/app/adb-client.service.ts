@@ -534,11 +534,17 @@ export class AdbClientService {
                                 );
                         }
                     })
-                    .catch(e => {
+                    .catch(async e => {
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
                         let er = e.message ? e.message : e.code ? e.code : e.reason ? e.reason : JSON.stringify(e);
+                        if (er.indexOf('INSTALL_FAILED_UPDATE_INCOMPATIBLE') > -1 && er.indexOf('com.oculus.environment.prod.')) {
+                            let match = er.match(/([A-Za-z]*[A-Za-z\d_]*\.)+[A-Za-z][A-Za-z\d_]*/gm);
+                            await this.adbCommand('uninstall', { serial: this.deviceSerial, packageName: match[0] });
+                            this.installAPK(filePath, isLocal, shouldUninstall, number, total, deleteAfter, name);
+                            return Promise.reject('Install failed, uninstalling and trying again...');
+                        }
                         if (er === 'SAFESIDE') {
                             this.appService.headerComponent.safeModal.openModal();
                         }
