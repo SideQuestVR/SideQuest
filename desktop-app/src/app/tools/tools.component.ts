@@ -34,6 +34,9 @@ enum SSO {
     _2560,
     _3072,
     _1440,
+    _Go,
+    _Quest1,
+    _Quest2,
 }
 enum SVR {
     _1024,
@@ -173,39 +176,61 @@ export class ToolsComponent implements OnInit {
             });
     }
     setSSO(sso: SSO) {
-        let value = 0;
+        let value = 1440;
+        let hvalue = 1584;
         switch (sso) {
             case SSO._512:
                 value = 512;
+                hvalue = 563;
                 break;
             case SSO._768:
                 value = 768;
+                hvalue = 845;
                 break;
             case SSO._1024:
                 value = 1024;
+                hvalue = 1127;
                 break;
             case SSO._1280:
                 value = 1280;
+                hvalue = 1408;
                 break;
             case SSO._1536:
                 value = 1536;
+                hvalue = 1690;
                 break;
             case SSO._2048:
                 value = 2048;
+                hvalue = 2253;
                 break;
             case SSO._2560:
                 value = 2560;
+                hvalue = 2816;
                 break;
             case SSO._3072:
                 value = 3072;
+                hvalue = 3380;
                 break;
             case SSO._1440:
                 value = 1440;
+                hvalue = 1584;
+                break;
+            case SSO._Go:
+                value = 1024;
+                hvalue = 1024;
+                break;
+            case SSO._Quest1:
+                value = 1216;
+                hvalue = 1344;
+                break;
+            case SSO._Quest2:
+                value = 1440;
+                hvalue = 1584;
                 break;
         }
 
         this.runAdbCommand('adb shell setprop debug.oculus.textureWidth ' + value)
-            .then(() => this.runAdbCommand('adb shell setprop debug.oculus.textureHeight ' + value))
+            .then(() => this.runAdbCommand('adb shell setprop debug.oculus.textureHeight ' + hvalue))
             .then(() => this.runAdbCommand('adb shell "settings put system font_scale 0.85 && settings put system font_scale 1.0"'))
             .then(() => {
                 this.statusService.showStatus('Texture Resolution set OK!!');
