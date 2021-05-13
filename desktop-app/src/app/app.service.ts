@@ -334,7 +334,9 @@ export class AppService {
                 (options.fullscreen ? '-f' : '') +
                 ' ' +
                 (options.no_control ? '-n' : '') +
-                ' --window-title "SideQuest Stream"';
+                ' --window-title "SideQuest Stream"' +
+                ' ' +
+                (options.device ? '-s ' + options.device : '');
             console.log(command);
             this.exec(command, function(err, stdout, stderr) {
                 if (err) {
@@ -393,7 +395,7 @@ export class AppService {
                             resolve(path.split('.')[0]);
                         });
                     };
-    
+
                     this.extract(path, { dir: this.path.join(this.appData, 'scrcpy') }, callback);
                     this.scrcpyBinaryPath = downloadPath;
                 });

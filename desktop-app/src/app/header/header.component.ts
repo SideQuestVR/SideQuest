@@ -85,6 +85,7 @@ export class HeaderComponent implements OnInit {
         fullscreen: false,
         max_size: '0',
         max_fps: '0',
+        device: '',
     };
     currentLogCat: LogCatEntry[] = [];
     isStarted: boolean;
@@ -148,6 +149,7 @@ export class HeaderComponent implements OnInit {
         }
     }
     runscrcpy() {
+        this.scrcpy_options.device = this.adbService.deviceSerial;
         this.appService
             .runScrCpy(this.scrcpy_options)
             .then(() => this.statusService.showStatus('Stream closed.'))
