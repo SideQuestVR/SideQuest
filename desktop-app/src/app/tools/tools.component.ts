@@ -53,8 +53,10 @@ enum SVB {
     _25Mbps,
 }
 enum RR {
+    _60,
     _72,
     _90,
+    _120,
 }
 @Component({
     selector: 'app-tools',
@@ -160,11 +162,17 @@ export class ToolsComponent implements OnInit {
     setRR(rr: RR) {
         let value = 72;
         switch (rr) {
+            case RR._60:
+                value = 60;
+                break;
             case RR._72:
                 value = 72;
                 break;
             case RR._90:
                 value = 90;
+                break;
+            case RR._120:
+                value = 120;
                 break;
         }
         this.runAdbCommand('adb shell setprop debug.oculus.refreshRate ' + value)
