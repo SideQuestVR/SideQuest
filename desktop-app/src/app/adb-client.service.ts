@@ -48,6 +48,7 @@ export class AdbClientService {
     displayDevices: ADBDevice[];
     deviceName: string;
     connectionCss: any;
+    obbRegex = /[a-z]{4,5}.[0-9]{1,}.([A-z0-9.]{1,}).obb/;
     constructor(
         public appService: AppService,
         private spinnerService: LoadingSpinnerService,
@@ -893,9 +894,9 @@ export class AdbClientService {
     }
     installLocalObb(filepath: string, dontCatchError = false, cb = null, number?: number, total?: number, task?, name?: string) {
         let filename = this.appService.path.basename(filepath);
-        let match = filename.match(/[a-z]{4,5}.[0-9]{1,}.([A-z0-9.]{1,}).obb/);
+        let match = filename.match(this.obbRegex);
         if (!match || !match.length) {
-            match = name.match(/[a-z]{4,5}.[0-9]{1,}.([A-z0-9.]{1,}).obb/);
+            match = name.match(this.obbRegex);
         }
         let packageId = match[1];
         name = name || packageId;
@@ -931,7 +932,7 @@ export class AdbClientService {
                 this.installAPK(filepath, true, false, 0, 0, deleteAfter);
             },
             '.obb': filepath => {
-                if (this.appService.path.basename(filepath).match(/main.[0-9]{1,}.[a-z]{1,}.[A-z]{1,}.[A-z]{1,}.obb/)) {
+                if (this.appService.path.basename(filepath).match(this.obbRegex)) {
                     this.processService.addItem('file_install', async task => {
                         return this.installLocalObb(filepath, false, null, 1, 1, task, '').then(() => {
                             if (deleteAfter) {
@@ -961,7 +962,6 @@ export class AdbClientService {
                             let installableFiles = files.filter((val, index) => {
                                 return Object.keys(typeBasedActions).includes(this.appService.path.extname(val));
                             });
-
                             installableFiles.sort(function(a, b) {
                                 return a.endsWith('.apk') ? -1 : 1;
                             });
