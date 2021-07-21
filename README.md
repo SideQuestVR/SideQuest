@@ -3,7 +3,7 @@ Below is the documentation of SideQuest with instructions for building and signi
 
 ## Build Steps
 
-Clone the repo. 
+Clone the repo
 
 To install the app dependencies 
 ```
