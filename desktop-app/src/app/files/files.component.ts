@@ -131,23 +131,25 @@ export class FilesComponent implements OnInit {
             return Promise.resolve();
         }
         const f = files.shift();
-        const savePath = this.appService.path.posix.join(this.currentPath, this.appService.path.basename(f));
-        if (!this.appService.fs.existsSync(f)) {
+        const savePath = f.save; // this.appService.path.posix.join(this.currentPath, this.appService.path.basename(f));
+        if (!this.appService.fs.existsSync(f.file)) {
             return Promise.resolve().then(() => setTimeout(() => this.uploadFile(files, task), 500));
         }
-        if (this.appService.fs.lstatSync(f).isDirectory()) {
+        console.log(f.file, this.appService.fs.lstatSync(f.file).isDirectory());
+        if (this.appService.fs.lstatSync(f.file).isDirectory()) {
             return new Promise(async resolve => {
-                this.folderName = this.appService.path.basename(f);
+                this.folderName = this.appService.path.basename(f.file);
                 await this.makeFolder();
-                await this.uploadFolder(f, files, task);
+                await this.uploadFolder(f.file, files, task);
                 resolve();
             });
         }
+        task.status = 'Transferring ' + this.appService.path.basename(f.file) + ' to ' + f.save;
         return this.adbService
-            .adbCommand('push', { serial: this.adbService.deviceSerial, path: f, savePath }, stats => {
+            .adbCommand('push', { serial: this.adbService.deviceSerial, path: f.file, savePath }, stats => {
                 task.status =
                     'File uploading: ' +
-                    this.appService.path.basename(f) +
+                    this.appService.path.basename(f.file) +
                     ' ' +
                     Math.round((stats.bytesTransferred / 1024 / 1024) * 100) / 100 +
                     'MB';
@@ -162,7 +164,11 @@ export class FilesComponent implements OnInit {
         if (files !== undefined && files.length) {
             return this.processService.addItem('restore_files', async task => {
                 task.status = 'Starting Upload to ' + this.currentPath;
-                return this.uploadFile(files, task)
+                let fileObjs = files.map(file => ({
+                    file,
+                    save: this.appService.path.posix.join(this.currentPath, this.appService.path.basename(file)),
+                }));
+                return this.uploadFile(fileObjs, task)
                     .then(() => {
                         setTimeout(() => {
                             this.open(this.currentPath);
