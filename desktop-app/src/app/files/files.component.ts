@@ -135,7 +135,6 @@ export class FilesComponent implements OnInit {
         if (!this.appService.fs.existsSync(f.file)) {
             return Promise.resolve().then(() => setTimeout(() => this.uploadFile(files, task), 500));
         }
-        console.log(f.file, this.appService.fs.lstatSync(f.file).isDirectory());
         if (this.appService.fs.lstatSync(f.file).isDirectory()) {
             return new Promise(async resolve => {
                 this.folderName = this.appService.path.basename(f.file);
