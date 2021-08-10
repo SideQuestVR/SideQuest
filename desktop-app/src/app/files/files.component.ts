@@ -323,7 +323,7 @@ export class FilesComponent implements OnInit {
         });
     }
     openSaveLocation() {
-        this.appService.electron.remote.shell.openItem(this.adbService.savePath);
+        this.appService.electron.remote.shell.openPath(this.adbService.savePath);
     }
     async readdir(path: string) {
         let dirContents: FileFolderListing[];
