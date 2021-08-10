@@ -101,6 +101,7 @@ export class HeaderComponent implements OnInit {
         public processService: ProcessBucketService
     ) {
         this.osPlatform = this.appService.os.platform();
+        console.log('Platform: ' + this.osPlatform);
         this.resetFavourites('browserFavourites');
         this.resetFavourites('fileFavourites');
         this.resetFavourites('commandFavourites');

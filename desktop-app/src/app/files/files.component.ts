@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AdbClientService, ConnectionStatus } from '../adb-client.service';
 import { AppService } from '../app.service';
 import { LoadingSpinnerService } from '../loading-spinner.service';
@@ -30,7 +30,7 @@ export class FilesComponent implements OnInit {
     filesToBeSaved: FileFolderListing[];
     filesToBeDeleted: FileFolderListing[];
     breadcrumbs: BreadcrumbListing[] = [];
-    isOpen: boolean = false;
+    isOpen = false;
     currentPath: string;
     folderName: string;
     folderSize: string;

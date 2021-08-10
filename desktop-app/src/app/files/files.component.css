@@ -22,3 +22,10 @@
   margin-right: 0.5em;
   margin-left: 0.5em;
 }
+.top-bar{
+  direction: rtl;
+  white-space: nowrap;
+  text-align: left;
+  width: 100%;
+  position: fixed;
+}

@@ -1,7 +1,7 @@
 <div *ngIf="isConnected()" class="top-bar">
   <nav class="pink lighten-2 breadcrumb-wrapper ">
     <div class="nav-wrapper container">
-      <div class="col s12">
+      <div class="col s12 truncate">
         <a *ngFor="let breadcrumb of breadcrumbs; let i = index" href="javascript:void(0)" class="breadcrumb"
           (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}<span *ngIf="i === breadcrumbs.length-1 && folderSize"> ({{folderSize}})</span> </a>
       </div>
