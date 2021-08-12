@@ -48,12 +48,12 @@
     <i class="large material-icons">add</i>
   </a>
   <ul>
-    <li mz-tooltip position="left" tooltip="Copy file to this folder" (click)="uploadFiles()"><a
-        class="btn-floating purple"><i class="material-icons">insert_drive_file</i></a></li>
-    <li mz-tooltip position="left" tooltip="Make folder in this folder" (click)="mkDirModal.openModal()"><a
-        class="btn-floating blue"><i class="material-icons">folder</i></a></li>
+    <li mz-tooltip position="left" tooltip="Upload file to this folder" (click)="uploadFiles()"><a
+        class="btn-floating purple"><i class="material-icons">file_upload</i></a></li>
+    <li mz-tooltip position="left" tooltip="Make new folder in this folder" (click)="mkDirModal.openModal()"><a
+        class="btn-floating blue"><i class="material-icons">create_new_folder</i></a></li>
     <li mz-tooltip position="left" tooltip="Open current save location" (click)="openSaveLocation()"><a
-        class="btn-floating yellow darken-2"><i class="material-icons">folder</i></a></li>
+        class="btn-floating yellow darken-2"><i class="material-icons">open_in_new</i></a></li>
     <li *ngIf="quickSaveSupported()" mz-tooltip position="left" tooltip="Save screenshots and recordings"
       (click)="downloadMediaModal.openModal()"><a class="btn-floating green"><i class="material-icons">get_app</i></a>
     </li>

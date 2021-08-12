@@ -201,7 +201,7 @@ class ADB {
             if (isInvalidURI) {
                 return ecb("Can't download file. Invalid URL:");
             } else {
-                throw e;
+                return ecb(e);
             }
         }
         this.client

@@ -201,7 +201,6 @@ export class PackagesComponent implements OnInit {
             .then(version => (this.currentPackage.versionCode = version))
             .then(() => this.adbService.getPackagePermissions(this.currentPackage.package.packageName))
             .then(perms => {
-                console.log(p);
                 perms.forEach((p: any) => {
                     const perm_split = p.permission.split('.');
                     p.display_permission = perm_split[perm_split.length - 1];
