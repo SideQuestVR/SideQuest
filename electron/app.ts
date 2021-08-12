@@ -1,4 +1,4 @@
-import { app, protocol, ipcMain, Menu, MenuItemConstructorOptions, BrowserWindow } from 'electron';
+import { app, protocol, ipcMain, Menu, MenuItemConstructorOptions, BrowserWindow, shell } from 'electron';
 import { StateStorage, EnvironmentConfig } from './state-storage';
 import { AppWindow } from './window';
 const path = require('path');
@@ -521,6 +521,8 @@ function createWindow() {
             BrowserWindow.getAllWindows()
                 .filter(b => b !== mainWindow)
                 .forEach(b => b.close());
+        } else {
+            shell.openExternal(url);
         }
         item.cancel();
     });
