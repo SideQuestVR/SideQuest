@@ -490,7 +490,7 @@ function createWindow() {
             if (error) console.error('Failed to register protocol');
         }
     );
-
+    mainWindow.webContents.on('did-fail-load', () => mainWindow.loadURL(mainWindow.webContents.getURL()));
     mainWindow.webContents.session.on('will-download', (_evt, item, _webContents) => {
         let url = item.getURL();
         let urls = item.getURLChain();

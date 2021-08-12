@@ -25,6 +25,7 @@ export class FilesComponent implements OnInit {
     @ViewChild('filesModal', { static: false }) filesModal;
     @ViewChild('fixedAction', { static: false }) fixedAction;
     @ViewChild('downloadMediaModal', { static: false }) downloadMediaModal;
+    @ViewChild('mkDirModal', { static: true }) mkDirModal;
     files: FileFolderListing[] = [];
     selectedFiles: FileFolderListing[] = [];
     filesToBeSaved: FileFolderListing[];
@@ -64,8 +65,8 @@ export class FilesComponent implements OnInit {
             return this.statusService.showStatus('A folder already exists with that name!!', true);
         } else {
             await this.adbService.makeDirectory(this.appService.path.posix.join(this.currentPath, this.folderName)).then(r => {
+                this.open(this.appService.path.posix.join(this.currentPath, this.folderName));
                 this.folderName = '';
-                this.open(this.currentPath);
             });
         }
     }
@@ -298,6 +299,12 @@ export class FilesComponent implements OnInit {
         }
         this.breadcrumbs.push({ path, name });
     }
+    autoReturn(event, callback) {
+        if (event.keyCode === 13) {
+            callback();
+            this.mkDirModal.closeModal();
+        }
+    }
     open(path: string) {
         this.currentPath = path;
         this.breadcrumbs = [];
@@ -323,7 +330,7 @@ export class FilesComponent implements OnInit {
         });
     }
     openSaveLocation() {
-        this.appService.electron.remote.shell.openPath(this.adbService.savePath);
+        this.appService.electron.remote.shell.openItem(this.adbService.savePath);
     }
     async readdir(path: string) {
         let dirContents: FileFolderListing[];

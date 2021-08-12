@@ -30,7 +30,7 @@ export class AdbClientService {
     lastConnectionCheck: number;
     deviceStatus: ConnectionStatus = ConnectionStatus.UNAUTHORIZED;
     deviceStatusMessage: string = 'Connecting...';
-    pollInterval: number = 1000 * 5;
+    pollInterval: number = 1000 * 2;
     savePath: string;
     isTransferring: boolean;
     adbResolves: any;

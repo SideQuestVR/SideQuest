@@ -12,7 +12,7 @@
   <div *ngIf="!isConnected()">
     <h4
       [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
-      No device connected...</h4>
+      No device connected yet...</h4>
 
   </div>
   <div *ngIf="isConnected()">
@@ -20,6 +20,7 @@
       <h4
         [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
         No files here...</h4>
+      <div class="grey-text">{{this.currentPath}}</div>
 
     </div>
     <div *ngFor="let file of files" class="vertical-align cursor"
@@ -74,7 +75,7 @@
   <mz-modal-content>
     Please enter a folder name.
     <div class="input-field ">
-      <input id="devicePaste" type="text" [(ngModel)]="folderName" autofocus />
+      <input id="devicePaste" type="text" [(ngModel)]="folderName" autofocus (keyup)="autoReturn($event, makeFolder.bind(this))"/>
       <label for="devicePaste">Folder Name</label>
     </div>
   </mz-modal-content>

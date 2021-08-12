@@ -197,31 +197,31 @@ export class AppService {
     openFolder(folder: FolderType, packageName?: string) {
         switch (folder) {
             case FolderType.MAIN:
-                this.electron.shell.openPath(this.appData);
+                this.electron.shell.openItem(this.appData);
                 break;
             case FolderType.BSABER:
-                this.electron.shell.openPath(this.path.join(this.appData, 'bsaber'));
+                this.electron.shell.openItem(this.path.join(this.appData, 'bsaber'));
                 break;
             case FolderType.BSABER_BACKUPS:
-                this.electron.shell.openPath(this.path.join(this.appData, 'bsaber-backups'));
+                this.electron.shell.openItem(this.path.join(this.appData, 'bsaber-backups'));
                 break;
             case FolderType.ADB:
-                this.electron.shell.openPath(this.path.join(this.appData, 'platform-tools'));
+                this.electron.shell.openItem(this.path.join(this.appData, 'platform-tools'));
                 break;
             case FolderType.APK_BACKUPS:
-                this.electron.shell.openPath(this.path.join(this.appData, 'backups'));
+                this.electron.shell.openItem(this.path.join(this.appData, 'backups'));
                 break;
             case FolderType.DATA_BACKUPS:
-                this.electron.shell.openPath(this.path.join(this.appData, 'bsaber-data-backups'));
+                this.electron.shell.openItem(this.path.join(this.appData, 'bsaber-data-backups'));
                 break;
             case FolderType.QUEST_SABER_PATCH:
-                this.electron.shell.openPath(this.path.join(this.appData, 'saber-quest-patch', 'questsaberpatch'));
+                this.electron.shell.openItem(this.path.join(this.appData, 'saber-quest-patch', 'questsaberpatch'));
                 break;
             case FolderType.APP_BACKUP:
-                this.electron.shell.openPath(this.path.join(this.backupPath, packageName));
+                this.electron.shell.openItem(this.path.join(this.backupPath, packageName));
                 break;
             case FolderType.SONG_FOLDER:
-                this.electron.shell.openPath(this.path.join(this.appData, 'bsaber', packageName));
+                this.electron.shell.openItem(this.path.join(this.appData, 'bsaber', packageName));
                 break;
         }
     }
