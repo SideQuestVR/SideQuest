@@ -127,7 +127,7 @@ export class ToolsComponent implements OnInit {
         return this.adbService.runAdbCommand(command);
     }
     setExperimental(exp: EXP) {
-        this.runAdbCommand('adb shell debug.oculus.experimentalEnabled ' + exp)
+        this.runAdbCommand('adb shell setprop debug.oculus.experimentalEnabled ' + exp)
             .then(() => {
                 this.statusService.showStatus('Experimental Mode set OK!!');
             })
