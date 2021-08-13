@@ -12,20 +12,32 @@
         <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
           [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
           (click)="appService.openFolder(folder.MAIN)">
-          Open Main App Folder
+          Open Main App Folder<i class="material-icons">open_in_new</i>
         </div>
         <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
           [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
           (click)="appService.openFolder(folder.APK_BACKUPS)">
-          Open APK Backup Folder
+          Open APK Backup Folder<i class="material-icons">open_in_new</i>
         </div>
         <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
           [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
           (click)="appService.openFolder(folder.ADB)">
-          Open ADB Folder
+          Open ADB Folder<i class="material-icons">open_in_new</i>
         </div>
       </div>
 
+      <div class="section-title"
+           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+        Experimental Mode</div>
+      This enables experimental features in your Oculus Quest such as Passthrough API support.
+      <div class="button-section">
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
+             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+             (click)="setExperimental(EXP.On)">On</div>
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
+             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+             (click)="setExperimental(EXP.Off)">Off</div>
+      </div>
       <div class="section-title"
            [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
         Refresh Rate</div>

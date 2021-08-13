@@ -15,6 +15,10 @@ enum GPU {
     _2,
     _4,
 }
+enum EXP {
+    Off,
+    On,
+}
 enum GU {
     ON,
     OFF,
@@ -120,6 +124,15 @@ export class ToolsComponent implements OnInit {
     }
     runAdbCommand(command: string) {
         return this.adbService.runAdbCommand(command);
+    }
+    setExperimental(exp: EXP) {
+        this.runAdbCommand('adb shell debug.oculus.experimentalEnabled ' + exp)
+            .then(() => {
+                this.statusService.showStatus('Experimental Mode set OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
     }
     setGPU(gpu: GPU) {
         let value = gpu === GPU._2 ? 2 : 4;
