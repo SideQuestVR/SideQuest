@@ -82,6 +82,7 @@ export class ToolsComponent implements OnInit {
     GPU = GPU;
     FR = GU;
     RR = RR;
+    EXP = EXP;
     pavlovName;
     constructor(
         public appService: AppService,
