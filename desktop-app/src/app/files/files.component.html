@@ -75,13 +75,13 @@
   <mz-modal-content>
     Please enter a folder name.
     <div class="input-field ">
-      <input id="devicePaste" type="text" [(ngModel)]="folderName" autofocus (keyup)="autoReturn($event, makeFolder.bind(this))"/>
+      <input id="devicePaste" type="text" [(ngModel)]="folderName" autofocus (keyup)="autoReturn($event, makeFolder.bind(this, true))"/>
       <label for="devicePaste">Folder Name</label>
     </div>
   </mz-modal-content>
   <mz-modal-footer>
     <button mz-button [flat]="true" mz-modal-close>Close</button>
-    <button mz-button class="pink-button" mz-modal-close (click)="makeFolder()">Make Folder</button>
+    <button mz-button class="pink-button" mz-modal-close (click)="makeFolder(true)">Make Folder</button>
   </mz-modal-footer>
 </mz-modal>
 

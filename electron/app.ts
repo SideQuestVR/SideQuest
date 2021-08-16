@@ -50,7 +50,11 @@ class ADB {
                     reject(error);
                 } else {
                     try {
-                        resolve(JSON.parse(body).found);
+                        const found = JSON.parse(body).found;
+                        if (!found) {
+                            updateStatus('APK is not in the blacklist. Installing...');
+                        }
+                        resolve(found);
                     } catch (e) {
                         reject(e);
                     }
@@ -179,6 +183,7 @@ class ADB {
                 return ecb('SAFESIDE');
             }
         }
+        scb('Transferring APK to device...');
         let stream;
         try {
             stream = isLocal

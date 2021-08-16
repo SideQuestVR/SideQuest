@@ -513,26 +513,12 @@ export class AdbClientService {
                     }
                 })
                     .then(r => {
-                        task.status = name + 'APK file installed ok!!';
+                        task.status = name + 'APK installed ok!!';
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
                         if (filePath.indexOf('com.weloveoculus.BMBF') > -1) {
                             return this.beatonService.setBeatOnPermission(this);
-                        }
-                        if (filePath.toLowerCase().indexOf('sidequest.legends') > -1) {
-                            return this.setPermission('com.sidequest.legends', 'android.permission.RECORD_AUDIO');
-                        }
-                        if (filePath.toLowerCase().indexOf('pavlov') > -1) {
-                            return this.setPermission('com.vankrupt.pavlov', 'android.permission.RECORD_AUDIO')
-                                .then(() => this.setPermission('com.vankrupt.pavlov', 'android.permission.READ_EXTERNAL_STORAGE'))
-                                .then(() => this.setPermission('com.vankrupt.pavlov', 'android.permission.WRITE_EXTERNAL_STORAGE'))
-                                .then(() =>
-                                    this.adbCommand('shell', {
-                                        serial: this.deviceSerial,
-                                        command: 'echo null > /sdcard/pavlov.name.txt',
-                                    })
-                                );
                         }
                     })
                     .catch(async e => {
@@ -540,7 +526,10 @@ export class AdbClientService {
                             this.appService.fs.unlink(filePath, err => {});
                         }
                         let er = e.message ? e.message : e.code ? e.code : e.reason ? e.reason : JSON.stringify(e);
-                        if (er.indexOf('INSTALL_FAILED_UPDATE_INCOMPATIBLE') > -1 && er.indexOf('com.oculus.environment.prod.')) {
+                        if (
+                            er.indexOf('INSTALL_FAILED_UPDATE_INCOMPATIBLE') > -1 &&
+                            er.indexOf('com.oculus.environment.prod.') > -1
+                        ) {
                             let match = er.match(/([A-Za-z]*[A-Za-z\d_]*\.)+[A-Za-z][A-Za-z\d_]*/gm);
                             await this.adbCommand('uninstall', { serial: this.deviceSerial, packageName: match[0] });
                             this.installAPK(filePath, isLocal, shouldUninstall, number, total, deleteAfter, name);
@@ -647,7 +636,7 @@ export class AdbClientService {
     }
     async restoreDataBackup(packageName: string, folderName: string) {
         return this.processService.addItem('restore_files', async task => {
-            task.status = 'Restoring Files...';
+            task.status = 'Transferring Files...';
             let packageBackupPath = this.appService.path.join(this.appService.backupPath, packageName, 'data', folderName, 'files');
             if (this.appService.fs.existsSync(packageBackupPath)) {
                 this.localFiles = [];
@@ -665,7 +654,7 @@ export class AdbClientService {
                         return this.uploadFile(this.localFiles.filter(f => f.__isFile), task);
                     })
                     .then(() => this.spinnerService.hideLoader())
-                    .then(() => (task.status = 'Restored game data backup OK!! ' + packageName + ' | ' + folderName));
+                    .then(() => (task.status = 'Files Transferred OK!! ' + packageName + ' | ' + folderName));
             }
             let obbBackupPath = this.appService.path.join(this.appService.backupPath, packageName, 'data', folderName, 'obb');
             if (this.appService.fs.existsSync(obbBackupPath)) {

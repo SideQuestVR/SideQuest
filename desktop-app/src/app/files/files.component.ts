@@ -55,7 +55,7 @@ export class FilesComponent implements OnInit {
     ngOnInit() {
         this.appService.setTitle('Headset Files');
     }
-    async makeFolder() {
+    async makeFolder(shouldOpen?: boolean) {
         if (
             !!~this.files
                 .filter(f => f.icon === 'folder')
@@ -65,7 +65,11 @@ export class FilesComponent implements OnInit {
             return this.statusService.showStatus('A folder already exists with that name!!', true);
         } else {
             await this.adbService.makeDirectory(this.appService.path.posix.join(this.currentPath, this.folderName)).then(r => {
-                this.open(this.appService.path.posix.join(this.currentPath, this.folderName));
+                if (shouldOpen) {
+                    this.open(this.appService.path.posix.join(this.currentPath, this.folderName));
+                } else {
+                    this.open(this.currentPath);
+                }
                 this.folderName = '';
             });
         }
@@ -173,7 +177,7 @@ export class FilesComponent implements OnInit {
                         setTimeout(() => {
                             this.open(this.currentPath);
                         }, 1500);
-                        task.status = 'Upload complete!';
+                        task.status = 'Transfer complete!';
                     })
                     .catch(e => this.statusService.showStatus(e.toString(), true));
             });
@@ -236,7 +240,7 @@ export class FilesComponent implements OnInit {
             return this.adbService
                 .adbCommand('pull', { serial: this.adbService.deviceSerial, path, savePath }, stats => {
                     task.status =
-                        'File downloading: ' +
+                        'File saving: ' +
                         this.appService.path.basename(savePath) +
                         ' - ' +
                         Math.round(stats.bytesTransferred / 1024 / 1024) +
