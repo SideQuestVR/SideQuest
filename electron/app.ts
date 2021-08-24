@@ -327,7 +327,7 @@ class ADB {
         if (!this.client) return ecb('Not connected.');
         this.client
             .listDevices()
-            .then(cb)
+            .then(d => cb(d))
             .catch(e => ecb(e));
     }
     setProperties(serial, command, cb, ecb) {

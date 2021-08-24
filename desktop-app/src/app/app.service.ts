@@ -227,30 +227,27 @@ export class AppService {
     }
     seedPlatformTools() {
         return new Promise(async resolve => {
-            if (!this.fs.existsSync(this.path.join(this.appData, 'platform-tools'))) {
-                let sourcesPath = this.path.join(__dirname, '..', 'platform-tools');
-                if (!this.fs.existsSync(sourcesPath)) {
-                    sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
-                }
-                // console.log(this.path.join(__dirname, '..', 'platform-tools'), process.cwd(), __dirname);
-                await this.mkdir(this.path.join(this.appData, 'platform-tools'));
-                try {
-                    let files = this.fs.readdirSync(sourcesPath);
-                    for (let i = 0; i < files.length; i++) {
-                        this.fs.copyFileSync(
-                            this.path.join(sourcesPath, files[i]),
-                            this.path.join(this.appData, 'platform-tools', files[i])
-                        );
-                    }
-                    if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
-                        this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() =>
-                            setTimeout(() => resolve(), 5000)
-                        );
-                    } else {
-                        setTimeout(() => resolve(), 5000);
-                    }
-                } catch (e) {}
+            let sourcesPath = this.path.join(__dirname, '..', 'platform-tools');
+            if (!this.fs.existsSync(sourcesPath)) {
+                sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
             }
+            await this.mkdir(this.path.join(this.appData, 'platform-tools'));
+            try {
+                let files = this.fs.readdirSync(sourcesPath);
+                for (let i = 0; i < files.length; i++) {
+                    this.fs.copyFileSync(
+                        this.path.join(sourcesPath, files[i]),
+                        this.path.join(this.appData, 'platform-tools', files[i])
+                    );
+                }
+                if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
+                    this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() =>
+                        setTimeout(() => resolve(), 5000)
+                    );
+                } else {
+                    setTimeout(() => resolve(), 5000);
+                }
+            } catch (e) {}
         });
     }
     makeFolders() {

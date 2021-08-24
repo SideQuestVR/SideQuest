@@ -275,7 +275,7 @@ export class AdbClientService {
                         '      </i>' +
                         this.batteryLevel +
                         '% ';
-                    this.beatonService.checkIsBeatOnRunning(this);
+                    // this.beatonService.checkIsBeatOnRunning(this);
                 } catch (e) {
                     const isBadConnection = e && e.message === "Failure: 'closed'" && e.name === 'FailError';
                     if (isBadConnection) {
@@ -336,7 +336,13 @@ export class AdbClientService {
                 requestAnimationFrame(this.connectedStatus.bind(this));
             })
             .catch(err => {
-                requestAnimationFrame(this.connectedStatus.bind(this));
+                alert(
+                    this.appService.os.platform() === 'win32'
+                        ? `It looks like there is something wrong with your install.
+Uninstall SideQuest and select "yes" when asked to delete app data and then install again. You may need to move your backup apks.`
+                        : `It looks like something went wrong, try uninstalling SideQuest and reinstalling.
+This can sometimes be caused by changes to your hosts file. Don't make changes unless you know what you are doing.`
+                );
             });
     }
     adbCommand(command: string, settings?, callback?) {
@@ -366,19 +372,18 @@ export class AdbClientService {
         });
     }
     isAdbDownloaded() {
-        // let command = 'which adb';
-        // if (process.platform == 'win32') {
-        //     command = 'where adb';
-        // }
-        // try{
-        //
-        //   let stdout = this.appService.execSync(command);
-        //   if (this.doesFileExist(stdout)) {
-        //     this.adbPath = this.appService.path.dirname(stdout);
-        //     return true;
-        //   }
-        // }catch(e){}
-        return this.doesFileExist(this.adbPath);
+        let downloaded = true;
+        if (!this.doesFileExist(this.adbPath)) {
+            return false;
+        }
+        let source_files = this.appService.fs.readdirSync(this.appService.path.join(process.cwd(), 'build', 'platform-tools'));
+        let dest_files = this.appService.fs.readdirSync(this.adbPath);
+        source_files.forEach(d => {
+            if (dest_files.indexOf(d) === -1) {
+                downloaded = false;
+            }
+        });
+        return downloaded; // this.doesFileExist(this.appService.path.join(this.adbPath, this.getAdbBinary()));
     }
     setPermission(packageName: string, permission: string, isRevoke?: boolean) {
         return this.adbCommand('shell', {
