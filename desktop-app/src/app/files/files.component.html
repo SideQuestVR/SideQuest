@@ -1,6 +1,6 @@
 <div *ngIf="isConnected()" class="top-bar">
-  <nav class="pink lighten-2 breadcrumb-wrapper ">
-    <div class="nav-wrapper container">
+  <nav class="pink lighten-2 breadcrumb-wrapper ">    
+    <div class="nav-wrapper container">      
       <div class="col s12 truncate">
         <a *ngFor="let breadcrumb of breadcrumbs; let i = index" href="javascript:void(0)" class="breadcrumb"
           (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}<span *ngIf="i === breadcrumbs.length-1 && folderSize"> ({{folderSize}})</span> </a>
@@ -26,9 +26,11 @@
     <div *ngFor="let file of files" class="vertical-align cursor"
       [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
       <div class="file" (click)="selectFile($event, file);  $event.stopPropagation()">
-        <div class="right">
+        <div class="right">          
           <span *ngIf="file.icon !== 'folder'">{{file.size|number:'1.2-2'}}MB | </span>{{file.time|date:'short'}}
 
+          <i class="material-icons cursor white-text drag-indicator save-icon"
+            title="Copy full file path to the clipboard" (click)="copyPathToClipboard(file.filePath)">content_copy</i>
           <i class="material-icons cursor white-text drag-indicator save-icon"
             (click)="filesToBeSaved = [file]; filesModal.openModal();">save</i>
           <i class="material-icons cursor orange-text drag-indicator right delete"

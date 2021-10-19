@@ -110,6 +110,10 @@ export class FilesComponent implements OnInit {
             this.selectedFiles.length = 0;
         }
     }
+    copyPathToClipboard(path = null) {
+        this.appService.electron.clipboard.writeText(path || this.currentPath);
+        this.statusService.showStatus(`Copied file path to your clipboard!`);
+    }
     async uploadFolder(folder, files, task) {
         task.status = 'Restoring Folder... ' + folder;
         if (this.appService.fs.existsSync(folder)) {
