@@ -457,7 +457,7 @@ function parseOpenUrl(argv: string[]) {
 function createWindow() {
     appWindow = new AppWindow(config);
     mainWindow = appWindow.window;
-
+    require('@electron/remote/main').enable(mainWindow.webContents);
     if (process.env.NODE_ENV === 'dev') {
         mainWindow.loadURL('http://localhost:4205');
         mainWindow.webContents.openDevTools();
@@ -475,28 +475,16 @@ function createWindow() {
         if (process.platform !== 'linux') autoUpdater.checkForUpdates();
     });
 
-    protocol.registerBufferProtocol(
-        'beatsaver',
-        (request, _callback) => {
-            mainWindow.webContents.send(
-                'open-url',
-                'sidequest://bsaber/#https://beatsaver.com/api/download/key/' + request.url.replace('beatsaver://', '')
-            );
-        },
-        error => {
-            if (error) console.error('Failed to register protocol');
-        }
-    );
+    protocol.registerBufferProtocol('beatsaver', (request, _callback) => {
+        mainWindow.webContents.send(
+            'open-url',
+            'sidequest://bsaber/#https://beatsaver.com/api/download/key/' + request.url.replace('beatsaver://', '')
+        );
+    });
 
-    protocol.registerStringProtocol(
-        'sidequest',
-        (request, _callback) => {
-            mainWindow.webContents.send('open-url', request.url);
-        },
-        error => {
-            if (error) console.error('Failed to register protocol');
-        }
-    );
+    protocol.registerStringProtocol('sidequest', (request, _callback) => {
+        mainWindow.webContents.send('open-url', request.url);
+    });
     mainWindow.webContents.on('did-fail-load', () => mainWindow.loadURL(mainWindow.webContents.getURL()));
     mainWindow.webContents.session.on('will-download', (_evt, item, _webContents) => {
         let url = item.getURL();
@@ -598,6 +586,7 @@ function setupMenu() {
 }
 
 function setupApp() {
+    require('@electron/remote/main').initialize();
     app.on('second-instance', (_event, commandLine, _workingDirectory) => {
         parseOpenUrl(commandLine);
         if (mainWindow) {

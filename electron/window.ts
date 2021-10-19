@@ -61,6 +61,7 @@ export class AppWindow {
             webPreferences: {
                 webviewTag: true,
                 nodeIntegration: true,
+                contextIsolation: false,
             },
         };
         this._window = new BrowserWindow(options);

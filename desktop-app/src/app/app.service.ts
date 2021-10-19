@@ -74,8 +74,8 @@ export class AppService {
         this.semver = (<any>window).require('semver');
         this.crypto = (<any>window).require('crypto');
         this.electron = (<any>window).require('electron');
-        this.remote = this.electron.remote;
-        this.nativeApp = this.electron.remote.app;
+        this.remote = (<any>window).require('@electron/remote');
+        this.nativeApp = this.remote.app;
         this.appData = this.path.join(this.nativeApp.getPath('appData'), 'SideQuest');
         this.exec = (<any>window).require('child_process').exec;
         this.execSync = (<any>window).require('child_process').execSync;

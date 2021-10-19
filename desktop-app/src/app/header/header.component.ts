@@ -232,7 +232,7 @@ export class HeaderComponent implements OnInit {
         this.saveLogcatPath = null;
     }
     async selectLogcatOutput() {
-        const res = await this.appService.electron.remote.dialog.showOpenDialog({
+        const res = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openDirectory'],
             defaultPath: this.adbService.savePath,
         });
@@ -317,7 +317,7 @@ export class HeaderComponent implements OnInit {
         this.appService.remote.getCurrentWindow().toggleDevTools();
     }
     async selectAppToInstall() {
-        let files = await this.appService.electron.remote.dialog.showOpenDialog({
+        let files = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openFile', 'multiSelections'],
             defaultPath: this.adbService.savePath,
         });

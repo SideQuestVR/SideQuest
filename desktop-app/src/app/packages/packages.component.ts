@@ -80,7 +80,7 @@ export class PackagesComponent implements OnInit {
     }
 
     async pickBackupLocation() {
-        const res = await this.appService.electron.remote.dialog.showOpenDialog({
+        const res = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openDirectory'],
             defaultPath: this.appService.backupPath,
         });
