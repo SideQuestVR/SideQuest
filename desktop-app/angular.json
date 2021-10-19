@@ -49,6 +49,57 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
+            },
+            "test2": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test2.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
+            },
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false
             }
           }
         },
@@ -60,6 +111,15 @@
           "configurations": {
             "production": {
               "browserTarget": "desktop-app:build:production"
+            },
+            "test": {
+              "browserTarget": "desktop-app:build:test"
+            },
+            "test2": {
+              "browserTarget": "desktop-app:build:test2"
+            },
+            "local": {
+              "browserTarget": "desktop-app:build:local"
             }
           }
         },
@@ -113,6 +173,15 @@
           "configurations": {
             "production": {
               "devServerTarget": "desktop-app:serve:production"
+            },
+            "test": {
+              "devServerTarget": "desktop-app:serve:test"
+            },
+            "test2": {
+              "devServerTarget": "desktop-app:serve:test2"
+            },
+            "local": {
+              "devServerTarget": "desktop-app:serve:local"
             }
           }
         },

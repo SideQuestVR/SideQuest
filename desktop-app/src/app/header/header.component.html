@@ -79,7 +79,7 @@
       </div>
       <div class="user-menu browser-menu" #browserMenu>
         <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-             (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';webService.loadUrl('https://sidequestvr.com')"
+             (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"
              routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>
 
         <div class="btn-flat waves-light waves-light full-width center-align white-text"
@@ -99,7 +99,7 @@
       </div>
       <div class="user-menu" #userMenu>
         <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl('https://sidequestvr.com')"
+          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"
           routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>
         <div class="btn-flat waves-light waves-light full-width center-align white-text"
              *ngIf="isConnected()&&osPlatform === 'win32'"
@@ -140,7 +140,7 @@
         (click)="userMenu.style.display = 'block';userMenuBack.style.display = 'block'">
         arrow_drop_down
       </i>
-      <i mz-tooltip routerLink="/webview" (click)="webService.back()"
+      <i mz-tooltip routerLink="/webview" (click)="doBack()"
         class="material-icons white-text no-outline" position="bottom" tooltip="Back">
         arrow_back
       </i>
@@ -312,7 +312,7 @@
 
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close routerLink="/webview" (click)="webService.loadUrl('https://sidequestvr.com');" >SideQuest Home</button>
+    <button mz-button [flat]="true" mz-modal-close routerLink="/webview" (click)="webService.loadUrl(webUrl || 'https://sidequestvr.com');" >SideQuest Home</button>
     <button mz-button [flat]="true" mz-modal-close>Close</button>
   </mz-modal-footer>
 </mz-modal>

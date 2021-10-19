@@ -6,6 +6,8 @@ import { WebviewService } from './webview.service';
 import { DragAndDropService } from './drag-and-drop.service';
 import { ElectronService } from './electron.service';
 import { AdbClientService } from './adb-client.service';
+import { environment } from '../environments/environment';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -18,6 +20,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     helpStatus: string;
     extraHelpStatus: string;
     devMode: boolean;
+    webUrl = environment.configuration.web_url;
+    shortenerUrl = environment.configuration.shortenerUrl;
     constructor(
         private spinnerService: LoadingSpinnerService,
         public statusService: StatusBarService,

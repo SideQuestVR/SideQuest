@@ -1,6 +1,8 @@
 import { app, protocol, ipcMain, Menu, MenuItemConstructorOptions, BrowserWindow, shell } from 'electron';
 import { StateStorage, EnvironmentConfig } from './state-storage';
 import { AppWindow } from './window';
+import { getEnvCfg } from './env-config';
+
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const download = require('./download');
@@ -32,7 +34,7 @@ class ADB {
     }
     async checkAPK(updateStatus: (string) => void, filePath: string): Promise<boolean> {
         const hash = await this.computeFileHash(updateStatus, filePath);
-        const url = `https://sdq.st/check-app-hash/${hash}`;
+        const url = `${getEnvCfg().shortenerUrl || 'https://sdq.st'}/check-app-hash/${hash}`;
         updateStatus('Checking APK against blacklist...');
         return new Promise((resolve, reject) => {
             let options = {
@@ -41,7 +43,7 @@ class ADB {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    Origin: 'https://sidequestvr.com',
+                    Origin: getEnvCfg().web_url,
                 },
                 rejectUnauthorized: process.env.NODE_ENV !== 'dev',
             };
@@ -102,12 +104,12 @@ class ADB {
     }
     installFromToken(token, cb, ecb) {
         let options = {
-            url: 'https://api.sidequestvr.com/install-from-key',
+            url: `${getEnvCfg().http_url || 'https://api.sidequestvr.com'}/install-from-key`,
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Origin: 'https://sidequestvr.com',
+                Origin: getEnvCfg().web_url || 'https://sidequestvr.com',
             },
             rejectUnauthorized: process.env.NODE_ENV !== 'dev',
             json: { token: token },
