@@ -1,4 +1,4 @@
-# SideQuest
+# SideQuest!
 Below is the documentation of SideQuest with instructions for building and signing then application.
 
 ## Build Steps
