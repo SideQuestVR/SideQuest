@@ -1,4 +1,4 @@
-import { app, protocol, ipcMain, Menu, MenuItemConstructorOptions, BrowserWindow, shell } from 'electron';
+import { app, protocol, ipcMain, Menu, MenuItemConstructorOptions, BrowserWindow, shell, HandlerDetails } from 'electron';
 import { StateStorage, EnvironmentConfig } from './state-storage';
 import { AppWindow } from './window';
 import { getEnvCfg } from './env-config';
@@ -15,6 +15,15 @@ const exec = require('child_process').exec;
 const crypto = require('crypto');
 const request = require('request');
 const progress = require('request-progress');
+
+const OPEN_IN_SYSTEM_BROWSER_DOMAINS = [
+    'www.oculus.com',
+    'oculus.com',
+    'facebook.com',
+    'www.facebook.com',
+    'twitter.com',
+    'www.twitter.com',
+];
 // const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';
 let has_port = process.argv.indexOf('--port');
@@ -453,40 +462,8 @@ function parseOpenUrl(argv: string[]) {
         setTimeout(() => mainWindow.webContents.send('open-url', argv[1].toString()), 5000);
     }
 }
-
-function createWindow() {
-    appWindow = new AppWindow(config);
-    mainWindow = appWindow.window;
-    require('@electron/remote/main').enable(mainWindow.webContents);
-    if (process.env.NODE_ENV === 'dev') {
-        mainWindow.loadURL('http://localhost:4205');
-        mainWindow.webContents.openDevTools();
-    } else {
-        mainWindow.loadFile('build/app/index.html');
-    }
-    mainWindow.on('closed', function() {
-        mainWindow = undefined;
-    });
-
-    setupMenu();
-    mainWindow.webContents.once('dom-ready', async _e => {
-        parseOpenUrl(process.argv);
-        autoUpdater.autoDownload = false;
-        if (process.platform !== 'linux') autoUpdater.checkForUpdates();
-    });
-
-    protocol.registerBufferProtocol('beatsaver', (request, _callback) => {
-        mainWindow.webContents.send(
-            'open-url',
-            'sidequest://bsaber/#https://beatsaver.com/api/download/key/' + request.url.replace('beatsaver://', '')
-        );
-    });
-
-    protocol.registerStringProtocol('sidequest', (request, _callback) => {
-        mainWindow.webContents.send('open-url', request.url);
-    });
-    mainWindow.webContents.on('did-fail-load', () => mainWindow.loadURL(mainWindow.webContents.getURL()));
-    mainWindow.webContents.session.on('will-download', (_evt, item, _webContents) => {
+function addWindowDownloadHandler(window) {
+    window.webContents.session.on('will-download', (_evt, item, _webContents) => {
         let url = item.getURL();
         let urls = item.getURLChain();
         let name = item.getFilename();
@@ -521,6 +498,68 @@ function createWindow() {
         }
         item.cancel();
     });
+}
+function createWindow() {
+    appWindow = new AppWindow(config);
+    mainWindow = appWindow.window;
+    require('@electron/remote/main').enable(mainWindow.webContents);
+    if (process.env.NODE_ENV === 'dev') {
+        mainWindow.loadURL('http://localhost:4205');
+        mainWindow.webContents.openDevTools();
+    } else {
+        mainWindow.loadFile('build/app/index.html');
+    }
+    mainWindow.on('closed', function() {
+        mainWindow = undefined;
+    });
+
+    setupMenu();
+    mainWindow.webContents.once('dom-ready', async _e => {
+        parseOpenUrl(process.argv);
+        autoUpdater.autoDownload = false;
+        if (process.platform !== 'linux') autoUpdater.checkForUpdates();
+    });
+
+    protocol.registerBufferProtocol('beatsaver', (request, _callback) => {
+        mainWindow.webContents.send(
+            'open-url',
+            'sidequest://bsaber/#https://beatsaver.com/api/download/key/' + request.url.replace('beatsaver://', '')
+        );
+    });
+
+    protocol.registerStringProtocol('sidequest', (request, _callback) => {
+        mainWindow.webContents.send('open-url', request.url);
+    });
+    mainWindow.webContents.on('did-fail-load', () => mainWindow.loadURL(mainWindow.webContents.getURL()));
+    addWindowDownloadHandler(mainWindow);
+    const handleOpenWindow: (details: HandlerDetails) => { action: 'allow' } | { action: 'deny' } = e => {
+        if (!e.postBody) {
+            try {
+                const extUrl = new URL(e.url).host.toLowerCase();
+                if (OPEN_IN_SYSTEM_BROWSER_DOMAINS.includes(extUrl)) {
+                    shell.openExternal(e.url);
+                    return { action: 'deny' };
+                }
+            } catch {}
+        }
+        return { action: 'allow' };
+    };
+    let handleWindow;
+    handleWindow = (child: BrowserWindow) => {
+        child.webContents.on('did-attach-webview', (z, wc) => {
+            wc.setWindowOpenHandler(handleOpenWindow);
+            wc.on('did-create-window', child => {
+                handleWindow(child);
+            });
+        });
+
+        child.webContents.setWindowOpenHandler(handleOpenWindow);
+        child.webContents.on('did-create-window', child => {
+            console.log('did create window fired');
+            handleWindow(child);
+        });
+    };
+    handleWindow(mainWindow);
 }
 
 function setupMenu() {
@@ -620,18 +659,6 @@ function setupApp() {
     app.setAsDefaultProtocolClient('sidequest');
     app.on('open-url', function(event, url) {
         event.preventDefault();
-    });
-
-    app.on('web-contents-created', (e, contents) => {
-        if (contents.getType() === 'webview') {
-            // contents.on('new-window', (e : any, url) => {
-            //        popupWindow = new BrowserWindow({show: false})
-            //        popupWindow.once('ready-to-show', () => popupWindow.show())
-            //        popupWindow.loadURL(url);
-            //        e.newGuest = popupWindow;
-            //        e.preventDefault();
-            // });
-        }
     });
 
     app.on('browser-window-blur', () => {
