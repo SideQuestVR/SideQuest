@@ -560,6 +560,7 @@ function createWindow() {
         });
     };
     handleWindow(mainWindow);
+    mainWindow.webContents.session.setUserAgent(mainWindow.webContents.session.getUserAgent() + ' SQ/' + app.getVersion());
 }
 
 function setupMenu() {
