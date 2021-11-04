@@ -372,18 +372,27 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         });
     }
     isAdbDownloaded() {
-        let downloaded = true;
-        if (!this.doesFileExist(this.adbPath)) {
+        try {
+            let downloaded = true;
+            if (!this.doesFileExist(this.adbPath)) {
+                return false;
+            }
+
+            let source_files = this.appService.fs.readdirSync(this.appService.getPlatformToolsSeedPath());
+            if (source_files === null) {
+                return false;
+            }
+            let dest_files = this.appService.fs.readdirSync(this.adbPath);
+            source_files.forEach(d => {
+                if (dest_files.indexOf(d) === -1) {
+                    downloaded = false;
+                }
+            });
+            return downloaded; // this.doesFileExist(this.appService.path.join(this.adbPath, this.getAdbBinary()));
+        } catch (e) {
+            console.error('Error checking for ADB being installed', e);
             return false;
         }
-        let source_files = this.appService.fs.readdirSync(this.appService.path.join(process.cwd(), 'build', 'platform-tools'));
-        let dest_files = this.appService.fs.readdirSync(this.adbPath);
-        source_files.forEach(d => {
-            if (dest_files.indexOf(d) === -1) {
-                downloaded = false;
-            }
-        });
-        return downloaded; // this.doesFileExist(this.appService.path.join(this.adbPath, this.getAdbBinary()));
     }
     setPermission(packageName: string, permission: string, isRevoke?: boolean) {
         return this.adbCommand('shell', {

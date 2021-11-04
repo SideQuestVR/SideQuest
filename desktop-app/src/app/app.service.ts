@@ -225,11 +225,36 @@ export class AppService {
                 break;
         }
     }
+
+    private foundSeedToolsPath: string | null = null;
+    getPlatformToolsSeedPath() {
+        if (this.foundSeedToolsPath !== null) {
+            return this.foundSeedToolsPath;
+        }
+        let ogSourcesPath = this.path.join(process.resourcesPath, 'build', 'platform-tools');
+        let sourcesPath = ogSourcesPath;
+        if (!this.doesFileExist(sourcesPath)) {
+            sourcesPath = sourcesPath.replace('app.asar', 'app.asar.unpacked');
+        }
+        if (!this.doesFileExist(sourcesPath)) {
+            sourcesPath = this.path.join(process.resourcesPath, 'app.asar.unpacked', 'build', 'platform-tools');
+        }
+        if (!this.doesFileExist(sourcesPath)) {
+            sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
+        }
+        if (!this.doesFileExist(sourcesPath)) {
+            return null;
+        }
+        this.foundSeedToolsPath = sourcesPath;
+        return sourcesPath;
+    }
     seedPlatformTools() {
-        return new Promise(async resolve => {
-            let sourcesPath = this.path.join(__dirname, '..', 'platform-tools');
-            if (!this.fs.existsSync(sourcesPath)) {
-                sourcesPath = this.path.join(process.cwd(), 'build', 'platform-tools');
+        return new Promise<void>(async resolve => {
+            let sourcesPath = this.getPlatformToolsSeedPath();
+            if (sourcesPath == null) {
+                console.error('Unable to locate platform tools!  Try reinstalling sidequest.');
+                resolve();
+                return;
             }
             await this.mkdir(this.path.join(this.appData, 'platform-tools'));
             try {
@@ -247,7 +272,10 @@ export class AppService {
                 } else {
                     setTimeout(() => resolve(), 5000);
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error('Error seeding platform tools! ', e);
+                resolve();
+            }
         });
     }
     makeFolders() {
@@ -262,7 +290,7 @@ export class AppService {
         });
     }
     setExecutable(path) {
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
             const ls = this.spawn('chmod', ['+x', path]);
             ls.stdout.on('data', res => {
                 console.log(res);
