@@ -36,9 +36,6 @@
             "category": "public.app-category.utilities",
             "target": [
                 "dmg"
-            ],
-            "arch": [
-                "universal"
             ]
         },
         "win": {
