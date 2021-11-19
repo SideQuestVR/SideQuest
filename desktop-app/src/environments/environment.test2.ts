@@ -1,8 +1,8 @@
 export const environment = {
-    production: true,
+    production: false,
     configuration: {
-        web_url: 'https://sidequestvr.com',
-        ws_url: 'wss://ws.sidequestvr.com',
+        web_url: 'https://test.side.quest',
+        ws_url: 'wss://testws.side.quest',
         http_url: 'https://api.sidequestvr.com',
         cdnUrl: 'https://cdn.sidequestvr.com',
         shortenerUrl: 'https://sdq.st',

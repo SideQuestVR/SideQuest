@@ -10,6 +10,8 @@ import { DragAndDropService } from '../drag-and-drop.service';
 import { Router } from '@angular/router';
 import { ProcessBucketService } from '../process-bucket.service';
 import { Subscription } from 'rxjs/Subscription';
+import { environment } from '../../environments/environment';
+
 interface ReplaceText {
     key: string;
     value: string;
@@ -45,6 +47,7 @@ export class HeaderComponent implements OnInit {
     adbCommandToRun: string;
     osPlatform: string;
     saveLogcatPath: string;
+    webUrl = environment.configuration.web_url;
     favourites: {
         browserFavourites: FavouriteItem[];
         fileFavourites: FavouriteItem[];
@@ -98,7 +101,8 @@ export class HeaderComponent implements OnInit {
         public statusService: StatusBarService,
         public beatonService: BeatOnService,
         public dragAndDropService: DragAndDropService,
-        public processService: ProcessBucketService
+        public processService: ProcessBucketService,
+        private router: Router
     ) {
         this.osPlatform = this.appService.os.platform();
         console.log('Platform: ' + this.osPlatform);
@@ -106,6 +110,19 @@ export class HeaderComponent implements OnInit {
         this.resetFavourites('fileFavourites');
         this.resetFavourites('commandFavourites');
         this.appService.headerComponent = this;
+    }
+    doBack() {
+        if (
+            this.appService.isTasksOpen ||
+            this.appService.isFilesOpen ||
+            this.appService.isPackagesOpen ||
+            this.appService.isSettingsOpen
+        ) {
+            this.router.navigateByUrl('/webview');
+            return;
+        } else {
+            this.webService.back();
+        }
     }
     resetFavourites(type: string) {
         let defaultFavs;
@@ -182,7 +199,7 @@ export class HeaderComponent implements OnInit {
     }
 
     updateAvailable() {
-        this.appService.opn('https://sidequestvr.com/download');
+        this.appService.opn(`${environment.configuration.web_url || 'https://sidequestvr.com'}/download`);
     }
 
     startLogcat() {
@@ -215,7 +232,7 @@ export class HeaderComponent implements OnInit {
         this.saveLogcatPath = null;
     }
     async selectLogcatOutput() {
-        const res = await this.appService.electron.remote.dialog.showOpenDialog({
+        const res = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openDirectory'],
             defaultPath: this.adbService.savePath,
         });
@@ -300,7 +317,7 @@ export class HeaderComponent implements OnInit {
         this.appService.remote.getCurrentWindow().toggleDevTools();
     }
     async selectAppToInstall() {
-        let files = await this.appService.electron.remote.dialog.showOpenDialog({
+        let files = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openFile', 'multiSelections'],
             defaultPath: this.adbService.savePath,
         });

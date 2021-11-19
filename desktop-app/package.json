@@ -4,10 +4,16 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:test": "ng serve -c test",
+    "start:test2": "ng serve -c test2",
+    "start:local": "ng serve -c local",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "e2e:test": "ng e2e -c test",
+    "e2e:local": "ng e2e -c test2",
+    "e2e:test2": "ng e2e -c local"
   },
   "private": true,
   "dependencies": {

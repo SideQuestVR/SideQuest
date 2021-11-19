@@ -1,5 +1,6 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { AppService } from './app.service';
+import { environment } from '../environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -7,7 +8,7 @@ import { AppService } from './app.service';
 export class WebviewService {
     webView: any;
     isWebviewOpen: boolean;
-    currentAddress: string = 'https://sidequestvr.com';
+    currentAddress: string = environment.configuration.web_url || 'https://sidequestvr.com';
     isWebviewLoading: boolean = false;
     isLoaded = () => {};
     constructor(private appService: AppService) {

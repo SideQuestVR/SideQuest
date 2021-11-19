@@ -110,6 +110,10 @@ export class FilesComponent implements OnInit {
             this.selectedFiles.length = 0;
         }
     }
+    copyPathToClipboard(path = null) {
+        this.appService.electron.clipboard.writeText(path || this.currentPath);
+        this.statusService.showStatus(`Copied file path to your clipboard!`);
+    }
     async uploadFolder(folder, files, task) {
         task.status = 'Restoring Folder... ' + folder;
         if (this.appService.fs.existsSync(folder)) {
@@ -184,7 +188,7 @@ export class FilesComponent implements OnInit {
         }
     }
     async uploadFiles() {
-        let res = await this.appService.electron.remote.dialog.showOpenDialog({
+        let res = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openFile', 'multiSelections'],
             defaultPath: this.adbService.savePath,
         });
@@ -277,7 +281,7 @@ export class FilesComponent implements OnInit {
         });
     }
     async pickLocation() {
-        let res = await this.appService.electron.remote.dialog.showOpenDialog({
+        let res = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openDirectory'],
             defaultPath: this.adbService.savePath,
         });
@@ -334,7 +338,7 @@ export class FilesComponent implements OnInit {
         });
     }
     openSaveLocation() {
-        this.appService.electron.remote.shell.openItem(this.adbService.savePath);
+        this.appService.remote.shell.openItem(this.adbService.savePath);
     }
     async readdir(path: string) {
         let dirContents: FileFolderListing[];

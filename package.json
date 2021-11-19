@@ -10,10 +10,19 @@
     "scripts": {
         "concurrently": "concurrently",
         "start": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev electron .\" \"cd desktop-app && ng serve --port 4205\"",
+        "start:test": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev SQ_ENV_CFG=test electron .\" \"cd desktop-app && ng serve -c test --port 4205\"",
+        "start:test2": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev SQ_ENV_CFG=test2 electron .\" \"cd desktop-app && ng serve -c test2 --port 4205\"",
+        "start:local": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev SQ_ENV_CFG=local electron .\" \"cd desktop-app && ng serve -c local --port 4205\"",
         "postinstall": "electron-builder install-app-deps && cd desktop-app && yarn install",
         "dist": "yarn electron-build && yarn platform-tools && yarn app-build && electron-builder",
         "angular": "cd desktop-app && ng serve --port 4205",
+        "angular:test": "cd desktop-app && ng serve -c test --port 4205",
+        "angular:test2": "cd desktop-app && ng serve -c test2 --port 4205",
+        "angular:local": "cd desktop-app && ng serve -c local --port 4205",
         "electron-dev": "yarn platform-tools && cross-env NODE_ENV=dev electron .",
+        "electron-dev:test": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=test electron .",
+        "electron-dev:test2": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=test2 electron .",
+        "electron-dev:local": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=local electron .",
         "electron": "yarn electron-build && yarn electron-dev",
         "app-build": "cd desktop-app && ng build --prod --aot && cd ..",
         "platform-tools": "node build-electron/platform-tools.js",
@@ -25,9 +34,13 @@
         "appId": "com.sidequestvr.app",
         "mac": {
             "category": "public.app-category.utilities",
-            "target": [
-                "dmg"
-            ]
+            "target": {
+                "target": "dmg",
+                "arch": [
+                    "arm64",
+                    "x64"
+                ]
+            }
         },
         "win": {
             "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
@@ -54,7 +67,8 @@
             "build-electron/download.js",
             "build-electron/setproperties.js",
             "build-electron/state-storage.js",
-            "build-electron/window.js"
+            "build-electron/window.js",
+            "build-electron/env-config.js"
         ],
         "asarUnpack": [
             "build/**/*"
@@ -78,13 +92,15 @@
         "trailingComma": "es5"
     },
     "dependencies": {
+        "@electron/remote": "^2.0.1",
+        "@types/electron": "^1.6.10",
         "adbkit": "^2.11.1",
         "adm-zip": "^0.4.14",
         "bytenode": "^1.1.6",
         "concurrently": "^4.1.0",
         "cross-env": "^5.2.0",
         "crypto": "^1.0.1",
-        "electron-updater": "^4.1.2",
+        "electron-updater": "^4.3.7",
         "express": "^4.17.1",
         "extract-zip": "^1.6.7",
         "md5": "^2.2.1",
@@ -101,8 +117,8 @@
     },
     "devDependencies": {
         "@angular/cli": "^8.0.3",
-        "electron": "7.2.4",
-        "electron-builder": "^22.4.0",
+        "electron": "13.5.1",
+        "electron-builder": "22.10.5",
         "electron-notarize": "^0.1.1",
         "husky": "^2.3.0",
         "prettier": "1.17.1",
