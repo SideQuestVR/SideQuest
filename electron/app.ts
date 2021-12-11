@@ -526,7 +526,6 @@ function createWindow() {
     mainWindow.webContents.on('did-fail-load', () => mainWindow.loadURL(mainWindow.webContents.getURL()));
     addWindowDownloadHandler(mainWindow);
     const handleOpenWindow: (details: HandlerDetails) => { action: 'allow' } | { action: 'deny' } = e => {
-        console.log(e);
         if (!e.postBody) {
             try {
                 const extUrl = new URL(e.url).host.toLowerCase();
@@ -535,7 +534,7 @@ function createWindow() {
                     return { action: 'deny' };
                 }
             } catch (e) {
-                console.log(e);
+                console.log('could not open url', e);
                 return { action: 'allow' };
             }
         }
