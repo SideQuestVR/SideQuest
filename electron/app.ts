@@ -16,16 +16,9 @@ const crypto = require('crypto');
 const request = require('request');
 const progress = require('request-progress');
 
-const OPEN_IN_SYSTEM_BROWSER_DOMAINS = [
-    'www.oculus.com',
-    'oculus.com',
-    'facebook.com',
-    'www.facebook.com',
-    'twitter.com',
-    'www.twitter.com',
-];
 // const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';
+import { OPEN_IN_SYSTEM_BROWSER_DOMAINS } from './external-urls';
 let has_port = process.argv.indexOf('--port');
 let valid_port = has_port > -1 && process.argv[has_port + 1] && Number.isInteger(Number(process.argv[has_port + 1]));
 class ADB {
@@ -533,6 +526,7 @@ function createWindow() {
     mainWindow.webContents.on('did-fail-load', () => mainWindow.loadURL(mainWindow.webContents.getURL()));
     addWindowDownloadHandler(mainWindow);
     const handleOpenWindow: (details: HandlerDetails) => { action: 'allow' } | { action: 'deny' } = e => {
+        console.log(e);
         if (!e.postBody) {
             try {
                 const extUrl = new URL(e.url).host.toLowerCase();
@@ -540,7 +534,10 @@ function createWindow() {
                     shell.openExternal(e.url);
                     return { action: 'deny' };
                 }
-            } catch {}
+            } catch (e) {
+                console.log(e);
+                return { action: 'allow' };
+            }
         }
         return { action: 'allow' };
     };

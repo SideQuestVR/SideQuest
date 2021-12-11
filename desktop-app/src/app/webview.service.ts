@@ -1,6 +1,7 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { AppService } from './app.service';
 import { environment } from '../environments/environment';
+import { OPEN_IN_SYSTEM_BROWSER_DOMAINS } from '../../../electron/external-urls';
 
 @Injectable({
     providedIn: 'root',
@@ -45,12 +46,22 @@ export class WebviewService {
             .bsaber-tooltip.-sidequest-remove::after {
                 content: "Remove Custom Level";
             }`;
+        let ses = this.appService.remote.session.fromPartition('webview-partition');
+        ses.webRequest.onBeforeRequest((details, callback) => {
+            let url = details.url;
+            const extUrl = new URL(url).host.toLowerCase();
+            if (OPEN_IN_SYSTEM_BROWSER_DOMAINS.includes(extUrl)) {
+                this.appService.electron.shell.openExternal(url);
+                callback({ cancel: true });
+            } else {
+                callback({});
+            }
+        });
         this.webView.addEventListener('did-start-loading', e => {
-            //this.currentAddress = this.webView.getURL();
             this.isWebviewLoading = true;
             this.webView.insertCSS(customCss);
         });
-        this.webView.addEventListener('did-navigate-in-page', () => {
+        this.webView.addEventListener('did-navigate-in-page', e => {
             this.currentAddress = this.webView.getURL();
         });
         this.webView.addEventListener('did-stop-loading', async e => {
