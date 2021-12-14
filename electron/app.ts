@@ -18,16 +18,9 @@ const progress = require('request-progress');
 //without this, there's a bug in electron that makes facebook pages ruin everything, see https://github.com/electron/electron/issues/25469
 app.commandLine.appendSwitch('disable-features', 'CrossOriginOpenerPolicy');
 
-const OPEN_IN_SYSTEM_BROWSER_DOMAINS = [
-    'www.oculus.com',
-    'oculus.com',
-    'facebook.com',
-    'www.facebook.com',
-    'twitter.com',
-    'www.twitter.com',
-];
 // const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';
+import { OPEN_IN_SYSTEM_BROWSER_DOMAINS } from './external-urls';
 let has_port = process.argv.indexOf('--port');
 let valid_port = has_port > -1 && process.argv[has_port + 1] && Number.isInteger(Number(process.argv[has_port + 1]));
 class ADB {
@@ -542,7 +535,10 @@ function createWindow() {
                     shell.openExternal(e.url);
                     return { action: 'deny' };
                 }
-            } catch {}
+            } catch (e) {
+                console.log('could not open url', e);
+                return { action: 'allow' };
+            }
         }
         return { action: 'allow' };
     };
