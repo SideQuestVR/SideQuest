@@ -57,6 +57,8 @@ export class WebviewService {
                 } else {
                     callback({});
                 }
+            } else {
+                callback({});
             }
         });
         this.webView.addEventListener('did-start-loading', e => {
