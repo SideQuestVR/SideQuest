@@ -68,7 +68,8 @@
             "build-electron/setproperties.js",
             "build-electron/state-storage.js",
             "build-electron/window.js",
-            "build-electron/env-config.js"
+            "build-electron/env-config.js",
+            "build-electron/external-urls.js"
         ],
         "asarUnpack": [
             "build/**/*"
