@@ -249,32 +249,42 @@ export class AppService {
         return sourcesPath;
     }
     seedPlatformTools() {
-        return new Promise<void>(async resolve => {
+        return new Promise<void>(async (resolve, reject) => {
             let sourcesPath = this.getPlatformToolsSeedPath();
             if (sourcesPath == null) {
                 console.error('Unable to locate platform tools!  Try reinstalling sidequest.');
-                resolve();
+                reject('Unable to locate platform tools!  Try reinstalling sidequest.');
                 return;
             }
             await this.mkdir(this.path.join(this.appData, 'platform-tools'));
             try {
-                let files = this.fs.readdirSync(sourcesPath);
+                let files: [] = this.fs.readdirSync(sourcesPath);
+                //always copy the adb executable last so this will retry in the event some copying fails
+                files.sort((a: string, b) => (a.endsWith('adb') || a.endsWith('adb.exe') ? 1 : -1));
                 for (let i = 0; i < files.length; i++) {
-                    this.fs.copyFileSync(
-                        this.path.join(sourcesPath, files[i]),
-                        this.path.join(this.appData, 'platform-tools', files[i])
-                    );
+                    try {
+                        this.fs.copyFileSync(
+                            this.path.join(sourcesPath, files[i]),
+                            this.path.join(this.appData, 'platform-tools', files[i])
+                        );
+                    } catch (e) {
+                        console.error('Error copying platform tools file ' + files[i] + e);
+                        //if the file exists and isn't writeable, don't give up, have some hope it's just in use and is fine.
+                        if (!this.fs.existsSync(this.path.join(this.appData, 'platform-tools', files[i]))) {
+                            throw 'Error copying platform tools file: ' + e.toString();
+                        }
+                    }
                 }
                 if (this.os.platform() === 'darwin' || this.os.platform() === 'linux') {
                     this.setExecutable(this.path.join(this.appData, 'platform-tools', 'adb')).then(() =>
-                        setTimeout(() => resolve(), 5000)
+                        setTimeout(() => resolve(), 8000)
                     );
                 } else {
-                    setTimeout(() => resolve(), 5000);
+                    setTimeout(() => resolve(), 8000);
                 }
             } catch (e) {
                 console.error('Error seeding platform tools! ', e);
-                resolve();
+                reject('Error seeding platform tools: ' + e.toString());
             }
         });
     }

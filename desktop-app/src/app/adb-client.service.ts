@@ -30,6 +30,7 @@ export class AdbClientService {
     lastConnectionCheck: number;
     deviceStatus: ConnectionStatus = ConnectionStatus.UNAUTHORIZED;
     deviceStatusMessage: string = 'Connecting...';
+    lastErrorMessage: string = '';
     pollInterval: number = 1000 * 2;
     savePath: string;
     isTransferring: boolean;
@@ -353,23 +354,31 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         });
     }
     async setupAdb() {
-        if (!this.isAdbDownloaded()) {
-            await this.appService.seedPlatformTools();
-        }
-        this.appService.electron.ipcRenderer.on('adb-command', (event, arg: any) => {
-            if (this.adbResolves[arg.uuid]) {
-                if (arg.status && this.adbResolves[arg.uuid].callback) {
-                    this.adbResolves[arg.uuid].callback(arg.status);
-                } else if (arg.error) {
-                    this.adbResolves[arg.uuid].reject(arg.error);
-                } else {
-                    this.adbResolves[arg.uuid].resolve(arg.resp);
-                }
+        try {
+            if (!this.isAdbDownloaded()) {
+                await this.appService.seedPlatformTools();
             }
-        });
-        this.adbCommand('setupAdb', {
-            adbPath: this.appService.path.join(this.adbPath, this.getAdbBinary()),
-        });
+            this.appService.electron.ipcRenderer.on('adb-command', (event, arg: any) => {
+                if (this.adbResolves[arg.uuid]) {
+                    if (arg.status && this.adbResolves[arg.uuid].callback) {
+                        this.adbResolves[arg.uuid].callback(arg.status);
+                    } else if (arg.error) {
+                        this.adbResolves[arg.uuid].reject(arg.error);
+                    } else {
+                        this.adbResolves[arg.uuid].resolve(arg.resp);
+                    }
+                }
+            });
+            this.adbCommand('setupAdb', {
+                adbPath: this.appService.path.join(this.adbPath, this.getAdbBinary()),
+            });
+            this.lastErrorMessage = null;
+        } catch (e) {
+            console.error(e);
+            this.deviceStatus = ConnectionStatus.DISCONNECTED;
+            this.deviceStatusMessage = 'ADB Setup Error';
+            this.lastErrorMessage = e.toString();
+        }
     }
     isAdbDownloaded() {
         try {
