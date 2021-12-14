@@ -49,12 +49,14 @@ export class WebviewService {
         let ses = this.appService.remote.session.fromPartition('webview-partition');
         ses.webRequest.onBeforeRequest((details, callback) => {
             let url = details.url;
-            const extUrl = new URL(url).host.toLowerCase();
-            if (OPEN_IN_SYSTEM_BROWSER_DOMAINS.includes(extUrl)) {
-                this.appService.electron.shell.openExternal(url);
-                callback({ cancel: true });
-            } else {
-                callback({});
+            if (details.resourceType === 'mainFrame' || details.resourceType === 'subframe') {
+                const extUrl = new URL(url).host.toLowerCase();
+                if (OPEN_IN_SYSTEM_BROWSER_DOMAINS.includes(extUrl)) {
+                    this.appService.electron.shell.openExternal(url);
+                    callback({ cancel: true });
+                } else {
+                    callback({});
+                }
             }
         });
         this.webView.addEventListener('did-start-loading', e => {
