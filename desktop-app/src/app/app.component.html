@@ -5,7 +5,7 @@
 
 <app-loading-spinner #spinner></app-loading-spinner>
 <app-status-bar #status (getHelp)="getHelpModal.openModal(); helpStatus = $event; setExterHelp()"></app-status-bar>
-<webview id="mainWebView" #webview httpreferrer="https://sdiequestvr.com" [attr.src]="webUrl" allowpopups [ngStyle]="{'left':webService.isWebviewOpen?'0':'-100%'}" class="bsaber-webview" partition='webview-partition'></webview>
+<webview id="mainWebView" #webview httpreferrer="https://sdiequestvr.com" [attr.src]="webUrl" allowpopups [ngStyle]="{'left':webService.isWebviewOpen?'0':'-100%'}" class="bsaber-webview"></webview>
 
 <mz-modal #getHelpModal [fixedFooter]="true">
   <mz-modal-header>

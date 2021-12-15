@@ -222,7 +222,7 @@
         arrow_drop_down
       </i>
       <div id="connection-status" class="connection-status-unauthorized"  mz-tooltip
-           position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="'Device connection status.'">
+           position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
         <div id="connection-status-message" [innerHTML]="appService.versionName+'&nbsp;&nbsp;'+adbService.deviceStatusMessage"></div>
       </div>
     </div>
