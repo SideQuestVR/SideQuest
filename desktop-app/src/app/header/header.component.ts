@@ -147,7 +147,8 @@ export class HeaderComponent implements OnInit {
             {"name":"Audica", "uri": "/sdcard/Audica/", "icon": "https://i.imgur.com/40sUjye.png"},
             {"name":"Audio Trip", "uri": "/sdcard/Android/data/com.KinemotikStudios.AudioTripQuest/files/Songs/", "icon": "https://i.imgur.com/5EgzxTl.png"},
             {"name":"OhShape", "uri": "/sdcard/OhShape/Songs/", "icon": "https://i.imgur.com/yIu0sSQ.png"},
-            {"name":"Battle Talent", "uri": "/sdcard/Android/data/com.CrossLink.SAO/files/", "icon": "https://i.imgur.com/MFdfn9J.png"},
+            {"name":"Battle Talent", "uri": "/sdcard/Android/data/com.CrossLink.SAO/files/Mods/", "icon": "https://i.imgur.com/MFdfn9J.png"},
+            {"name":"Blade and Sorcery", "uri": "/sdcard/Android/data/com.Warpfrog.BladeAndSorcery/files/Mods/", "icon": "https://i.imgur.com/lxK5bny.png"},
             {"name":"Oculus", "uri": "/sdcard/Oculus/", "icon": "https://i.imgur.com/LORDvYK.png"}
           ]`;
         }
