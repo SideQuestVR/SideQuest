@@ -141,7 +141,7 @@ export class HeaderComponent implements OnInit {
                 break;
             case 'fileFavourites':
                 defaultFavs = `[
-            {"name":"SynthRiders", "uri": "/sdcard/Android/data/com.kluge.SynthRiders/files/CustomSongs/", "icon": "https://i.imgur.com/LjK7Z3o.png"},
+            {"name":"SynthRiders", "uri": "/sdcard/SynthRidersUC/", "icon": "https://i.imgur.com/cmH6q6D.png"},
             {"name":"Song Beater", "uri": "/sdcard/Android/data/com.Playito.SongBeater/CustomSongs/", "icon": "https://i.imgur.com/dOx0OEl.png"},
             {"name":"VRtuos", "uri": "/sdcard/Android/data/com.PavelMarceluch.VRtuos/files/Midis/", "icon": "https://i.imgur.com/7G0OpJi.png"},
             {"name":"Audica", "uri": "/sdcard/Audica/", "icon": "https://i.imgur.com/40sUjye.png"},
