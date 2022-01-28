@@ -55,10 +55,12 @@ export class SynthriderService {
                                 {
                                     name: zipPath,
                                     savePath:
-                                        '/sdcard/Android/data/com.kluge.SynthRiders/files/' +
+                                        '/sdcard/SynthRidersUC/' +
                                         (ext.toLowerCase() === '.synth'
                                             ? 'CustomSongs/'
-                                            : ext.toLowerCase() === '.stagequest'
+                                            : ext.toLowerCase() === '.playlist'
+                                            ? 'Playlist/'
+                                            : ext.toLowerCase() === '.stagequest' || ext.toLowerCase() === '.spinstagequest'
                                             ? 'CustomStages/'
                                             : 'Mods/') +
                                         basename,
