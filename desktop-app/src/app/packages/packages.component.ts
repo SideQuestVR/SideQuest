@@ -29,6 +29,9 @@ export class PackagesComponent implements OnInit {
     search: string;
     savePath: string;
     perms: any;
+    cloudBackupLoading: boolean;
+    cloudBackupDone: boolean;
+    cloudBackupStatus: string;
     constructor(
         public adbService: AdbClientService,
         public appService: AppService,
@@ -88,6 +91,22 @@ export class PackagesComponent implements OnInit {
             this.appService.backupPath = res.filePaths[0];
             localStorage.setItem('backup-path', this.appService.backupPath);
         }
+    }
+
+    async triggerCloudBackup() {
+        this.cloudBackupLoading = true;
+        this.cloudBackupStatus = 'Starting backup...';
+        await this.adbService.runAdbCommand('adb shell bmgr backup @pm@');
+        await this.adbService.runAdbCommand('adb shell bmgr run');
+        await this.adbService.runAdbCommand('adb shell cmd package list packages');
+        let packages: any = this.adbService.adbResponse;
+        packages = packages.split('\n').map(line => line.replace(/^package:/, ''));
+        for (let i = 0; i < packages.length; i++) {
+            this.cloudBackupStatus = `Backing up ${Math.round(((i + 1) / packages.length) * 100)}%`;
+            await this.adbService.runAdbCommand('adb shell bmgr fullbackup ' + packages[i]).then(o => console.log(o));
+        }
+        this.cloudBackupLoading = false;
+        this.cloudBackupDone = true;
     }
 
     backupAll() {

@@ -12,7 +12,9 @@
   line-height: 3rem;
   vertical-align: middle;
 }
-
+.filename-padding-top{
+  padding-top: 10px;
+}
 .selected{
   background: #e93c96;
   border-radius: 10px;

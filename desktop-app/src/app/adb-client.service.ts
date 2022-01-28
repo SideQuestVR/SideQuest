@@ -50,6 +50,11 @@ export class AdbClientService {
     deviceName: string;
     connectionCss: any;
     obbRegex = /[a-z]{4,5}.[0-9]{1,}.([A-z0-9.]{1,}).obb/;
+    freespace = {
+        available: '',
+        total: '',
+        percent: '',
+    };
     constructor(
         public appService: AppService,
         private spinnerService: LoadingSpinnerService,
@@ -265,7 +270,7 @@ export class AdbClientService {
                     this.deviceStatusMessage =
                         this.deviceName +
                         ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
-                        '         position="bottom" tooltip="Battery">' +
+                        '         position="bottom" tooltip="Wifi">' +
                         '        wifi' +
                         '      </i> ' +
                         (this.deviceIp || 'Not found...') +
@@ -276,7 +281,6 @@ export class AdbClientService {
                         '      </i>' +
                         this.batteryLevel +
                         '% ';
-                    // this.beatonService.checkIsBeatOnRunning(this);
                 } catch (e) {
                     const isBadConnection = e && e.message === "Failure: 'closed'" && e.name === 'FailError';
                     if (isBadConnection) {
@@ -1054,7 +1058,14 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return perms;
         });
     }
-
+    async getFreeSpace() {
+        return this.adbCommand('shell', { serial: this.deviceSerial, command: 'df -h' }).then(data => {
+            data = data.split(' ').filter(d => d);
+            this.freespace.available = data[data.length - 3];
+            this.freespace.total = data[data.length - 5];
+            this.freespace.percent = data[data.length - 2];
+        });
+    }
     async getBatteryLevel() {
         return this.adbCommand('shell', { serial: this.deviceSerial, command: 'dumpsys battery' }).then(data => {
             let batteryObject = {};

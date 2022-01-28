@@ -21,7 +21,9 @@
         </div>
       </div>
     </div>
-    <div class="right waves-effect waves-light btn pink-button small-button" (click)="backupEverything.openModal()">
+    <div class="right waves-effect waves-light btn pink-button small-button" (click)="cloudBackup.openModal()">
+      Cloud Backup</div>
+    <div class="right waves-effect waves-light btn pink-button small-button margin-right" (click)="backupEverything.openModal()">
       Backup/Restore All</div>
     <div class="right waves-effect waves-light btn pink-button small-button margin-right" mzTooltip
       [tooltip]="'Current backup location: ' + appService.backupPath" position="bottom"
@@ -192,6 +194,33 @@
     <button mz-button [flat]="true" mz-modal-close>Close</button>
     <button mz-button class="pink-button"
       (click)="(isBackingUp?backupAll():restoreAll()); backupEverything.closeModal()">{{isBackingUp?'Run Backup':'Run Restore'}}</button>
+  </mz-modal-footer>
+</mz-modal>
+
+
+<mz-modal #cloudBackup [fixedFooter]="true" (close)="cloudBackupDone = false">
+  <mz-modal-header>
+    <h4>Cloud Backup</h4>
+  </mz-modal-header>
+  <mz-modal-content>
+    <div class="center-align"><br><br>
+    <ng-container *ngIf="!cloudBackupLoading&&!cloudBackupDone">
+      Trigger apps on your headset to run a cloud backup now in-case you want to do a factory reset.<br><br>
+      WARNING: Not all apps support cloud backup - this is not guaranteed to work for all apps.<br><br>
+      <button  mz-button class="pink-button" (click)="triggerCloudBackup()">Trigger Cloud Backup</button><br><br>
+    </ng-container>
+    <ng-container *ngIf="!cloudBackupLoading&&cloudBackupDone">
+      Cloud backup complete. <br><br>Check cloud backup status here: https://secure.oculus.com/my/cloud-backup/<br><br>
+      <button  mz-button class="pink-button" (click)="appService.opn('https://secure.oculus.com/my/cloud-backup/')">View On Oculus</button><br><br>
+    </ng-container>
+    <ng-container *ngIf="cloudBackupLoading">
+      {{cloudBackupStatus}}<br><br>
+      <app-loading-spinner-small></app-loading-spinner-small>
+    </ng-container>
+    </div>
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Done</button>
   </mz-modal-footer>
 </mz-modal>
 

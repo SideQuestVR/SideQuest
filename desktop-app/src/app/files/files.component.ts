@@ -300,7 +300,7 @@ export class FilesComponent implements OnInit {
     }
     getCrumb(path: string) {
         const parts = path.split('/');
-        const name = parts.pop();
+        let name = parts.pop();
         const parentPath = parts.join('/');
         if (parts.length > 0) {
             this.getCrumb(parentPath);
@@ -318,14 +318,23 @@ export class FilesComponent implements OnInit {
         this.breadcrumbs = [];
         this.selectedFiles.length = 0;
         this.files.length = 0;
+        if (!this.isConnected()) {
+            return Promise.resolve();
+        }
+
         this.getCrumb(
             this.currentPath
                 .split('/')
                 .filter(d => d)
                 .join('/')
         );
-        if (!this.isConnected()) {
-            return Promise.resolve();
+        if (this.breadcrumbs.length === 1) {
+            this.adbService.getFreeSpace().then(() => {
+                if (this.breadcrumbs[0].path == 'sdcard' && this.breadcrumbs[0].name == 'sdcard') {
+                    this.breadcrumbs[0].name +=
+                        ' (' + this.adbService.freespace.available + 'b of ' + this.adbService.freespace.total + 'b free)';
+                }
+            });
         }
         this.readdir(path).then(dirContents => {
             this.files = dirContents;

@@ -123,6 +123,15 @@ export class ToolsComponent implements OnInit {
                 this.statusService.showStatus(e, true);
             });
     }
+    disableProximity() {
+        this.runAdbCommand('adb shell am broadcast -a com.oculus.vrpowermanager.prox_close')
+            .then(() => {
+                this.statusService.showStatus('Disable proximity message sent OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
+    }
     runAdbCommand(command: string) {
         return this.adbService.runAdbCommand(command);
     }

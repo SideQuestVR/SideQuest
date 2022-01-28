@@ -1,6 +1,6 @@
 <div *ngIf="isConnected()" class="top-bar">
-  <nav class="pink lighten-2 breadcrumb-wrapper ">    
-    <div class="nav-wrapper container">      
+  <nav class="pink lighten-2 breadcrumb-wrapper ">
+    <div class="nav-wrapper container">
       <div class="col s12 truncate">
         <a *ngFor="let breadcrumb of breadcrumbs; let i = index" href="javascript:void(0)" class="breadcrumb"
           (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}<span *ngIf="i === breadcrumbs.length-1 && folderSize"> ({{folderSize}})</span> </a>
@@ -23,10 +23,10 @@
       <div class="grey-text">{{this.currentPath}}</div>
 
     </div>
-    <div *ngFor="let file of files" class="vertical-align cursor"
+    <div *ngFor="let file of files" class="cursor"
       [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
       <div class="file" (click)="selectFile($event, file);  $event.stopPropagation()">
-        <div class="right">          
+        <div class="right">
           <span *ngIf="file.icon !== 'folder'">{{file.size|number:'1.2-2'}}MB | </span>{{file.time|date:'short'}}
 
           <i class="material-icons cursor white-text drag-indicator save-icon"
@@ -37,10 +37,12 @@
             (click)="filesToBeDeleted = [file]; confirmModal.openModal()">close</i>
         </div>
         <div>
-          <i class="material-icons medium vertical-align"
-            [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">{{file.icon}}</i>{{file.name}}
+          <i class="material-icons medium left "
+            [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">{{file.icon}}</i>
+          <div class="filename-padding-top">{{file.name}}</div>
         </div>
       </div>
+      <div class="clearfix"></div>
     </div>
   </div>
   <br><br>
