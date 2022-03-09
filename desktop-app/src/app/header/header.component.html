@@ -223,8 +223,34 @@
       </i>
       <div id="connection-status" class="connection-status-unauthorized"  mz-tooltip
            position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
-        <div id="connection-status-message" [innerHTML]="appService.versionName+'&nbsp;&nbsp;'+adbService.deviceStatusMessage"></div>
+        <div id="connection-status-message">
+           <!-- [innerHTML]="appService.versionName+'&nbsp;&nbsp;'+adbService.deviceStatusMessage"> -->
+          <ng-container *ngIf="adbService.deviceStatus == ConnectionStatus.LINUX_PERMS">
+            Warning: no permissions. ADB udev rules missing.
+          </ng-container>
+          <ng-container *ngIf="adbService.deviceStatus == ConnectionStatus.DISCONNECTED">
+            Not Detected
+            <a class="diagnosticator" (click)="diagBegin(); diagnosticator.openModal();">Help!</a>
+          </ng-container>
+          <ng-container *ngIf="adbService.deviceStatus == ConnectionStatus.UNAUTHORIZED">
+            Unauthorized: Allow in headset.
+          </ng-container>
+
+          <ng-container *ngIf="adbService.deviceIp">
+            <i class="material-icons white-text vertical-align">wifi</i> 
+            {{adbService.deviceIp}}
+          </ng-container>
+          <ng-container *ngIf="adbService.deviceStatus == ConnectionStatus.CONNECTED">
+             <i mz-tooltip class="material-icons white-text vertical-align"
+                                position="bottom" tooltip="Battery">
+                        {{adbService.isBatteryCharging ? 'battery_charging_full' : 'battery_full'}}
+                              </i>
+                        {{adbService.batteryLevel}}%
+          </ng-container>
+        </div>
+        
       </div>
+      
     </div>
     <div *ngIf="appService.showBrowserBar" class="beast-saber-buttons">
       <a class="waves-effect waves-light synthrideerz"
@@ -644,5 +670,74 @@
   <mz-modal-footer>
     <button mz-button [flat]="true" mz-modal-close (click)="resetFavourites(favoriteType); showAddFavourite = false;">Cancel</button>
     <button mz-button class="pink-button" mz-modal-close (click)="saveFavourites(favoriteType); showAddFavourite = false;">Save</button>
+  </mz-modal-footer>
+</mz-modal>
+
+
+
+<mz-modal #diagnosticator [fixedFooter]="true">
+  <mz-modal-header>
+    <h4>Diagnose Quest 2 USB (BETA) <button mz-button [flat]="true" (click)="diagBegin();">Refresh</button></h4>
+    
+  </mz-modal-header>
+  <mz-modal-content>
+    <p>This is an early preview of a tool to help diagnose Quest 2 USB connections.</p>
+    <p>Quest 1 and other headsets are not currently supported.</p>
+    <p>This may not work for everyone in all cases, but it might work for you!</p>
+    <ng-container *ngIf="diagnostics">
+      <ng-container *ngIf="diagnostics.loading">
+        Please wait...
+      </ng-container>
+      <ng-container *ngIf="!diagnostics.loading">
+        <ng-container *ngIf="!diagnostics.usb.success">
+          The diagnostics failed to run.  Information in the log may be helpful.
+        </ng-container>
+        <ng-container *ngIf="diagnostics.usb.success">
+          <div [class]="'diag-result ' + diagnostics.usb.result_status">
+            <i class="material-icons left">{{(diagnostics.usb.result_status=='diag-good')?'check_circle':((diagnostics.usb.result_status=='diag-bad')?'cancel':'warning')}}</i>
+            <div class="diag-result-details">{{diagnostics.usb.result}}</div>
+          </div>
+          <div class="diag-status-table">
+            <div class="status-cell" mz-tooltip [tooltip]="diagnostics.usb.is_connected?'The Quest 2 is plugged in and the computer detects it.':'The computer does not detect the Quest 2 plugged in at all.'" [ngClass]="{'diag-status-ok': diagnostics.usb.is_connected, 'diag-status-no': !diagnostics.usb.is_connected}">
+              <i class="material-icons left">{{diagnostics.usb.is_connected?'check_circle':'cancel'}}</i>USB Connection
+            </div>
+            <div class="status-cell" mz-tooltip [tooltip]="diagnostics.usb.is_mtp_enabled?'MTP is enabled.  MTP allows the Quest 2 to show up on the computer as an external drive.':'MTP is not enabled, but isn\'t required for SideQuest to work.  MTP allows the Quest 2 to show up on the computer as an external drive.'" [ngClass]="{'diag-status-ok': diagnostics.usb.is_mtp_enabled, 'diag-status-off': !diagnostics.usb.is_mtp_enabled}">
+              <i class="material-icons left">{{diagnostics.usb.is_mtp_enabled?'check_circle':'remove_circle'}}</i>MTP
+            </div>
+            <div class="status-cell" mz-tooltip [tooltip]="diagnostics.usb.is_dev_mode_enabled?'Developer mode is enabled':'Developer mode is not enabled'" [ngClass]="{'diag-status-ok': diagnostics.usb.is_dev_mode_enabled, 'diag-status-no': !diagnostics.usb.is_dev_mode_enabled}">
+              <i class="material-icons left">{{diagnostics.usb.is_dev_mode_enabled?'check_circle':'cancel'}}</i>Developer Mode
+            </div>
+            <div class="status-cell" mz-tooltip [tooltip]="diagnostics.usb.is_adb_enabled?'An ADB USB device is detected':'No ADB USB device is detected'" [ngClass]="{'diag-status-ok': diagnostics.usb.is_adb_enabled, 'diag-status-no': !diagnostics.usb.is_adb_enabled}">
+              <i class="material-icons left">{{diagnostics.usb.is_adb_enabled?'check_circle':'cancel'}}</i>ADB Device
+            </div>
+          </div>
+          <div class="diag-recommend">
+            <div class="diag-recommend-header">
+              {{(diagnostics.usb.result_status=='diag-good')?'It still isn\'t working?':'So how do I fix it?'}}
+            </div>
+            <div class="diag-recommend-details">
+              {{diagnostics.usb.recommendation}}
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="diag-log">
+          <div class='diag-log-header'>Log:</div>
+          <div class="diag-log-details">
+            {{ diagnostics.usb.log }}
+          </div>
+        </div>
+
+
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!diagnostics">
+      Plug your Quest 2 into a USB port and click the button below
+      <button mz-button [flat]="true" (click)="diagBegin();">Begin USB Diagnostics</button>
+    </ng-container>
+   
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close >Close</button>
   </mz-modal-footer>
 </mz-modal>

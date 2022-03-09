@@ -186,10 +186,89 @@ virtual-scroller{
   position: absolute;
   left: 10px;
   top: 8px;
-  -webkit-app-region: no-drag;
+  -webkit-app-region: no-drag; 
 }
 .connection-device-select{
   vertical-align: top;
+}
+.diagnosticator {
+  margin-right: 5px;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  vertical-align: middle;
+  z-index: 999;
+}
+
+.diag-good {
+background-color: darkgreen;
+}
+.diag-maybe {
+background-color: goldenrod;
+}
+.diag-bad {
+background-color: darkred;
+}
+.diag-status-ok {
+  background-color: darkgreen;
+  color: white;
+}
+.diag-status-off {
+  background-color: dimgray;
+  color: white;
+}
+.diag-status-no {
+  background-color: darkred;
+  color: white;
+}
+.diag-log {
+  margin-top: 10px;
+}
+.diag-log .diag-log-header {
+  font-size: 1.3em;
+}
+.diag-log .diag-log-details {
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+.diag-status-table {
+  display: table;
+  border-collapse: separate;
+  border-spacing: 5px;
+}
+.diag-result {
+  font-size: 1.5em;
+  color: white;
+  display: table;
+  line-height: 1.5em;
+}
+.diag-result i {
+  font-size: 50px;
+  display:table-cell;
+}
+
+.diag-recommend {
+  margin-top: 15px;
+}
+.diag-recommend .diag-recommend-header {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+.diag-recommend .diag-recommend-details {
+  white-space: pre-wrap;
+}
+.diag-result .diag-result-details {
+  margin-top: 15px;
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+.status-cell {
+  display: table-cell;
+  line-height: 26px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 #connection-status {
   width: 20px;

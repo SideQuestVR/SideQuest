@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { ProcessBucketService } from '../process-bucket.service';
 import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../environments/environment';
+import { DeviceUsbStatus, DiagnosticatorService, UsbDiagResultStatus } from '../diagnosticator.service';
 
 interface ReplaceText {
     key: string;
@@ -57,6 +58,11 @@ export class HeaderComponent implements OnInit {
         fileFavourites: [],
         commandFavourites: [],
     };
+    diagnostics: {
+        loading: boolean;
+        usb?: DeviceUsbStatus;
+    } = null;
+
     favoriteName: string;
     favoriteUri: string;
     favoriteIcon: string;
@@ -102,6 +108,7 @@ export class HeaderComponent implements OnInit {
         public beatonService: BeatOnService,
         public dragAndDropService: DragAndDropService,
         public processService: ProcessBucketService,
+        private diag: DiagnosticatorService,
         private router: Router
     ) {
         this.osPlatform = this.appService.os.platform();
@@ -123,6 +130,35 @@ export class HeaderComponent implements OnInit {
         } else {
             this.webService.back();
         }
+    }
+    diagBegin() {
+        this.diagnostics = null;
+        this.diagnostics = { loading: true };
+        this.diag
+            .getDeviceStatus()
+            .then(x => {
+                if (!this.diagnostics) {
+                    return;
+                }
+                this.diagnostics.loading = false;
+                this.diagnostics.usb = x;
+            })
+            .catch(e => {
+                this.diagnostics.loading = false;
+                this.diagnostics.usb = {
+                    is_connected: false,
+                    is_mtp_enabled: false,
+                    is_adb_enabled: false,
+                    is_dev_mode_enabled: false,
+                    all_oculus_devices: [],
+                    adb_device: null,
+                    log: 'Error',
+                    success: false,
+                    result: 'Error',
+                    result_status: UsbDiagResultStatus.Bad,
+                    recommendation: 'Error',
+                };
+            });
     }
     resetFavourites(type: string) {
         let defaultFavs;
@@ -156,6 +192,7 @@ export class HeaderComponent implements OnInit {
         this.favourites[type] = localStorage.getItem(type) || defaultFavs;
         this.favourites[type] = JSON.parse(this.favourites[type]);
     }
+    readonly ConnectionStatus = ConnectionStatus;
 
     removeFromFavourites(type: string, index: number) {
         this.favourites[type] = this.favourites[type].filter((f, i) => i !== index);
@@ -197,6 +234,10 @@ export class HeaderComponent implements OnInit {
     }
     isConnected() {
         return this.adbService.deviceStatus === ConnectionStatus.CONNECTED;
+    }
+
+    isDisconnected() {
+        return this.adbService.deviceStatus === ConnectionStatus.DISCONNECTED;
     }
 
     updateAvailable() {

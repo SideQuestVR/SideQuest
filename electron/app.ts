@@ -3,6 +3,7 @@ import { StateStorage, EnvironmentConfig } from './state-storage';
 import { AppWindow } from './window';
 import { getEnvCfg } from './env-config';
 
+app.allowRendererProcessReuse = false;
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const download = require('./download');
