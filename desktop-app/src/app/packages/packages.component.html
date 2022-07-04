@@ -1,8 +1,7 @@
 <div class="container">
 
   <div *ngIf="!isConnected()">
-    <h4
-      [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <h4 class="text-dark-theme">
       No device connected...</h4>
   </div>
   <div *ngIf="isConnected()">

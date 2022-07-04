@@ -5,7 +5,7 @@ import { LoadingSpinnerService } from '../loading-spinner.service';
 import { StatusBarService } from '../status-bar.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { RepoService } from '../repo.service';
+import { PackageService } from './package.service';
 
 @Component({
     selector: 'app-packages',
@@ -37,7 +37,7 @@ export class PackagesComponent implements OnInit {
         public appService: AppService,
         public spinnerService: LoadingSpinnerService,
         public statusService: StatusBarService,
-        private repoService: RepoService,
+        private packageService: PackageService,
         router: Router,
         route: ActivatedRoute
     ) {
@@ -141,10 +141,10 @@ export class PackagesComponent implements OnInit {
                 .then(() => {
                     this.myApps = this.adbService.devicePackages
                         .map(p => {
-                            if (this.repoService.allApps[p]) {
+                            if (this.packageService.allApps[p]) {
                                 return {
-                                    name: this.repoService.allApps[p].name,
-                                    icon: this.repoService.allApps[p].icon,
+                                    name: this.packageService.allApps[p].name,
+                                    icon: this.packageService.allApps[p].icon,
                                     packageName: p,
                                 };
                             }

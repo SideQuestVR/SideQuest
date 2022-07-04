@@ -22,7 +22,6 @@ export class AudicaService {
             let parts = downloadUrl.split('/');
             let zipPath = this.appService.path.join(this.appService.appData, this.appService.path.basename(downloadUrl));
             let ws = this.appService.fs.createWriteStream(zipPath);
-            //let name = parts[parts.length - 1].split('.')[0];
             const requestOptions = {
                 timeout: 30000,
                 'User-Agent': this.appService.getUserAgent(),

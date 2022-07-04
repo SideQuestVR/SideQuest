@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { RepoService } from '../repo.service';
 
 @Component({
     selector: 'app-package-item',
@@ -7,9 +6,9 @@ import { RepoService } from '../repo.service';
     styleUrls: ['./package-item.component.css'],
 })
 export class PackageItemComponent implements OnInit {
-    @Input('package') package: any;
-    @Output('settings') settings = new EventEmitter();
-    constructor(public repoService: RepoService) {}
+    @Input() package: any;
+    @Output() settings = new EventEmitter();
+    constructor() {}
 
     ngOnInit() {}
 

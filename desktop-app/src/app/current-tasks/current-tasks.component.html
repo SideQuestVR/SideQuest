@@ -1,5 +1,5 @@
 <div class="container">
-  <h4 *ngIf="!processService.tasks.length" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">No tasks running...</h4>
+  <h4 *ngIf="!processService.tasks.length" class="text-dark-theme">No tasks running...</h4>
 
   <div class="row" *ngIf="processService.tasks.length">
     <app-current-task-item *ngFor="let task of processService.tasks;" [task]="task"></app-current-task-item>

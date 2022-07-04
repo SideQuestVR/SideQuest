@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AppService } from './app.service';
+import { AppService } from '../app.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class RepoService {
+export class PackageService {
     allApps: any = {};
-    indexUrl: string = 'https://the-expanse.github.io/SideQuestRepos/';
+    indexUrl = 'https://the-expanse.github.io/SideQuestRepos/';
     constructor(private appService: AppService) {
         this.getAppIndex();
     }

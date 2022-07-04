@@ -10,21 +10,18 @@
 </div>
 <div class="container files-section">
   <div *ngIf="!isConnected()">
-    <h4
-      [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <h4 class="text-dark-theme">
       No device connected yet...</h4>
 
   </div>
   <div *ngIf="isConnected()">
     <div *ngIf="!files.length">
-      <h4
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <h4 class="text-dark-theme">
         No files here...</h4>
       <div class="grey-text">{{this.currentPath}}</div>
 
     </div>
-    <div *ngFor="let file of files" class="cursor"
-      [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div *ngFor="let file of files" class="cursor text-dark-theme">
       <div class="file" (click)="selectFile($event, file);  $event.stopPropagation()">
         <div class="right">
           <span *ngIf="file.icon !== 'folder'">{{file.size|number:'1.2-2'}}MB | </span>{{file.time|date:'short'}}
@@ -37,8 +34,7 @@
             (click)="filesToBeDeleted = [file]; confirmModal.openModal()">close</i>
         </div>
         <div>
-          <i class="material-icons medium left "
-            [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">{{file.icon}}</i>
+          <i class="material-icons medium left text-dark-theme">{{file.icon}}</i>
           <div class="filename-padding-top">{{file.name}}</div>
         </div>
       </div>

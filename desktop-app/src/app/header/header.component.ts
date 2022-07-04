@@ -4,7 +4,6 @@ import { AppService, FolderType } from '../app.service';
 import { WebviewService } from '../webview.service';
 import { LoadingSpinnerService } from '../loading-spinner.service';
 import { StatusBarService } from '../status-bar.service';
-import { RepoService } from '../repo.service';
 import { BeatOnService } from '../beat-on.service';
 import { DragAndDropService } from '../drag-and-drop.service';
 import { Router } from '@angular/router';

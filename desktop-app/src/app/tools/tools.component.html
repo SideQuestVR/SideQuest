@@ -1,130 +1,121 @@
-<div class="container"
-  [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+<div class="container text-dark-theme">
   <div class="side-quest-version">
     SideQuest Version: {{appService.versionName}}
   </div>
   <div class="row">
     <div class="col s12">
-      <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         SideQuest Folders</div>
       <div class="button-section">
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="appService.openFolder(folder.MAIN)">
           Open Main App Folder
         </div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="appService.openFolder(folder.APK_BACKUPS)">
           Open APK Backup Folder
         </div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="appService.openFolder(folder.ADB)">
           Open ADB Folder
         </div>
       </div>
 
-      <div class="section-title"
-           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Proximity Sensor</div>
       This disables the proximity sensor effectively keeping your quest awake when not on your head ( requires restart to disable ).
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="disableProximity()">Disable</div>
       </div>
 
-      <div class="section-title"
-           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Experimental Mode</div>
       This enables experimental features in your Oculus Quest such as Passthrough API support ( requires guardian to be enabled ).
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setExperimental(EXP.On)">On</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setExperimental(EXP.Off)">Off</div>
       </div>
-      <div class="section-title"
-           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Refresh Rate</div>
       This will allow you to change to 90Hz refresh rate for 90fps support in games on Quest 2.<br>
       WARNING: This does not work in all games, and does not work with Oculus Link. This setting may also reset to default when you restart your headset. You may need to press the power button twice to turn the screen off and on to enable this setting for apps that dont have it natively enabled.
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setRR(RR._72)">Default</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setRR(RR._60)">60Hz</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setRR(RR._72)">72Hz</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setRR(RR._90)">90Hz</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setRR(RR._120)">120Hz</div>
       </div>
-      <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Chromatic Aberration</div>
       This will enable/disable chromatic aberration.
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setCa(CA.APP)">Default</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setCa(CA.APP)">App Selected</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setCa(CA.ON)">On</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setCa(CA.OFF)">Off</div>
       </div>
-      <div class="section-title"
-           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Guardian</div>
       This will enable/disable the guardian.
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setGuardian(GU.ON)">ON</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setGuardian(GU.OFF)">OFF</div>
       </div>
 
-      <div class="section-title"
-           [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Full Rate Capture</div>
       This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setFullRate(GU.ON)">ON</div>
-        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-ca margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setFullRate(GU.OFF)">OFF</div>
       </div>
-      <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Paste Text to your device</div>
       If there is a text input field focussed on your headset you can paste / type text in here to have SideQuest type
       it out on your headset. Good for long passwords you don't want to have to type on a virtual keyboard.
       <div class="button-section">
         <div class="input-field ">
           <input id="devicePaste"
-            [ngClass]="{'input-dark-theme':appService.currentTheme === 'dark','input-light-theme':appService.currentTheme === 'light'}"
+                 class="input-dark-theme"
             [type]="isPassword?'password':'text'" [(ngModel)]="textToSend" />
           <label for="devicePaste"
-            [ngClass]="{'label-dark-theme':appService.currentTheme === 'dark','label-light-theme':appService.currentTheme === 'light'}">Text
+                 class="label-dark-theme">Text
             to Paste</label>
         </div>
         <div class="switch">
@@ -136,133 +127,128 @@
           </label>
         </div>
         <div class="waves-effect waves-light btn paste-text-button right pink-button" (click)="pasteToDevice()"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}">
+          [ngClass]="{'waves-dark':true,'waves-light':false}">
           Send</div>
       </div>
       <br><br>
-      <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Set FFR ( Fixed Foveated Rendering ) level
       </div>
       This will change how the view is rendered in the outer edges of the viewscreen for each eye. Higher is better
       performance, lower is better quality. This gets reset when you reboot the device.
       <div class="button-section">
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setFFR(FFR.MEDIUM)">Default</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setFFR(FFR.OFF)">Off</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setFFR(FFR.LOW)">Low</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setFFR(FFR.MEDIUM)">Medium</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setFFR(FFR.HIGH)">High</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setFFR(FFR.HIGH_TOP)">High Top</div>
       </div>
-      <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Set Video Capture Size</div>
       This changes the resolution of captured videos on the Quest
       <div class="button-section">
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setCR(CR._480)">480</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setCR(CR._720)">720</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setCR(CR._1080)">1080</div>
       </div>
-      <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Set CPU and GPU level</div>
       This can improve performance for 2D apps & games.
       <div class="button-section">
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setGPU(GPU._2)">Default</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setGPU(GPU._2)">Level 2</div>
-        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setGPU(GPU._4)">Level 4</div>
       </div>
-       <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+       <div class="section-title text-dark-theme">
         Default Texture Size</div>
       This will change how high quality some of the in game textures are rendered at.
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._Go)">Default - Oculus Go</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setSSO(SSO._Quest1)">Default - Oculus Quest</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+             [ngClass]="{'waves-dark':true,'waves-light':false}"
              (click)="setSSO(SSO._Quest2)">Default - Oculus Quest 2</div><br>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._512)">512</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._768)">768</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._1024)">1024</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._1280)">1280</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._1536)">1536</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._2048)">2048</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._2560)">2560</div>
-        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-sso margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSSO(SSO._3072)">3072</div>
       </div>
-      <div class="section-title"
-        [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="section-title text-dark-theme">
         Capture Video Bitrate ( Go Only )</div>
       This will increase the quality of captured videos on Oculus Go.
 
       <div class="button-section">
-        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSVB(SVB._5Mbps)">Default</div>
-        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSVB(SVB._5Mbps)">5Mbps</div>
-        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSVB(SVB._15Mbps)">15Mbps</div>
-        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button"
-          [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+        <div class="waves-effect waves-light btn set-svb margin-bottom margin-right pink-button button-dark-theme"
+          [ngClass]="{'waves-dark':true,'waves-light':false}"
           (click)="setSVB(SVB._25Mbps)">25Mbps</div>
       </div>
       <!--      <div class="section-title" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">Video Recording Resolution ( Go Only )</div>-->
       <!--      This will increase the resolution of captured videos on Oculus Go.-->
       <!--      <div class="button-section">-->
       <!--        <div class="waves-effect waves-light btn set-svr margin-bottom margin-right pink-button"-->
-      <!--             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}" (click)="setSVR(SVR._1024)">Default</div>-->
+      <!--             [ngClass]="{'waves-dark':true,'waves-light':false}" (click)="setSVR(SVR._1024)">Default</div>-->
       <!--        <div class="waves-effect waves-light btn set-svr margin-bottom margin-right pink-button"-->
-      <!--             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}" (click)="setSVR(SVR._1024)">1024</div>-->
+      <!--             [ngClass]="{'waves-dark':true,'waves-light':false}" (click)="setSVR(SVR._1024)">1024</div>-->
       <!--        <div class="waves-effect waves-light btn set-svr margin-bottom margin-right pink-button"-->
-      <!--             [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}" (click)="setSVR(SVR._1536)">1536</div>-->
+      <!--             [ngClass]="{'waves-dark':true,'waves-light':false}" (click)="setSVR(SVR._1536)">1536</div>-->
       <!--      </div>-->
       <!--      <div class="section-title" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">Destroy The World</div>-->
       <!--      Click this to release all the goblins and endanger the future of humanity. Do not do this!-->

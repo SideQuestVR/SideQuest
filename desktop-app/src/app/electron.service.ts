@@ -1,6 +1,5 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { AppService } from './app.service';
-import { RepoService } from './repo.service';
 import { StatusBarService } from './status-bar.service';
 import { LoadingSpinnerService } from './loading-spinner.service';
 import { AdbClientService } from './adb-client.service';
@@ -19,7 +18,6 @@ export class ElectronService {
     isInstallingLauncher: boolean;
     constructor(
         private appService: AppService,
-        private repoService: RepoService,
         private statusService: StatusBarService,
         private spinnerService: LoadingSpinnerService,
         private adbService: AdbClientService,

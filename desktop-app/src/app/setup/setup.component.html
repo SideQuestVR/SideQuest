@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col s12 m6">
-    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div class="setup-content text-dark-theme">
       <div class="section-title">
         Step 1: Create Organisation
       </div>
@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="col s12 m6">
-    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div class="setup-content text-dark-theme">
       <div class="section-title">
         Step 2: Install Drivers ( Windows Only - skip this on Mac / Linux )
       </div>
@@ -38,7 +38,7 @@
 <div class="clear-fix"></div>
 <div class="row">
   <div class="col s12 m6">
-    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div class="setup-content text-dark-theme">
       <div class="section-title">
         Step 3: Enable Developer Mode and Reboot
       </div>
@@ -53,7 +53,7 @@
     </div>
   </div>
   <div class="col s12 m6">
-    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div class="setup-content text-dark-theme">
       <div class="section-title">
         Step 4: Connect USB Cable and Allow USB Debugging
       </div>
@@ -71,25 +71,25 @@
 <div class="clear-fix"></div>
 <div class="row">
   <div class="col s12">
-    <div class="setup-content" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
-      <div class="section-title" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div class="setup-content text-dark-theme">
+      <div class="section-title">
         Step 5: Install App Launcher
       </div>
-      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="text-dark-theme">
         Install a launcher to make finding apps easier on your headset. This launcher will be found in
         the library under 'Unknown Sources' on the menu on the left. Open it to find all the apps that
         have been installed on your device.
       </div><br>
       <span class="chip" *ngIf="isLauncherInstalled()">SideQuest Launcher Installed!</span>
       <app-loading-spinner-small *ngIf="isInstallingLauncher"></app-loading-spinner-small>
-      <div class="waves-effect waves-light btn pink-button"
+      <div class="waves-effect waves-light btn pink-button button-dark-theme"
            *ngIf="!isInstalledLauncher&&!isInstallingLauncher"
-           [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+           [ngClass]="{'waves-dark':true,'waves-light':false}"
            (click)="installLauncher()">
         Install App Launcher
       </div>
       <br><br>
-      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="text-dark-theme">
         You will then be able to install apps to your headset and open them from the launcher. You can
         find it in the side menu of the library under the Unknown Sources section called
         <span class="chip">SideQuest - TV</span> and <span class="chip">SideQuest - Home</span>.  This will show you all the apps on the device even hidden
@@ -97,16 +97,16 @@
       </div><br>
       <span class="chip" *ngIf="isExpanseInstalled()">The Expanse VR Installed!</span>
       <app-loading-spinner-small *ngIf="isInstallingExpanse"></app-loading-spinner-small>
-      <div class="waves-effect waves-light btn pink-button"
+      <div class="waves-effect waves-light btn pink-button button-dark-theme"
            *ngIf="!isInstalledExpanse&&!isInstallingExpanse"
-           [ngClass]="{'button-dark-theme':appService.currentTheme === 'dark','button-light-theme':appService.currentTheme === 'light','waves-dark':true,'waves-light':false}"
+           [ngClass]="{'waves-dark':true,'waves-light':false}"
            (click)="installExpanse()">
         Install Your First App - The Expanse
       </div><br><br>
-      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="text-dark-theme">
         If you want to install your own APK files just drag and drop them over this window.
       </div>
-      <div [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+      <div class="text-dark-theme">
         Check your antivirus hasn't blocked some parts of the ADB download - this has happened for some
         with Avast antivirus in particular. <br />If you have any problems or want to say hi drop us a
         line on discord - <app-link url="https://discord.gg/HNnDPSu" text="discord"></app-link>.
@@ -117,10 +117,10 @@
 <div class="clear-fix"></div>
 <div class="row" style="display: none;">
   <div class="col s12">
-    <div class="section-title" [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div class="section-title text-dark-theme">
       App Developers Link to your apps!
     </div>
-    <div style="text-align: center"  [ngClass]="{'text-dark-theme':appService.currentTheme === 'dark','text-light-theme':appService.currentTheme === 'light'}">
+    <div style="text-align: center" class="text-dark-theme">
       Use our custom protocol to be able to install APK files, add repos and even load custom beat
       saber songs direct from your website.
     </div>
