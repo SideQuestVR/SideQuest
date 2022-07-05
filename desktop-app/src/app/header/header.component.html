@@ -1,14 +1,191 @@
 <div class="header">
+  <div class="top-bar">
+    <div class="relative">
+      <div class="topper"></div>
+      <div class="user-menu-back" (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none'"
+           #userMenuBack></div>
+      <div class="user-menu-back" (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none'"
+           #browserMenuBack></div>
+      <div class="user-menu-back" (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none'"
+           #commandMenuBack></div>
+
+      <div class="user-menu-back" (click)="deviceMenu.style.display = 'none';deviceMenuBack.style.display = 'none'"
+           #deviceMenuBack></div>
+      <div class="user-menu device-menu" #deviceMenu>
+        <ng-container *ngFor="let device of adbService.displayDevices">
+          <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
+               (click)="deviceMenu.style.display = 'none';deviceMenuBack.style.display = 'none';adbService.deviceSerial = device.id;adbService.updateConnectedStatus()"
+          >[{{device.id}}] {{device.deviceName}}</div><br>
+        </ng-container>
+      </div>
+      <div class="title-menu-container">
+        <div class="user-menu command-menu" #commandMenu>
+          <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
+               (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';adbModal.openModal()"
+          ><i class="material-icons left">input</i>Custom Command</div><br>
+          <div class="btn-flat waves-light waves-light full-width center-align white-text"
+               (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';favoriteType = 'commandFavourites';favouriteMax = 20;favoritePathType = 'Command';manageFavs.openModal()"
+          ><i class="material-icons left">edit</i>Manage</div><br>
+          <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
+               (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';logcatModal.openModal()"
+          ><i class="material-icons left">toc</i>Logcat</div><br>
+          <ng-container *ngFor="let favourite of favourites.commandFavourites">
+            <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
+                 (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';adbCommandToRun = favourite.uri; runAdbCommand(); adbModal.openModal()"
+            ><img *ngIf="favourite.icon" class="left browser-menu-image" src="{{favourite.icon}}"/>{{favourite.name}}</div><br>
+          </ng-container>
+        </div>
+        <div class="user-menu browser-menu" #browserMenu>
+          <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
+               (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"
+               routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>
+
+          <div class="btn-flat waves-light waves-light full-width center-align white-text"
+               (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';bookmarksModal.openModal()"
+               routerLink="/webview"><i class="material-icons left">public</i>Go to url</div><br>
+          <div class="btn-flat waves-light waves-light full-width center-align white-text"
+               (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';favoriteType = 'browserFavourites';favouriteMax = 20;favoritePathType = 'Url';manageFavs.openModal()"
+          ><i class="material-icons left">edit</i>Manage</div><br>
+          <div class="btn-flat waves-light waves-light full-width center-align white-text"
+               (click)="addCurrentFavourite()"
+          ><i class="material-icons left">add</i>Add Current</div><br>
+          <ng-container *ngFor="let favourite of favourites.browserFavourites">
+            <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
+                 (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';webService.loadUrl(favourite.uri)"
+                 routerLink="/webview"><img *ngIf="favourite.icon" class="left browser-menu-image" src="{{favourite.icon}}"/>{{favourite.name}}</div><br>
+          </ng-container>
+        </div>
+        <div class="user-menu" #userMenu>
+          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"-->
+          <!--          routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>-->
+          <div class="btn-flat waves-light waves-light full-width center-align white-text"
+               *ngIf="isConnected()&&osPlatform === 'win32'"
+               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">
+            <i class="material-icons left">live_tv</i>Streaming</div>
+          <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"
+               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';wifiModal.openModal()"><i
+            class="material-icons left">wifi</i>Wifi</div>
+          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';selectAppToInstall()"><i-->
+          <!--            class="material-icons left">archive</i>Select APK</div>-->
+          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="/device-files"><i-->
+          <!--            class="material-icons left">folder</i>File Explorer</div>-->
+          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="packages"><i-->
+          <!--            class="material-icons left">apps</i>My Apps</div>-->
+          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="tools"><i-->
+          <!--            class="material-icons left">build</i>Tools</div>-->
+          <div class="btn-flat waves-light waves-light full-width center-align white-text"
+               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';adbModal.openModal()"><i
+            class="material-icons left">input</i>ADB Commands</div>
+          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+          <!--             (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';logcatModal.openModal()"><i-->
+          <!--          class="material-icons left">input</i>ADB Logcat</div>-->
+        </div>
+        <app-link *ngIf="appService.updateAvailable"
+                  class="waves-effect waves-light btn-flat update-available link small-button warning" (click)="updateAvailable()"
+                  text="Update"></app-link>
+        <i mz-tooltip class="material-icons white-text no-outline top-menu-bar-icon-down" position="bottom" tooltip="Menu"
+           (click)="userMenu.style.display = 'block';userMenuBack.style.display = 'block'">
+          arrow_drop_down
+        </i>
+        <i mz-tooltip routerLink="/webview" (click)="doBack()"
+           class="material-icons white-text no-outline" position="bottom" tooltip="Back">
+          arrow_back
+        </i>
+        <i mz-tooltip *ngIf="!webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
+           class="material-icons white-text no-outline" position="bottom" tooltip="Web Browser">
+          public
+        </i>
+        <div mz-tooltip *ngIf="webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
+             class="loader-tiny pointer" position="bottom"
+             tooltip="Web Browser Loading..."></div>
+        <i mz-tooltip routerLink="/webview" (click)="webService.forward()"
+           class="material-icons white-text no-outline" position="bottom" tooltip="Forward">
+          arrow_forward
+        </i>
+        <i mz-tooltip (click)="scrcpyModal.openModal();" *ngIf="isConnected()&&osPlatform === 'win32'"
+           class="material-icons white-text no-outline top-menu-bar-icon" position="bottom"
+           tooltip="Stream from your headset to your PC with ScrCpy.">
+          live_tv
+        </i>
+        <i mz-tooltip *ngIf="adbService.deviceIp" (click)="wifiModal.openModal()"
+           class="material-icons no-outline top-menu-bar-icon"
+           [ngClass]="{'green-text':adbService.wifiEnabled,'white-text':!adbService.wifiEnabled}" position="bottom"
+           tooltip="Enable wireless mode. (Experimental)">
+          wifi
+        </i>
+        <i mz-tooltip #mainLogo (click)="selectAppToInstall()"
+           class="material-icons white-text no-outline" position="bottom"
+           tooltip="Install APK file from folder on computer.">
+          archive
+        </i>
+        <i mz-tooltip class="material-icons white-text no-outline " routerLink="/device-files"
+           position="bottom" tooltip="Manage files on the headset.">
+          folder
+        </i>
+        <i routerLink="packages" mz-tooltip class="material-icons white-text no-outline"
+           position="bottom" tooltip="Currently installed apps">
+          apps
+        </i>
+        <i routerLink="tasks" mz-tooltip class="material-icons white-text no-outline" position="bottom"
+           tooltip="Running {{processService.left_length}} tasks.">
+          playlist_add_check
+        </i><span routerLink="tasks" mz-tooltip *ngIf="processService.left_length" position="bottom"
+                  tooltip="Running {{processService.left_length}} tasks."
+                  class="process-badge pink-button">{{processService.left_length>100?'99+':processService.left_length}}</span>
+        <span routerLink="tasks" mz-tooltip *ngIf="!processService.left_length&&processService.failed_length"
+              position="bottom" tooltip="{{processService.failed_length}} failed tasks."
+              class="process-badge pink-button red">{{processService.failed_length>100?'99+':processService.failed_length}}</span>
+        <i id="device-settings" routerLink="tools" mz-tooltip
+           class="material-icons white-text no-outline" position="bottom"
+           tooltip="Device settings & tools">
+          build
+        </i>
+        <i mz-tooltip (click)="commandMenu.style.display = 'block';commandMenuBack.style.display = 'block'" class="material-icons white-text no-outline top-menu-bar-icon"
+           position="bottom" tooltip="Run ADB commands">
+          input
+        </i>
+        <!--      <i (click)="openDebugger()" id="open-debugger" mz-tooltip class="material-icons white-text top-menu-bar-icon"-->
+        <!--        position="bottom" tooltip="Open debugger">-->
+        <!--        bug_report-->
+        <!--      </i>-->
+        <!--      <i (click)="minimizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
+        <!--        tooltip="Minimize SideQuest.">-->
+        <!--        minimize-->
+        <!--      </i>-->
+        <!--      <i (click)="maximizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
+        <!--        tooltip="Toggle Maximize.">-->
+        <!--        aspect_ratio-->
+        <!--      </i>-->
+        <!--      <i (click)="closeAppModal.openModal(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
+        <!--        tooltip="Close SideQuest.">-->
+        <!--        close-->
+        <!--      </i>-->
+      </div>
+      <div id="connection-status-container">
+        <i mz-tooltip class="material-icons white-text no-outline connection-device-select pointer left"
+           *ngIf="adbService.devices && adbService.devices.length > 1"
+           (click)="deviceMenu.style.display = 'block';deviceMenuBack.style.display = 'block'"
+           position="bottom" tooltip="Select Device">
+          arrow_drop_down
+        </i>
+        <div id="connection-status" class="connection-status-unauthorized  left"  mz-tooltip
+             position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
+          <div id="connection-status-message" [innerHTML]="appService.versionName+'&nbsp;&nbsp;'+adbService.deviceStatusMessage"></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="top-dnd-backing">
-    <div class="topper"></div>
+
     <div class="top-banner">
       <div>
-        <!--<div class="header-title">SideQuest</div>-->
-        <!--<div class="apk-install">Make it your own</div>-->
         <a href="#/" class="logo">
-          <!--<img src="assets/images/logo-large icony.png"/>-->
           <img src="assets/images/new-logo.png" />
-          <!--<img class="spider-image" src="https://i.giphy.com/media/V3sjIPOXgP5Zu/giphy.webp"/>-->
         </a>
       </div>
       <div class="top-buttons hide-on-med-and-down">
@@ -18,211 +195,15 @@
         <br />
         <span class="spinner-loading-message" [innerHTML]="dragAndDropService.message"></span>
       </div>
-      <!--<div class="logo no-outline" (click)="webService.webView.loadURL('http://localhost:4201');" routerLink="webview"></div>-->
-      <!--<div class="header-title" #header><img src="assets/images/logo-textual.png" class="responsive-img"/></div>-->
-      <!--<div class="apk-install">Drag and drop your APK/OBB files <br>over this message to install!</div>-->
-      <!--<div class="apk-install" *ngIf="appService.isFilesOpen">Manage the files on your headset.<br>Drag and drop to move-->
-        <!--files onto your headset.</div>-->
       <div class="apk-install" *ngIf="appService.isPackagesOpen">Manage the apps on your headset.<br>Click Show All to
         see all apps including system apps.</div>
       <div class="apk-install" *ngIf="appService.isSettingsOpen">Manage settings on your headset.</div>
       <div class="apk-install" *ngIf="appService.isTasksOpen">Manage tasks for installing, <br>downloading and uploading
         from your headset.</div>
-      <!--<div class="apk-install" *ngIf="appService.showCustomActions">Special thanks to-->
-      <!--<app-link url="https://github.com/trishume/QuestSaberPatch" text="@trishume"></app-link>,-->
-      <!--<app-link url="https://github.com/ATechAdventurer" text="@ATechAdventurer"></app-link>,<br>-->
-      <!--<app-link url="https://www.reddit.com/u/drewbaumann/" text="@drewbaumann"></app-link>,-->
-      <!--<app-link url="https://www.reddit.com/u/motokochan/" text="@motokochan"></app-link>-->
-      <!--and of course-->
-      <!--<app-link url="https://bsaber.com/members/elliotttate/" text="@elliotttate"></app-link>-->
-      <!--for beat saber efforts.-->
-      <!--</div>-->
-    </div>
-    <div class="user-menu-back" (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none'"
-         #userMenuBack></div>
-    <div class="user-menu-back" (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none'"
-         #browserMenuBack></div>
-    <div class="user-menu-back" (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none'"
-         #commandMenuBack></div>
-
-    <div class="user-menu-back" (click)="deviceMenu.style.display = 'none';deviceMenuBack.style.display = 'none'"
-         #deviceMenuBack></div>
-    <div class="user-menu device-menu" #deviceMenu>
-      <ng-container *ngFor="let device of adbService.displayDevices">
-        <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-             (click)="deviceMenu.style.display = 'none';deviceMenuBack.style.display = 'none';adbService.deviceSerial = device.id;adbService.updateConnectedStatus()"
-        >[{{device.id}}] {{device.deviceName}}</div><br>
-      </ng-container>
-    </div>
-    <div class="title-menu-container">
-      <!--<img mz-tooltip-->
-      <!--(click)="openBeatOn()"-->
-      <!--class="material-icons no-outline beaton-icon"-->
-      <!--src="{{beatonService.beatOnEnabled?'assets/images/beaton.png':'assets/images/beatoff.png'}}"-->
-      <!--position="bottom" tooltip="BeatOn mods & custom songs on Beat Saber"/>-->
-
-      <div class="user-menu command-menu" #commandMenu>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-             (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';adbModal.openModal()"
-             ><i class="material-icons left">input</i>Custom Command</div><br>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-             (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';favoriteType = 'commandFavourites';favouriteMax = 20;favoritePathType = 'Command';manageFavs.openModal()"
-             ><i class="material-icons left">edit</i>Manage</div><br>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-             (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';logcatModal.openModal()"
-             ><i class="material-icons left">toc</i>Logcat</div><br>
-        <ng-container *ngFor="let favourite of favourites.commandFavourites">
-          <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-               (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none';adbCommandToRun = favourite.uri; runAdbCommand(); adbModal.openModal()"
-               ><img *ngIf="favourite.icon" class="left browser-menu-image" src="{{favourite.icon}}"/>{{favourite.name}}</div><br>
-        </ng-container>
-      </div>
-      <div class="user-menu browser-menu" #browserMenu>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-             (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"
-             routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>
-
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-             (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';bookmarksModal.openModal()"
-             routerLink="/webview"><i class="material-icons left">public</i>Go to url</div><br>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-             (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';favoriteType = 'browserFavourites';favouriteMax = 20;favoritePathType = 'Url';manageFavs.openModal()"
-             ><i class="material-icons left">edit</i>Manage</div><br>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-             (click)="addCurrentFavourite()"
-             ><i class="material-icons left">add</i>Add Current</div><br>
-        <ng-container *ngFor="let favourite of favourites.browserFavourites">
-          <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
-               (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';webService.loadUrl(favourite.uri)"
-               routerLink="/webview"><img *ngIf="favourite.icon" class="left browser-menu-image" src="{{favourite.icon}}"/>{{favourite.name}}</div><br>
-        </ng-container>
-      </div>
-      <div class="user-menu" #userMenu>
-<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"-->
-<!--          routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>-->
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-             *ngIf="isConnected()&&osPlatform === 'win32'"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">
-          <i class="material-icons left">live_tv</i>Streaming</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';wifiModal.openModal()"><i
-            class="material-icons left">wifi</i>Wifi</div>
-<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';selectAppToInstall()"><i-->
-<!--            class="material-icons left">archive</i>Select APK</div>-->
-<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="/device-files"><i-->
-<!--            class="material-icons left">folder</i>File Explorer</div>-->
-<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="packages"><i-->
-<!--            class="material-icons left">apps</i>My Apps</div>-->
-<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="tools"><i-->
-<!--            class="material-icons left">build</i>Tools</div>-->
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';adbModal.openModal()"><i
-            class="material-icons left">input</i>ADB Commands</div>
-<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--             (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';logcatModal.openModal()"><i-->
-<!--          class="material-icons left">input</i>ADB Logcat</div>-->
-      </div>
-      <app-link *ngIf="appService.updateAvailable"
-        class="waves-effect waves-light btn-flat update-available link small-button warning" (click)="updateAvailable()"
-        text="Update"></app-link>
-      <i mz-tooltip class="material-icons white-text no-outline top-menu-bar-icon-down" position="bottom" tooltip="Menu"
-        (click)="userMenu.style.display = 'block';userMenuBack.style.display = 'block'">
-        arrow_drop_down
-      </i>
-      <i mz-tooltip routerLink="/webview" (click)="doBack()"
-        class="material-icons white-text no-outline" position="bottom" tooltip="Back">
-        arrow_back
-      </i>
-      <i mz-tooltip *ngIf="!webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
-        class="material-icons white-text no-outline" position="bottom" tooltip="Web Browser">
-        public
-      </i>
-      <div mz-tooltip *ngIf="webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
-           class="loader-tiny pointer" position="bottom"
-        tooltip="Web Browser Loading..."></div>
-      <i mz-tooltip routerLink="/webview" (click)="webService.forward()"
-        class="material-icons white-text no-outline" position="bottom" tooltip="Forward">
-        arrow_forward
-      </i>
-      <i mz-tooltip (click)="scrcpyModal.openModal();" *ngIf="isConnected()&&osPlatform === 'win32'"
-        class="material-icons white-text no-outline top-menu-bar-icon" position="bottom"
-        tooltip="Stream from your headset to your PC with ScrCpy.">
-        live_tv
-      </i>
-      <i mz-tooltip *ngIf="adbService.deviceIp" (click)="wifiModal.openModal()"
-        class="material-icons no-outline top-menu-bar-icon"
-        [ngClass]="{'green-text':adbService.wifiEnabled,'white-text':!adbService.wifiEnabled}" position="bottom"
-        tooltip="Enable wireless mode. (Experimental)">
-        wifi
-      </i>
-      <i mz-tooltip #mainLogo (click)="selectAppToInstall()"
-        class="material-icons white-text no-outline" position="bottom"
-        tooltip="Install APK file from folder on computer.">
-        archive
-      </i>
-      <i mz-tooltip class="material-icons white-text no-outline " routerLink="/device-files"
-        position="bottom" tooltip="Manage files on the headset.">
-        folder
-      </i>
-      <i routerLink="packages" mz-tooltip class="material-icons white-text no-outline"
-        position="bottom" tooltip="Currently installed apps">
-        apps
-      </i>
-      <i routerLink="tasks" mz-tooltip class="material-icons white-text no-outline" position="bottom"
-        tooltip="Running {{processService.left_length}} tasks.">
-        playlist_add_check
-      </i><span routerLink="tasks" mz-tooltip *ngIf="processService.left_length" position="bottom"
-        tooltip="Running {{processService.left_length}} tasks."
-        class="process-badge pink-button">{{processService.left_length>100?'99+':processService.left_length}}</span>
-      <span routerLink="tasks" mz-tooltip *ngIf="!processService.left_length&&processService.failed_length"
-        position="bottom" tooltip="{{processService.failed_length}} failed tasks."
-        class="process-badge pink-button red">{{processService.failed_length>100?'99+':processService.failed_length}}</span>
-      <i id="device-settings" routerLink="tools" mz-tooltip
-        class="material-icons white-text no-outline" position="bottom"
-        tooltip="Device settings & tools">
-        build
-      </i>
-      <i mz-tooltip (click)="commandMenu.style.display = 'block';commandMenuBack.style.display = 'block'" class="material-icons white-text no-outline top-menu-bar-icon"
-        position="bottom" tooltip="Run ADB commands">
-        input
-      </i>
-<!--      <i (click)="openDebugger()" id="open-debugger" mz-tooltip class="material-icons white-text top-menu-bar-icon"-->
-<!--        position="bottom" tooltip="Open debugger">-->
-<!--        bug_report-->
-<!--      </i>-->
-<!--      <i (click)="minimizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
-<!--        tooltip="Minimize SideQuest.">-->
-<!--        minimize-->
-<!--      </i>-->
-<!--      <i (click)="maximizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
-<!--        tooltip="Toggle Maximize.">-->
-<!--        aspect_ratio-->
-<!--      </i>-->
-<!--      <i (click)="closeAppModal.openModal(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
-<!--        tooltip="Close SideQuest.">-->
-<!--        close-->
-<!--      </i>-->
-    </div>
-    <div id="connection-status-container">
-      <i mz-tooltip class="material-icons white-text no-outline connection-device-select pointer"
-         *ngIf="adbService.devices && adbService.devices.length > 1"
-         (click)="deviceMenu.style.display = 'block';deviceMenuBack.style.display = 'block'"
-         position="bottom" tooltip="Select Device">
-        arrow_drop_down
-      </i>
-      <div id="connection-status" class="connection-status-unauthorized"  mz-tooltip
-           position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
-        <div id="connection-status-message" [innerHTML]="appService.versionName+'&nbsp;&nbsp;'+adbService.deviceStatusMessage"></div>
-      </div>
     </div>
     <div *ngIf="appService.showBrowserBar" class="beast-saber-buttons">
       <a class="waves-effect waves-light synthrideerz"
-        (click)="webService.loadUrl('https://synthriderz.com/beatmaps/recent')">
+         (click)="webService.loadUrl('https://synthriderz.com/beatmaps/recent')">
         <img src="assets/images/Synth.png" class="responsive-img" /></a>&nbsp;&nbsp;&nbsp;
     </div>
     <div *ngIf="appService.isFilesOpen" class="beast-saber-buttons">
@@ -240,17 +221,17 @@
     </div>
     <div class="sync-songs" *ngIf="appService.showTaskActions">
       <div class="waves-effect waves-light btn small-button pink-button" mz-tooltip position="bottom"
-        tooltip="Clear out the finished tasks." (click)="processService.clearDone()">
+           tooltip="Clear out the finished tasks." (click)="processService.clearDone()">
         Clear Done
       </div>
       &nbsp;&nbsp;
       <div class="waves-effect waves-light btn small-button pink-button" mz-tooltip position="bottom"
-        tooltip="Restart the failed tasks." (click)="processService.retryFailed()">
+           tooltip="Restart the failed tasks." (click)="processService.retryFailed()">
         Retry Failed
       </div>
       &nbsp;&nbsp;
       <div class="waves-effect waves-light btn small-button pink-button" mz-tooltip position="bottom"
-        tooltip="Clear out the failed tasks." (click)="processService.clearFailed()">
+           tooltip="Clear out the failed tasks." (click)="processService.clearFailed()">
         Clear Failed
       </div>
       &nbsp;&nbsp;
@@ -293,13 +274,13 @@
       <h5>Custom Url</h5>
       <div class="input-field inline browser-input">
         <input id="web_address" type="text" [(ngModel)]="webService.currentAddress" (keyup)="gogo($event)"
-          placeholder="Address" />
+               placeholder="Address" />
         <label class="active label-dark-theme" for="web_address">
           Address
         </label>
       </div>
       <a class="waves-effect waves-dark btn search-button-margin white black-text" routerLink="/webview"
-        (click)="webService.loadUrl(webService.currentAddress);" mz-modal-close>Open</a>
+         (click)="webService.loadUrl(webService.currentAddress);" mz-modal-close>Open</a>
 
       <br><br>
     </div>
@@ -322,8 +303,8 @@
       <div class="chip">Experimental</div>
       <br><br><br>
       <i mz-tooltip class="material-icons large cursor" [ngClass]="{'green-text':adbService.wifiEnabled}"
-        (click)="adbService.wifiEnabled=!adbService.wifiEnabled;adbService.toggleWifiMode()" position="bottom"
-        tooltip="Enable wireless mode. (Experimental)">
+         (click)="adbService.wifiEnabled=!adbService.wifiEnabled;adbService.toggleWifiMode()" position="bottom"
+         tooltip="Enable wireless mode. (Experimental)">
         wifi
       </i>
       <br>
@@ -332,10 +313,10 @@
         <h5>Device IP:</h5>
         {{adbService.deviceIp}}<br>
         <a class="waves-effect waves-dark btn search-button-margin white black-text" mz-modal-close
-          (click)="connectWifi()">Connect</a>
+           (click)="connectWifi()">Connect</a>
         <br><br>
         <a class="waves-effect waves-dark btn search-button-margin white black-text" mz-modal-close
-          (click)="adbCommandToRun = 'adb disconnect';runAdbCommand()">Reset</a>
+           (click)="adbCommandToRun = 'adb disconnect';runAdbCommand()">Reset</a>
       </div>
     </div>
   </mz-modal-content>
@@ -365,17 +346,17 @@
         <div *ngIf="!currentLogCat.length">
           {{isStarted ? 'Waiting for messages...' : 'Click start to begin streaming logcat messages.'}}
         </div>
-<!--        <virtual-scroller #scroll [items]="currentLogCat">-->
-          <div class="child-item" *ngFor="let logcat of currentLogCat">
-            <div class="row no-margin">
-              <div class="col s2 logcat-smaller green-text no-padding">{{logcat.date}}: {{priorities[logcat.priority]}}</div>
-              <div class="col s2 logcat-smaller purple-text no-padding">{{logcat.tid}}/{{logcat.pid}} {{logcat.tag}} </div>
-              <div class="col s8 logcat-small no-padding"
-                   [ngClass]="{'red-text': logcat.priority === 6, 'orange-text': logcat.priority === 5}" [innerHTML]="logcat.message">
-              </div>
+        <!--        <virtual-scroller #scroll [items]="currentLogCat">-->
+        <div class="child-item" *ngFor="let logcat of currentLogCat">
+          <div class="row no-margin">
+            <div class="col s2 logcat-smaller green-text no-padding">{{logcat.date}}: {{priorities[logcat.priority]}}</div>
+            <div class="col s2 logcat-smaller purple-text no-padding">{{logcat.tid}}/{{logcat.pid}} {{logcat.tag}} </div>
+            <div class="col s8 logcat-small no-padding"
+                 [ngClass]="{'red-text': logcat.priority === 6, 'orange-text': logcat.priority === 5}" [innerHTML]="logcat.message">
             </div>
           </div>
-<!--        </virtual-scroller>-->
+        </div>
+        <!--        </virtual-scroller>-->
       </div>
     </div>
   </mz-modal-content>
@@ -416,14 +397,14 @@
     <br><br>
     If you think this has happened in error, please contact us on Discord with a link to the apk file.<br><br>
     We have protected you from:<br><br>
-     - Causing physical damage to your headset.<br>
-     - Having your personal information stolen ( including tracking your movments in VR )<br>
-     - Being banned from the Oculus platform.<br>
-     - Loosing access to developer/experimental mode on your headset.<br>
-     - Loosing access to your content library including paid games and apps.<br>
-     - Being banned from creating Oculus Accounts in the future.<br>
-     - Being reported to the police for illegal activites.<br>
-     - Starving poor developers to death.<br><br>
+    - Causing physical damage to your headset.<br>
+    - Having your personal information stolen ( including tracking your movments in VR )<br>
+    - Being banned from the Oculus platform.<br>
+    - Loosing access to developer/experimental mode on your headset.<br>
+    - Loosing access to your content library including paid games and apps.<br>
+    - Being banned from creating Oculus Accounts in the future.<br>
+    - Being reported to the police for illegal activites.<br>
+    - Starving poor developers to death.<br><br>
     You can click "Back to Safety" and the harmful content will not make it onto your device.
     <br><br>
     Thank you and have a great day!
@@ -481,7 +462,7 @@
     <h4>Stream Options</h4>
   </mz-modal-header>
   <mz-modal-content>
-   <div class="row">
+    <div class="row">
       <div class="col s6 fixed-height">
         Always On Top
         <div class="grey-text small">
@@ -586,7 +567,7 @@
   </mz-modal-content>
   <mz-modal-footer>
     <div class="left margin-left"><br>Put your headset on before clicking Start Stream</div>
-    <button mz-button class="pink-button" mz-modal-close (click)="runscrcpy()">Start Stream</button>
+    <button mz-button class="pink-button margin-right" mz-modal-close (click)="runscrcpy()">Start Stream</button>
     <button mz-button class="pink-button margin-right" mz-modal-close (click)="appService.opn('https://www.oculus.com/casting')">Oculus Casting</button>
     <button mz-button [flat]="true" mz-modal-close>Close</button>
   </mz-modal-footer>
@@ -600,19 +581,19 @@
   <mz-modal-content>
     Manage your favourites here. If you need to undo click RESET at the bottom. When you are done click SAVE.<br><br>
     <ng-container *ngIf="!favouriteImportExport">
-     <ng-container *ngIf="showAddFavourite"> <h5>Add New</h5>
-      <hr>
-      <div class="no-margin" *ngIf="this.favourites[favoriteType].length >= favouriteMax">
-        You cannot add any more. Please remove some first.
-      </div>
-      <div class="row no-margin" *ngIf="this.favourites[favoriteType].length < favouriteMax">
-        <div class="col s3"><input type="text" placeholder="Name" [(ngModel)]="favoriteName"/></div>
-        <div class="col s4"><input type="text" placeholder="{{favoritePathType}}" [(ngModel)]="favoriteUri"/></div>
-        <div class="col s4"><input type="text" placeholder="Icon Url" [(ngModel)]="favoriteIcon"/></div>
-        <div class="col s1"><i class="material-icons green-text fav-manage-icon pointer"
-                               (click)="addToFavorites(favoriteType, favoriteName, favoriteUri, favoriteIcon)">add</i></div>
-      </div>
-     </ng-container>
+      <ng-container *ngIf="showAddFavourite"> <h5>Add New</h5>
+        <hr>
+        <div class="no-margin" *ngIf="this.favourites[favoriteType].length >= favouriteMax">
+          You cannot add any more. Please remove some first.
+        </div>
+        <div class="row no-margin" *ngIf="this.favourites[favoriteType].length < favouriteMax">
+          <div class="col s3"><input type="text" placeholder="Name" [(ngModel)]="favoriteName"/></div>
+          <div class="col s4"><input type="text" placeholder="{{favoritePathType}}" [(ngModel)]="favoriteUri"/></div>
+          <div class="col s4"><input type="text" placeholder="Icon Url" [(ngModel)]="favoriteIcon"/></div>
+          <div class="col s1"><i class="material-icons green-text fav-manage-icon pointer"
+                                 (click)="addToFavorites(favoriteType, favoriteName, favoriteUri, favoriteIcon)">add</i></div>
+        </div>
+      </ng-container>
       <div class="row fav-padding">
         <div class="col s4">Name</div>
         <div class="col s4">{{favoritePathType}}</div>

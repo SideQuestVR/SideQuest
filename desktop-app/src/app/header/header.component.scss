@@ -89,6 +89,7 @@ virtual-scroller{
   width: 100%;
   border-bottom: 1px solid #8f8f8f;
   transition: 0.35s;
+  margin-top: 35px;
 }
 .spider-image{
   margin-top: 50px;
@@ -415,6 +416,11 @@ virtual-scroller{
     display: inline-block;
     font-size: 1.8rem;
   }
+}
+.top-bar{
+  position: fixed;
+  z-index: 99999;
+  width: 100%;
 }
 
 .warning {
