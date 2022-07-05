@@ -19,7 +19,7 @@ declare let M;
 @Component({
     selector: 'app-files',
     templateUrl: './files.component.html',
-    styleUrls: ['./files.component.css'],
+    styleUrls: ['./files.component.scss'],
 })
 export class FilesComponent implements OnInit {
     @ViewChild('filesModal', { static: false }) filesModal;

@@ -10,7 +10,7 @@ import { PackageService } from './package.service';
 @Component({
     selector: 'app-packages',
     templateUrl: './packages.component.html',
-    styleUrls: ['./packages.component.css'],
+    styleUrls: ['./packages.component.scss'],
 })
 export class PackagesComponent implements OnInit {
     @ViewChild('appSettingsModal', { static: false }) appSettingsModal;

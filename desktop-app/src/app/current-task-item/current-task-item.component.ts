@@ -4,7 +4,7 @@ import { ProcessBucketService } from '../process-bucket.service';
 @Component({
     selector: 'app-current-task-item',
     templateUrl: './current-task-item.component.html',
-    styleUrls: ['./current-task-item.component.css'],
+    styleUrls: ['./current-task-item.component.scss'],
 })
 export class CurrentTaskItemComponent implements OnInit {
     @Input() task;

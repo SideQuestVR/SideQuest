@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
     selector: 'app-webview',
     templateUrl: './webview.component.html',
-    styleUrls: ['./webview.component.css'],
+    styleUrls: ['./webview.component.scss'],
 })
 export class WebviewComponent implements OnInit {
     constructor(webService: WebviewService, appService: AppService, router: Router, route: ActivatedRoute) {

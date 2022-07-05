@@ -6,7 +6,7 @@ import { AppService } from '../app.service';
 @Component({
     selector: 'app-current-tasks',
     templateUrl: './current-tasks.component.html',
-    styleUrls: ['./current-tasks.component.css'],
+    styleUrls: ['./current-tasks.component.scss'],
 })
 export class CurrentTasksComponent implements OnInit {
     constructor(public processService: ProcessBucketService, public appService: AppService) {

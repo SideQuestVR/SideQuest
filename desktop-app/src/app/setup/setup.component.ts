@@ -5,7 +5,7 @@ import { AdbClientService } from '../adb-client.service';
 @Component({
     selector: 'app-setup',
     templateUrl: './setup.component.html',
-    styleUrls: ['./setup.component.css'],
+    styleUrls: ['./setup.component.scss'],
 })
 export class SetupComponent implements OnInit {
     isInstallingLauncher: boolean;

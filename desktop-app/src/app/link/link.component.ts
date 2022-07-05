@@ -2,23 +2,20 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 
 @Component({
-  selector: 'app-link',
-  templateUrl: './link.component.html',
-  styleUrls: ['./link.component.css']
+    selector: 'app-link',
+    templateUrl: './link.component.html',
+    styleUrls: ['./link.component.scss'],
 })
 export class LinkComponent implements OnInit {
-  @Input('url') url:string;
-  @Input('text') text:string;
-  @Input('isDark') isDark:boolean;
-  constructor(public appService:AppService) {
+    @Input('url') url: string;
+    @Input('text') text: string;
+    @Input('isDark') isDark: boolean;
+    constructor(public appService: AppService) {}
 
-  }
+    ngOnInit() {}
 
-  ngOnInit() {
-  }
-
-  open(){
-    console.log(this.url);
-    this.appService.opn(this.url);
-  }
+    open() {
+        console.log(this.url);
+        this.appService.opn(this.url);
+    }
 }
