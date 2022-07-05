@@ -15,7 +15,6 @@ import { AppRoutes } from './app.routes';
 import { LoadingSpinnerSmallComponent } from './loading-spinner-small/loading-spinner-small.component';
 import { PackagesComponent } from './packages/packages.component';
 import { PackageItemComponent } from './package-item/package-item.component';
-import { ToolsComponent } from './tools/tools.component';
 import { LinkComponent } from './link/link.component';
 import { FormsModule } from '@angular/forms';
 import { SanitizeHtmlPipe } from './sanitize-html.pipe';
@@ -27,6 +26,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CurrentTasksComponent } from './current-tasks/current-tasks.component';
 import { CurrentTaskItemComponent } from './current-task-item/current-task-item.component';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { HeadsetSettingsComponent } from './headset-settings/headset-settings.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -38,7 +38,6 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
         LoadingSpinnerSmallComponent,
         PackagesComponent,
         PackageItemComponent,
-        ToolsComponent,
         LinkComponent,
         SanitizeHtmlPipe,
         WebviewComponent,
@@ -46,6 +45,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
         FilesComponent,
         CurrentTasksComponent,
         CurrentTaskItemComponent,
+        HeadsetSettingsComponent,
     ],
     imports: [
         BrowserModule,

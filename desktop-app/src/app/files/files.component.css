@@ -1,6 +1,6 @@
 .breadcrumb-wrapper{
-  position: fixed;
-  top: 165px;
+  position: relative;
+  top: -20px;
   width: 100%;
   height: auto;
   z-index: 1;
@@ -29,5 +29,4 @@
   white-space: nowrap;
   text-align: left;
   width: 100%;
-  position: fixed;
 }

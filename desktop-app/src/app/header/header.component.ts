@@ -313,9 +313,6 @@ export class HeaderComponent implements OnInit {
             win.maximize();
         }
     }
-    openDebugger() {
-        this.appService.remote.getCurrentWindow().toggleDevTools();
-    }
     async selectAppToInstall() {
         let files = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openFile', 'multiSelections'],

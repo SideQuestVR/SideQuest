@@ -102,6 +102,7 @@
         "cross-env": "^5.2.0",
         "crypto": "^1.0.1",
         "electron-updater": "^4.3.7",
+        "usb-detection2": "git+https://github.com/SideQuestVR/node-usb-detection.git",
         "express": "^4.17.1",
         "extract-zip": "^1.6.7",
         "md5": "^2.2.1",

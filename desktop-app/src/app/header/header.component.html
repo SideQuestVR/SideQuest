@@ -98,9 +98,9 @@
         </ng-container>
       </div>
       <div class="user-menu" #userMenu>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"
-          routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>
+<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"-->
+<!--          routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>-->
         <div class="btn-flat waves-light waves-light full-width center-align white-text"
              *ngIf="isConnected()&&osPlatform === 'win32'"
           (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">
@@ -108,30 +108,24 @@
         <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"
           (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';wifiModal.openModal()"><i
             class="material-icons left">wifi</i>Wifi</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';selectAppToInstall()"><i
-            class="material-icons left">archive</i>Select APK</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="/device-files"><i
-            class="material-icons left">folder</i>File Explorer</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="packages"><i
-            class="material-icons left">apps</i>My Apps</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="tools"><i
-            class="material-icons left">build</i>Tools</div>
+<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';selectAppToInstall()"><i-->
+<!--            class="material-icons left">archive</i>Select APK</div>-->
+<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="/device-files"><i-->
+<!--            class="material-icons left">folder</i>File Explorer</div>-->
+<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="packages"><i-->
+<!--            class="material-icons left">apps</i>My Apps</div>-->
+<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="tools"><i-->
+<!--            class="material-icons left">build</i>Tools</div>-->
         <div class="btn-flat waves-light waves-light full-width center-align white-text"
           (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';adbModal.openModal()"><i
             class="material-icons left">input</i>ADB Commands</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-             (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';logcatModal.openModal()"><i
-          class="material-icons left">input</i>ADB Logcat</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';openDebugger()"><i
-            class="material-icons left">bug_report</i>Debugger</div>
-        <div class="btn-flat waves-light waves-light full-width center-align white-text" routerLink="webview"
-          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl('http://tee.pub/lic/L295azlpJYk')">
-          <i class="material-icons left">storefront</i>GiftShop</div>
+<!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--             (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';logcatModal.openModal()"><i-->
+<!--          class="material-icons left">input</i>ADB Logcat</div>-->
       </div>
       <app-link *ngIf="appService.updateAvailable"
         class="waves-effect waves-light btn-flat update-available link small-button warning" (click)="updateAvailable()"
@@ -167,15 +161,15 @@
         wifi
       </i>
       <i mz-tooltip #mainLogo (click)="selectAppToInstall()"
-        class="material-icons white-text no-outline top-menu-bar-icon" position="bottom"
+        class="material-icons white-text no-outline" position="bottom"
         tooltip="Install APK file from folder on computer.">
         archive
       </i>
-      <i mz-tooltip class="material-icons white-text no-outline top-menu-bar-icon" routerLink="/device-files"
+      <i mz-tooltip class="material-icons white-text no-outline " routerLink="/device-files"
         position="bottom" tooltip="Manage files on the headset.">
         folder
       </i>
-      <i routerLink="packages" mz-tooltip class="material-icons white-text no-outline top-menu-bar-icon"
+      <i routerLink="packages" mz-tooltip class="material-icons white-text no-outline"
         position="bottom" tooltip="Currently installed apps">
         apps
       </i>
@@ -189,7 +183,7 @@
         position="bottom" tooltip="{{processService.failed_length}} failed tasks."
         class="process-badge pink-button red">{{processService.failed_length>100?'99+':processService.failed_length}}</span>
       <i id="device-settings" routerLink="tools" mz-tooltip
-        class="material-icons white-text no-outline top-menu-bar-icon" position="bottom"
+        class="material-icons white-text no-outline" position="bottom"
         tooltip="Device settings & tools">
         build
       </i>
@@ -197,22 +191,22 @@
         position="bottom" tooltip="Run ADB commands">
         input
       </i>
-      <i (click)="openDebugger()" id="open-debugger" mz-tooltip class="material-icons white-text top-menu-bar-icon"
-        position="bottom" tooltip="Open debugger">
-        bug_report
-      </i>
-      <i (click)="minimizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"
-        tooltip="Minimize SideQuest.">
-        minimize
-      </i>
-      <i (click)="maximizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"
-        tooltip="Toggle Maximize.">
-        aspect_ratio
-      </i>
-      <i (click)="closeAppModal.openModal(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"
-        tooltip="Close SideQuest.">
-        close
-      </i>
+<!--      <i (click)="openDebugger()" id="open-debugger" mz-tooltip class="material-icons white-text top-menu-bar-icon"-->
+<!--        position="bottom" tooltip="Open debugger">-->
+<!--        bug_report-->
+<!--      </i>-->
+<!--      <i (click)="minimizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
+<!--        tooltip="Minimize SideQuest.">-->
+<!--        minimize-->
+<!--      </i>-->
+<!--      <i (click)="maximizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
+<!--        tooltip="Toggle Maximize.">-->
+<!--        aspect_ratio-->
+<!--      </i>-->
+<!--      <i (click)="closeAppModal.openModal(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
+<!--        tooltip="Close SideQuest.">-->
+<!--        close-->
+<!--      </i>-->
     </div>
     <div id="connection-status-container">
       <i mz-tooltip class="material-icons white-text no-outline connection-device-select pointer"

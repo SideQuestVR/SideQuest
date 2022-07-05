@@ -302,7 +302,7 @@ virtual-scroller{
 .user-menu{
   position: absolute;
   top: 25px;
-  right: 240px;
+  right: 80px;
   width: 220px;
   z-index: 999;
   overflow: hidden;
@@ -315,7 +315,7 @@ virtual-scroller{
   display: none;
 }
 .browser-menu{
-  right: 400px;
+  right: 200px;
 }
 .device-menu{
   right: initial;
@@ -327,6 +327,7 @@ virtual-scroller{
 }
 .command-menu{
   width: 240px;
+  right: 20px;
 }
 .smaller-menu{
   top: 44px;
@@ -413,6 +414,7 @@ virtual-scroller{
   .top-menu-bar-icon-down{
     display: inline-block;
     font-size: 1.8rem;
+    margin-right: 0px!important;
   }
 }
 

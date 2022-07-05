@@ -5,6 +5,7 @@ import { StatusBarService } from './status-bar.service';
 import { BeatOnService } from './beat-on.service';
 import { WebviewService } from './webview.service';
 import { ProcessBucketService } from './process-bucket.service';
+import { DiagnosticatorService, UsbDiagResultStatus } from './diagnostics.service';
 
 declare const process;
 export enum ConnectionStatus {
@@ -29,9 +30,9 @@ export class AdbClientService {
     deviceSerial: string;
     lastConnectionCheck: number;
     deviceStatus: ConnectionStatus = ConnectionStatus.UNAUTHORIZED;
-    deviceStatusMessage: string = 'Connecting...';
-    lastErrorMessage: string = '';
-    pollInterval: number = 1000 * 2;
+    deviceStatusMessage = 'Connecting...';
+    lastErrorMessage = '';
+    pollInterval: number = 1000 * 1;
     savePath: string;
     isTransferring: boolean;
     adbResolves: any;
@@ -55,13 +56,16 @@ export class AdbClientService {
         total: '',
         percent: '',
     };
+    diagnostics: any;
+    justChangedMPT: boolean;
     constructor(
         public appService: AppService,
         private spinnerService: LoadingSpinnerService,
         private statusService: StatusBarService,
         private beatonService: BeatOnService,
         private webService: WebviewService,
-        public processService: ProcessBucketService
+        public processService: ProcessBucketService,
+        public diag: DiagnosticatorService
     ) {
         this.lastConnectionCheck = performance.now() - 4000;
         this.adbPath = appService.path.join(appService.appData, 'platform-tools');
@@ -80,6 +84,48 @@ export class AdbClientService {
             'connection-status-too-many': this.deviceStatus === ConnectionStatus.LINUX_PERMS,
         };
     }
+
+    diagBegin() {
+        this.diagnostics = { loading: true, usb: this.diagnostics ? this.diagnostics.usb : null };
+        this.diag
+            .getDeviceStatus()
+            .then(x => {
+                if (!this.diagnostics) {
+                    return;
+                }
+                this.diagnostics.usb = x;
+                setTimeout(() => {
+                    this.diagnostics.loading = false;
+                }, 250);
+            })
+            .catch(e => {
+                console.log('diag-begin catch', e);
+                this.diagnostics.loading = false;
+                this.diagnostics.usb = {
+                    is_connected: false,
+                    is_mtp_enabled: false,
+                    is_adb_enabled: false,
+                    is_dev_mode_enabled: false,
+                    all_oculus_devices: [],
+                    adb_device: null,
+                    log: 'Error',
+                    success: false,
+                    result: 'Error',
+                    result_status: UsbDiagResultStatus.Bad,
+                    recommendation: 'Error',
+                };
+            });
+    }
+    async toggleMTP() {
+        this.justChangedMPT = true;
+        await this.adbCommand('shell', {
+            serial: this.deviceSerial,
+            command: 'svc usb setFunctions ' + (this.diagnostics.usb && this.diagnostics.usb.is_mtp_enabled ? '' : 'mtp'),
+        });
+    }
+    get isReady(): boolean {
+        return this.deviceStatus === ConnectionStatus.CONNECTED;
+    }
     runAdbCommand(adbCommandToRun) {
         if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
             return Promise.reject('Adb command failed - No device connected!');
@@ -93,7 +139,6 @@ export class AdbClientService {
             this.appService.exec(
                 '"' + this.appService.path.join(this.adbPath, this.getAdbBinary()) + '" -s ' + this.deviceSerial + ' ' + command,
                 function(err, stdout, stderr) {
-                    console.log(err, stdout, stderr);
                     if (err) {
                         return reject(err);
                     }
@@ -103,6 +148,7 @@ export class AdbClientService {
             );
         }).then((resp: string) => {
             this.adbResponse = resp.trim() || 'Command Completed.';
+            return this.adbResponse;
         });
     }
     launchApp(packageName) {
@@ -221,6 +267,24 @@ export class AdbClientService {
     makeDirectory(dir) {
         return this.adbCommand('shell', { serial: this.deviceSerial, command: 'mkdir "' + dir + '"' });
     }
+    tryGetQuestDevice(devices: ADBDevice[]) {
+        let selectedDevice: ADBDevice;
+        if (this.diagnostics && this.diagnostics.usb) {
+            const oculusDevices = this.diagnostics.usb.all_oculus_devices;
+            for (let i = 0; i < oculusDevices.length; i++) {
+                for (let j = 0; j < devices.length; j++) {
+                    if (oculusDevices[i].serial === devices[j].id) {
+                        selectedDevice = devices[j];
+                    }
+                }
+            }
+        }
+        if (selectedDevice) {
+            return selectedDevice;
+        } else {
+            return devices[0];
+        }
+    }
     getConnectedStatus() {
         if (!this.devices.length) {
             return ConnectionStatus.DISCONNECTED;
@@ -228,12 +292,12 @@ export class AdbClientService {
             if (!this.deviceSerial) {
                 let readyDevice = this.devices.filter(d => d.type === 'device');
                 if (readyDevice.length) {
-                    this.deviceSerial = readyDevice[0].id;
+                    this.deviceSerial = this.tryGetQuestDevice(readyDevice).id;
                 }
             }
             let readyDevice = this.devices.filter(d => d.id === this.deviceSerial);
             if (!readyDevice.length && this.devices.length) {
-                this.deviceSerial = this.devices[0].id;
+                this.deviceSerial = this.tryGetQuestDevice(this.devices).id;
                 readyDevice = this.devices.filter(d => d.id === this.deviceSerial);
             }
             if (readyDevice[0].type === 'device') {
@@ -256,6 +320,7 @@ export class AdbClientService {
         }
         this.displayDevices = this.devices;
         document.getElementById('connection-status').className = 'connection-status-' + status;
+        this.diagBegin();
         switch (this.deviceStatus) {
             case ConnectionStatus.LINUX_PERMS:
                 this.deviceStatusMessage = 'Warning: no permissions. ADB udev rules missing.';
@@ -334,6 +399,10 @@ export class AdbClientService {
         return this.adbCommand('listDevices')
             .then((devices: any) => devices.filter(device => device.type !== 'offline'))
             .then(async devices => {
+                if (devices.length > 1 && this.justChangedMPT) {
+                    this.justChangedMPT = false;
+                    this.deviceSerial = this.tryGetQuestDevice(devices).id;
+                }
                 this.devices = devices;
             })
             .then(status => {
@@ -918,7 +987,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         name = name || packageId;
         const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
         if (!task) this.spinnerService.showLoader();
-        let p = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename);
+        let p: any = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename);
         if (cb) {
             cb();
         }

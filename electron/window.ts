@@ -57,7 +57,6 @@ export class AppWindow {
             minWidth: 800,
             minHeight: 480,
             show: !showAfterSetup,
-            frame: false,
             webPreferences: {
                 webviewTag: true,
                 nodeIntegration: true,
