@@ -26,6 +26,7 @@ export class AppService {
     showTaskActions: boolean;
     updateAvailable: boolean;
     showRepo: boolean;
+    isSetupOpen: boolean;
     isFilesOpen: boolean;
     isPackagesOpen: boolean;
     isSettingsOpen: boolean;

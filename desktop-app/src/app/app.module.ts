@@ -27,6 +27,8 @@ import { CurrentTasksComponent } from './current-tasks/current-tasks.component';
 import { CurrentTaskItemComponent } from './current-task-item/current-task-item.component';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { HeadsetSettingsComponent } from './headset-settings/headset-settings.component';
+import { SetupGuideComponent } from './setup-guide/setup-guide.component';
+import { ConnectionStatusComponent } from './connection-status/connection-status.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -46,6 +48,8 @@ import { HeadsetSettingsComponent } from './headset-settings/headset-settings.co
         CurrentTasksComponent,
         CurrentTaskItemComponent,
         HeadsetSettingsComponent,
+        SetupGuideComponent,
+        ConnectionStatusComponent,
     ],
     imports: [
         BrowserModule,

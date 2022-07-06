@@ -12,6 +12,7 @@ export enum ConnectionStatus {
     CONNECTED,
     OFFLINE,
     UNAUTHORIZED,
+    DEV_MODE,
     DISCONNECTED,
     LINUX_PERMS,
 }
@@ -82,6 +83,7 @@ export class AdbClientService {
             'connection-status-unauthorized': this.deviceStatus === ConnectionStatus.UNAUTHORIZED,
             'connection-status-disconnected': this.deviceStatus === ConnectionStatus.DISCONNECTED,
             'connection-status-too-many': this.deviceStatus === ConnectionStatus.LINUX_PERMS,
+            'connection-status-dev-mode': this.deviceStatus === ConnectionStatus.DEV_MODE,
         };
     }
 
@@ -287,7 +289,16 @@ export class AdbClientService {
     }
     getConnectedStatus() {
         if (!this.devices.length) {
-            return ConnectionStatus.DISCONNECTED;
+            if (
+                this.diagnostics &&
+                this.diagnostics.usb &&
+                !this.diagnostics.usb.is_dev_mode_enabled &&
+                this.diagnostics.usb.is_connected
+            ) {
+                return ConnectionStatus.DEV_MODE;
+            } else {
+                return ConnectionStatus.DISCONNECTED;
+            }
         } else {
             if (!this.deviceSerial) {
                 let readyDevice = this.devices.filter(d => d.type === 'device');
@@ -313,6 +324,7 @@ export class AdbClientService {
     }
 
     async updateConnectedStatus() {
+        this.diagBegin();
         this.deviceStatus = this.getConnectedStatus();
         this.setConnectionCssClass();
         for (let i = 0; i < this.devices.length; i++) {
@@ -320,7 +332,6 @@ export class AdbClientService {
         }
         this.displayDevices = this.devices;
         document.getElementById('connection-status').className = 'connection-status-' + status;
-        this.diagBegin();
         switch (this.deviceStatus) {
             case ConnectionStatus.LINUX_PERMS:
                 this.deviceStatusMessage = 'Warning: no permissions. ADB udev rules missing.';
@@ -370,6 +381,17 @@ export class AdbClientService {
             case ConnectionStatus.UNAUTHORIZED:
                 this.deviceStatusMessage =
                     'Unauthorized: Allow in headset. ' +
+                    (this.deviceIp
+                        ? ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
+                          '         position="bottom" tooltip="Battery">' +
+                          '        wifi' +
+                          '      </i> ' +
+                          this.deviceIp
+                        : '');
+                break;
+            case ConnectionStatus.DEV_MODE:
+                this.deviceStatusMessage =
+                    'Dev Mode: Enable dev mode in the Oculus phone app. ' +
                     (this.deviceIp
                         ? ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
                           '         position="bottom" tooltip="Battery">' +

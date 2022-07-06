@@ -85,6 +85,7 @@
           <!--             (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';logcatModal.openModal()"><i-->
           <!--          class="material-icons left">input</i>ADB Logcat</div>-->
         </div>
+
         <app-link *ngIf="appService.updateAvailable"
                   class="waves-effect waves-light btn-flat update-available link small-button warning" (click)="updateAvailable()"
                   text="Update"></app-link>
@@ -173,8 +174,11 @@
            position="bottom" tooltip="Select Device">
           arrow_drop_down
         </i>
+        <app-link class="waves-effect waves-light btn-flat update-available get-help link small-button warning left" *ngIf="!adbService.isReady"
+                  text="Get Help" routerLink="/setup"></app-link>
         <div id="connection-status" class="connection-status-unauthorized  left"  mz-tooltip
              position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
+
           <div id="connection-status-message" [innerHTML]="appService.versionName+'&nbsp;&nbsp;'+adbService.deviceStatusMessage"></div>
         </div>
       </div>
@@ -198,6 +202,8 @@
       <div class="apk-install" *ngIf="appService.isPackagesOpen">Manage the apps on your headset.<br>Click Show All to
         see all apps including system apps.</div>
       <div class="apk-install" *ngIf="appService.isSettingsOpen">Manage settings on your headset.</div>
+      <div class="apk-install" *ngIf="appService.isSetupOpen">Setup your headset with SideQuest.</div>
+
       <div class="apk-install" *ngIf="appService.isTasksOpen">Manage tasks for installing, <br>downloading and uploading
         from your headset.</div>
     </div>
@@ -567,9 +573,9 @@
   </mz-modal-content>
   <mz-modal-footer>
     <div class="left margin-left"><br>Put your headset on before clicking Start Stream</div>
-    <button mz-button class="pink-button margin-right" mz-modal-close (click)="runscrcpy()">Start Stream</button>
-    <button mz-button class="pink-button margin-right" mz-modal-close (click)="appService.opn('https://www.oculus.com/casting')">Oculus Casting</button>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
+    <button mz-button [flat]="true" class="footer-margin-right" mz-modal-close>Close</button>
+    <button mz-button class="pink-button footer-margin-right" mz-modal-close (click)="runscrcpy()">Start Stream</button>
+    <button mz-button class="pink-button" mz-modal-close (click)="appService.opn('https://www.oculus.com/casting')">Oculus Casting</button>
   </mz-modal-footer>
 </mz-modal>
 

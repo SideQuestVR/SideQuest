@@ -5,7 +5,7 @@
       You are not currently connected.
     </ng-container>
     <br><br>
-    <button class="pure-material-button-contained" (click)="close.emit()">Back to Main Screen</button>
+    <button class="pure-material-button-contained" routerLink="/setup">Open Setup</button>
   </div>
   <ng-container *ngIf="adbService.isReady">
     <h3 class="section-title">MTP ( Media Transfer Protocol )</h3>

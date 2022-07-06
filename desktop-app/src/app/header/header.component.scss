@@ -201,7 +201,7 @@ virtual-scroller{
 .connection-status-connected {
   background-color: #4caf50;
 }
-.connection-status-unauthorized {
+.connection-status-unauthorized, .connection-status-dev-mode {
   background-color: #ff9800;
 }
 .connection-status-disconnected {
@@ -439,6 +439,9 @@ virtual-scroller{
   text-decoration: none;
   animation: glowing 1500ms infinite;
 }
+.get-help{
+  margin-top: -2px;
+}
 
 @-webkit-keyframes glowing {
   0% {
@@ -453,4 +456,7 @@ virtual-scroller{
     background-color: #b20000;
     -webkit-box-shadow: 0 0 3px #b20000;
   }
+}
+.footer-margin-right{
+  margin-right: 1em!important;
 }
