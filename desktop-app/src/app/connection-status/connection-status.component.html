@@ -1,0 +1,54 @@
+
+<div class="right-side-diagnostics">
+<h3 i18n>Connection Status</h3>
+<div i18n>
+  <div class="status-circle" [ngClass]="{'green': adb.diagnostics.usb && adb.diagnostics.usb.is_connected}"></div>
+  <span class="status-text">{{adb.diagnostics.usb && adb.diagnostics.usb.is_connected?'Quest Detected':'Quest Not Detected'}}</span>
+</div>
+<div i18n>
+  <div class="status-circle" [ngClass]="{'green': adb.diagnostics.usb && adb.diagnostics.usb.is_dev_mode_enabled}"></div>
+  <span class="status-text">{{adb.diagnostics.usb && adb.diagnostics.usb.is_dev_mode_enabled?'Dev Mode Enabled':'Dev Mode Not Enabled'}}</span>
+</div>
+<div i18n>
+  <div class="status-circle" [ngClass]="{'green': adb.diagnostics.usb && adb.diagnostics.usb.is_adb_enabled}"></div>
+  <span class="status-text">{{adb.diagnostics.usb && adb.diagnostics.usb.is_adb_enabled?'ADB Detected':'No ADB Detected'}}</span>
+</div>
+<div i18n>
+  <div class="status-circle" [ngClass]="{'green': adb.devices.length && adb.deviceStatus !== ConnectionStatus.UNAUTHORIZED}"></div>
+  <span class="status-text">{{adb.devices.length && adb.deviceStatus === ConnectionStatus.UNAUTHORIZED?'Not Authorized.':'Device Authorized'}}</span>
+</div>
+<br>
+<!--<div class="hint-text" *ngIf="adb.currentHint">{{adb.currentHint}}</div>-->
+<!--<br>-->
+<!--<div i18n *ngIf="adb.isReady" >-->
+<!--  <div class="status-circle" [ngClass]="{'green': adb.diagnostics.usb && adb.diagnostics.usb.is_mtp_enabled}"></div>-->
+<!--  <span class="status-text">{{adb.diagnostics.usb && adb.diagnostics.usb.is_mtp_enabled?'MTP Enabled ( Optional )':'MTP Not Enabled ( Optional )'}}</span>-->
+<!--</div>-->
+<!--<br *ngIf="adb.isReady" >-->
+<!--  <button class="pure-material-button-contained small spaced" *ngIf="adb.isReady" [ngClass]="{'reset': adb.diagnostics.usb && adb.diagnostics.usb.is_mtp_enabled}" (click)="adb.toggleMTP()" i18n>{{adb.diagnostics.usb && adb.diagnostics.usb.is_mtp_enabled ? 'disable MTP':'enable mtp'}}</button>-->
+
+<!--<div class="switch switch-margin-bottom" *ngIf="adb.isReady" >-->
+<!--  <label>-->
+<!--    Off-->
+<!--    <input type="checkbox" class="disable-reviews" [checked]="adb.diagnostics.usb && adb.diagnostics.usb.is_mtp_enabled" (click)="adb.toggleMTP()">-->
+<!--    <span class="lever disable-reviews-switch"></span>-->
+<!--    On-->
+<!--  </label>-->
+<!--</div>-->
+
+<button class="pure-material-button-contained button-margin-bottom" (click)="helpOpen = true;" *ngIf="!adb.isReady">Fix It For Me</button>
+<!--<button class="pure-material-button-contained button-margin-bottom" (click)="backHome.emit()" *ngIf="adb.isReady && (adb.isOutOfDate || adb.notInstalled)">Install SideQuest</button>-->
+<!--  <button class="pure-material-button-contained button-margin-bottom flat" (click)="backHome.emit()" *ngIf="adb.isReady && !(adb.isOutOfDate || adb.notInstalled)">Back Home</button>-->
+
+</div>
+<div class="help-section" *ngIf="helpOpen">
+  <div class="diag-recommend">
+    <div class="back-arrow" (click)="helpOpen = false"></div><h2 class="clearfix" i18n>
+      {{(adb.diagnostics.usb && adb.diagnostics.usb.result_status=='diag-good' && adb.devices.length && adb.deviceStatus !== ConnectionStatus.UNAUTHORIZED)?'You\'re all set!':'So how do I fix it?'}}
+    </h2>
+    <div class="switch-margin-bottom">
+      Here are some solutions we have come across related to this problem. <br>Please try the recommendations here before following tutorials online, this information is always the most up to date.
+    </div>
+    <div class="diag-recommend-details" i18n>{{(adb.diagnostics.usb && adb.diagnostics.usb.result_status=='diag-good' && adb.devices.length && adb.deviceStatus !== ConnectionStatus.UNAUTHORIZED) ? "Check for a popup to accept inside the headset.":adb.diagnostics.usb ? adb.diagnostics.usb.recommendation : ''}}</div>
+  </div>
+</div>

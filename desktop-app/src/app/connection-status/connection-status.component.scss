@@ -1,0 +1,53 @@
+
+.diag-recommend .diag-recommend-details {
+  white-space: pre-wrap;
+}
+.diag-recommend-details{
+  //background: rgba(255,255,255,0.3);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid white;
+}
+.help-section{
+  position: absolute;
+  z-index: 200;
+  top: 0px;
+  left: 0px;
+  right: 270px;
+  bottom: 0px;
+  background: #111124;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  padding: 0 40px;
+}
+
+.right-side-diagnostics{
+  position: absolute;
+  width: 245px;
+  top: 56px;
+  right: 20px;
+}
+.switch-margin-bottom{
+  margin-bottom: 20px;
+}
+.status-circle{
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border-radius: 50%;
+  background: linear-gradient(to right, #d71d33, #d92613); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  vertical-align: middle;
+}
+.status-circle.green{
+  background: linear-gradient(to right, #12c4b5, #22c05d); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.status-circle.purple{
+  background: linear-gradient(to right, #aa076b, #61045f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+
+.status-text{
+  font-size: 12px;
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: middle;
+}
