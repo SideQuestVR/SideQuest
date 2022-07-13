@@ -5,7 +5,7 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  background:#0c0c0c;
+  background:#12152d;
 }
 body{
 
@@ -151,10 +151,8 @@ body{
   cursor:pointer;
 }
 .section-title {
-  font-size: 2rem;
-  margin-top: 0.4em;
+  margin-top: 1em;
   margin-left: 1em;
-  font-family: 'PT Sans', sans-serif;
 }
 .link,
 .sort-link {
@@ -271,7 +269,7 @@ code > pre, .code{
 .pure-material-button-contained.slim{
   padding: 5px 10px;
   height: 25px;
-  line-height: 20px;
+  line-height: 17px;
 }
 
 .pure-material-button-contained.tiny{

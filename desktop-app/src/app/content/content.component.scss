@@ -1,7 +1,6 @@
 .body-content {
   height: calc(100% - 200px);
   width: 100%;
-  background: #f0f0f0;
   position: relative;
   overflow: auto;
 }
@@ -11,7 +10,6 @@
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
   transition: background-color 350ms ease-out;
-  background-color:#0c0c0c;
 }
 /*.content-dark-theme{*/
   /*background-color:#211c23;*/

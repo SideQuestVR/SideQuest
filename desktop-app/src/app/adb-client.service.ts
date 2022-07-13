@@ -346,11 +346,6 @@ export class AdbClientService {
                     this.deviceStatusMessage =
                         this.deviceName +
                         ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
-                        '         position="bottom" tooltip="Wifi">' +
-                        '        wifi' +
-                        '      </i> ' +
-                        (this.deviceIp || 'Not found...') +
-                        ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
                         '         position="bottom" tooltip="Battery">' +
                         '        ' +
                         (this.isBatteryCharging ? 'battery_charging_full' : 'battery_full') +
@@ -368,37 +363,13 @@ export class AdbClientService {
                 }
                 break;
             case ConnectionStatus.DISCONNECTED:
-                this.deviceStatusMessage =
-                    'Not Detected' +
-                    (this.deviceIp
-                        ? ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
-                          '         position="bottom" tooltip="Battery">' +
-                          '        wifi' +
-                          '      </i> ' +
-                          this.deviceIp
-                        : '');
+                this.deviceStatusMessage = 'Not Detected';
                 break;
             case ConnectionStatus.UNAUTHORIZED:
-                this.deviceStatusMessage =
-                    'Unauthorized: Allow in headset. ' +
-                    (this.deviceIp
-                        ? ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
-                          '         position="bottom" tooltip="Battery">' +
-                          '        wifi' +
-                          '      </i> ' +
-                          this.deviceIp
-                        : '');
+                this.deviceStatusMessage = 'Unauthorized: Allow in headset';
                 break;
             case ConnectionStatus.DEV_MODE:
-                this.deviceStatusMessage =
-                    'Dev Mode: Enable dev mode in the Oculus phone app. ' +
-                    (this.deviceIp
-                        ? ' <i mz-tooltip class="material-icons white-text top-menu-bar-icon vertical-align"' +
-                          '         position="bottom" tooltip="Battery">' +
-                          '        wifi' +
-                          '      </i> ' +
-                          this.deviceIp
-                        : '');
+                this.deviceStatusMessage = 'Dev Mode: Enable dev mode in the Oculus phone app';
                 break;
         }
     }

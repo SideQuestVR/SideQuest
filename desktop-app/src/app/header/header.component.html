@@ -56,43 +56,25 @@
           </ng-container>
         </div>
         <div class="user-menu" #userMenu>
-          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';webService.loadUrl(webUrl || 'https://sidequestvr.com')"-->
-          <!--          routerLink="/webview"><i class="material-icons left">home</i>Home</div><br>-->
-          <div class="btn-flat waves-light waves-light full-width center-align white-text"
-               *ngIf="isConnected()&&osPlatform === 'win32'"
-               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">
-            <i class="material-icons left">live_tv</i>Streaming</div>
-          <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"
-               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';wifiModal.openModal()"><i
-            class="material-icons left">wifi</i>Wifi</div>
-          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';selectAppToInstall()"><i-->
-          <!--            class="material-icons left">archive</i>Select APK</div>-->
-          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="/device-files"><i-->
-          <!--            class="material-icons left">folder</i>File Explorer</div>-->
-          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="packages"><i-->
-          <!--            class="material-icons left">apps</i>My Apps</div>-->
-          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-          <!--          (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';" routerLink="tools"><i-->
-          <!--            class="material-icons left">build</i>Tools</div>-->
-          <div class="btn-flat waves-light waves-light full-width center-align white-text"
-               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';adbModal.openModal()"><i
-            class="material-icons left">input</i>ADB Commands</div>
-          <!--        <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-          <!--             (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';logcatModal.openModal()"><i-->
-          <!--          class="material-icons left">input</i>ADB Logcat</div>-->
+<!--          <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--               *ngIf="isConnected()&&osPlatform === 'win32'"-->
+<!--               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">-->
+<!--            <i class="material-icons left">live_tv</i>Streaming</div>-->
+<!--          <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"-->
+<!--               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';wifiModal.openModal()"><i-->
+<!--            class="material-icons left">wifi</i>Wifi</div>-->
+<!--          <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
+<!--               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';adbModal.openModal()"><i-->
+<!--            class="material-icons left">input</i>ADB Commands</div>-->
         </div>
 
         <app-link *ngIf="appService.updateAvailable"
                   class="waves-effect waves-light btn-flat update-available link small-button warning" (click)="updateAvailable()"
                   text="Update"></app-link>
-        <i mz-tooltip class="material-icons white-text no-outline top-menu-bar-icon-down" position="bottom" tooltip="Menu"
-           (click)="userMenu.style.display = 'block';userMenuBack.style.display = 'block'">
-          arrow_drop_down
-        </i>
+<!--        <i mz-tooltip class="material-icons white-text no-outline top-menu-bar-icon-down" position="bottom" tooltip="Menu"-->
+<!--           (click)="userMenu.style.display = 'block';userMenuBack.style.display = 'block'">-->
+<!--          arrow_drop_down-->
+<!--        </i>-->
         <i mz-tooltip routerLink="/webview" (click)="doBack()"
            class="material-icons white-text no-outline" position="bottom" tooltip="Back">
           arrow_back
@@ -109,12 +91,12 @@
           arrow_forward
         </i>
         <i mz-tooltip (click)="scrcpyModal.openModal();" *ngIf="isConnected()&&osPlatform === 'win32'"
-           class="material-icons white-text no-outline top-menu-bar-icon" position="bottom"
+           class="material-icons white-text no-outline" position="bottom"
            tooltip="Stream from your headset to your PC with ScrCpy.">
           live_tv
         </i>
         <i mz-tooltip *ngIf="adbService.deviceIp" (click)="wifiModal.openModal()"
-           class="material-icons no-outline top-menu-bar-icon"
+           class="material-icons no-outline"
            [ngClass]="{'green-text':adbService.wifiEnabled,'white-text':!adbService.wifiEnabled}" position="bottom"
            tooltip="Enable wireless mode. (Experimental)">
           wifi
@@ -146,26 +128,11 @@
            tooltip="Device settings & tools">
           build
         </i>
-        <i mz-tooltip (click)="commandMenu.style.display = 'block';commandMenuBack.style.display = 'block'" class="material-icons white-text no-outline top-menu-bar-icon"
+        <i mz-tooltip (click)="commandMenu.style.display = 'block';commandMenuBack.style.display = 'block'"
+           class="material-icons white-text no-outline"
            position="bottom" tooltip="Run ADB commands">
           input
         </i>
-        <!--      <i (click)="openDebugger()" id="open-debugger" mz-tooltip class="material-icons white-text top-menu-bar-icon"-->
-        <!--        position="bottom" tooltip="Open debugger">-->
-        <!--        bug_report-->
-        <!--      </i>-->
-        <!--      <i (click)="minimizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
-        <!--        tooltip="Minimize SideQuest.">-->
-        <!--        minimize-->
-        <!--      </i>-->
-        <!--      <i (click)="maximizeApp(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
-        <!--        tooltip="Toggle Maximize.">-->
-        <!--        aspect_ratio-->
-        <!--      </i>-->
-        <!--      <i (click)="closeAppModal.openModal(); userMenu.style.display = 'none';userMenuBack.style.display = 'none'" mz-tooltip class="material-icons white-text no-outline" position="bottom"-->
-        <!--        tooltip="Close SideQuest.">-->
-        <!--        close-->
-        <!--      </i>-->
       </div>
       <div id="connection-status-container">
         <i mz-tooltip class="material-icons white-text no-outline connection-device-select pointer left"
@@ -174,13 +141,15 @@
            position="bottom" tooltip="Select Device">
           arrow_drop_down
         </i>
-        <app-link class="waves-effect waves-light btn-flat update-available get-help link small-button warning left" *ngIf="!adbService.isReady"
-                  text="Get Help" routerLink="/setup"></app-link>
-        <div id="connection-status" class="connection-status-unauthorized  left"  mz-tooltip
-             position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
+        <div class="connection-status-outer left">
+          <div id="connection-status" class="connection-status-unauthorized  "  mz-tooltip
+               position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
 
-          <div id="connection-status-message" [innerHTML]="appService.versionName+'&nbsp;&nbsp;'+adbService.deviceStatusMessage"></div>
+
+          </div>
+          <div id="connection-status-message" [innerHTML]="adbService.deviceStatusMessage"></div>
         </div>
+        <div class="pure-material-button-contained slim get-help" *ngIf="!adbService.isReady" routerLink="/setup">Open Setup Instructions</div>
       </div>
     </div>
   </div>
@@ -199,13 +168,6 @@
         <br />
         <span class="spinner-loading-message" [innerHTML]="dragAndDropService.message"></span>
       </div>
-      <div class="apk-install" *ngIf="appService.isPackagesOpen">Manage the apps on your headset.<br>Click Show All to
-        see all apps including system apps.</div>
-      <div class="apk-install" *ngIf="appService.isSettingsOpen">Manage settings on your headset.</div>
-      <div class="apk-install" *ngIf="appService.isSetupOpen">Setup your headset with SideQuest.</div>
-
-      <div class="apk-install" *ngIf="appService.isTasksOpen">Manage tasks for installing, <br>downloading and uploading
-        from your headset.</div>
     </div>
     <div *ngIf="appService.showBrowserBar" class="beast-saber-buttons">
       <a class="waves-effect waves-light synthrideerz"

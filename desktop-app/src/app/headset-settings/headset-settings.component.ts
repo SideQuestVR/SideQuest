@@ -41,20 +41,12 @@ enum SSO {
     _Quest1,
     _Quest2,
 }
-enum SVR {
-    _1024,
-    _1536,
-}
 enum CR {
     _480,
     _720,
     _1080,
     _1024,
-}
-enum SVB {
-    _5Mbps,
-    _15Mbps,
-    _25Mbps,
+    _1600,
 }
 enum RR {
     _60,
@@ -62,6 +54,22 @@ enum RR {
     _72_DEF,
     _90,
     _120,
+}
+enum FPS {
+    _24,
+    _30,
+    _60,
+}
+enum BR {
+    _2K,
+    _5K,
+    _10K,
+    _15K,
+    _20K,
+}
+enum TP {
+    _FHD,
+    _SQUARE,
 }
 @Component({
     selector: 'app-headset-settings',
@@ -80,17 +88,19 @@ export class HeadsetSettingsComponent implements OnInit {
     videoCaptureSize: string;
     cpuGpuLevel: string;
     textureSize: string;
+    captureFps: string;
+    captureBitrate: string;
     FFR = FFR;
-    SVR = SVR;
-    SVB = SVB;
     SSO = SSO;
     GU = GU;
     CA = CA;
     CR = CR;
     GPU = GPU;
-    FR = GU;
     RR = RR;
     EXP = EXP;
+    BR = BR;
+    FPS = FPS;
+    TP = TP;
     constructor(public adbService: AdbClientService, public appService: AppService, private statusService: StatusBarService) {
         this.appService.resetTop();
         appService.webService.isWebviewOpen = false;
@@ -116,7 +126,8 @@ export class HeadsetSettingsComponent implements OnInit {
         await this.getString('debug.oculus.refreshRate', '72', 'refreshRate');
         await this.getString('debug.oculus.forceChroma', '1', 'chromaticAberration');
         await this.getString('debug.oculus.foveation.level', '2', 'fixedFoveatedRendering');
-        // await this.getString('debug.oculus.forceChroma', '1', 'videoCaptureSize');
+        await this.getString('debug.oculus.capture.fps', '24', 'captureFps');
+        await this.getString('debug.oculus.capture.bitrate', '5000000', 'captureBitrate');
         await this.getDoubleString('debug.oculus.capture.width', 'debug.oculus.capture.height', '1024', '1024', 'videoCaptureSize');
         await this.getDoubleString('debug.oculus.cpuLevel', 'debug.oculus.gpuLevel', 'app', 'app', 'cpuGpuLevel');
         await this.getDoubleString('debug.oculus.textureWidth', 'debug.oculus.textureHeight', '1440', '1584', 'textureSize');
@@ -209,13 +220,80 @@ export class HeadsetSettingsComponent implements OnInit {
             })
             .catch(e => this.statusService.showStatus(e, true));
     }
-    setFullRate(fullRate: GU) {
-        this.runAdbCommand('setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0))
-            .then(() => {
-                this.statusService.showStatus('Full Rate Capture set OK!!');
-                return this.getBool('fullRateCaptureEnabled', 'debug.oculus.fullRateCapture');
+    setCaptureFPSRate(fps: FPS) {
+        let value = 0;
+        switch (fps) {
+            case FPS._24:
+                value = 24;
+                break;
+            case FPS._30:
+                value = 30;
+                break;
+            case FPS._60:
+                value = 60;
+                break;
+        }
+        this.runAdbCommand('setprop debug.oculus.capture.fps ' + value)
+            .then(async () => {
+                this.statusService.showStatus('Capture FPS set OK!!');
+                await this.getString('debug.oculus.capture.fps', '24', 'captureFps');
             })
             .catch(e => this.statusService.showStatus(e, true));
+    }
+    setCaptureBitrate(bitrate: BR) {
+        let value = 0;
+        switch (bitrate) {
+            case BR._5K:
+                value = 5000000;
+                break;
+            case BR._10K:
+                value = 10000000;
+                break;
+            case BR._15K:
+                value = 15000000;
+                break;
+            case BR._20K:
+                value = 20000000;
+                break;
+        }
+        this.runAdbCommand('setprop debug.oculus.capture.bitrate ' + value)
+            .then(() => {
+                this.statusService.showStatus('Capture Bit Rate set OK!!');
+                return this.getString('debug.oculus.capture.bitrate', '5000000', 'captureBitrate');
+            })
+            .catch(e => this.statusService.showStatus(e, true));
+    }
+    setTetianasPreset(tp: TP) {
+        let width = 1920;
+        let height = 1080;
+        switch (tp) {
+            case TP._FHD:
+                width = 1920;
+                height = 1080;
+                break;
+            case TP._SQUARE:
+                width = 1600;
+                height = 1600;
+                break;
+        }
+        this.runAdbCommand('setprop debug.oculus.capture.width ' + width)
+            .then(() => this.runAdbCommand('setprop debug.oculus.capture.height ' + height))
+            .then(() => this.runAdbCommand('setprop debug.oculus.capture.fps 60'))
+            .then(() => this.runAdbCommand('setprop debug.oculus.capture.bitrate 10000000'))
+            .then(async () => {
+                this.statusService.showStatus('Capture settings set OK!!');
+                await this.getString('debug.oculus.capture.bitrate', '5000000', 'captureBitrate');
+                await this.getString('debug.oculus.capture.fps', '24', 'captureFps');
+                await this.getDoubleString(
+                    'debug.oculus.capture.width',
+                    'debug.oculus.capture.height',
+                    '1024',
+                    '1024',
+                    'videoCaptureSize'
+                );
+            })
+            .catch(e => this.statusService.showStatus(e, true));
+        console.log(this.videoCaptureSize);
     }
     setGuardian(guardian: GU) {
         this.runAdbCommand('setprop debug.oculus.guardian_pause ' + (guardian === GU.ON ? 0 : 1))
@@ -326,28 +404,9 @@ export class HeadsetSettingsComponent implements OnInit {
             })
             .catch(e => this.statusService.showStatus(e, true));
     }
-    setSVB(svb: SVB) {
-        let value = 5000000;
-        switch (svb) {
-            case SVB._5Mbps:
-                value = 5000000;
-                break;
-            case SVB._15Mbps:
-                value = 15000000;
-                break;
-            case SVB._25Mbps:
-                value = 25000000;
-                break;
-        }
-        this.runAdbCommand('setprop debug.oculus.videoBitrate ' + value)
-            .then(() => {
-                this.statusService.showStatus('Video Bitrate set OK!!');
-            })
-            .catch(e => this.statusService.showStatus(e, true));
-    }
     setCR(svr: CR) {
-        let width = 1280;
-        let height = 720;
+        let width = 1024;
+        let height = 1024;
         switch (svr) {
             case CR._480:
                 width = 640;
@@ -364,6 +423,10 @@ export class HeadsetSettingsComponent implements OnInit {
             case CR._1024:
                 width = 1024;
                 height = 1024;
+                break;
+            case CR._1600:
+                width = 1600;
+                height = 1600;
                 break;
         }
         this.runAdbCommand('setprop debug.oculus.capture.width ' + width)

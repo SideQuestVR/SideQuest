@@ -1,5 +1,13 @@
+
+
+
 <div class="container">
-  <h4 *ngIf="!processService.tasks.length" class="text-dark-theme">No tasks running...</h4>
+  <div *ngIf="!processService.tasks.length" class="white-text">
+
+    <br>No tasks running.
+    <br><br>
+    <div class="pure-material-button-contained" routerLink="/">Back Home</div>
+  </div>
 
   <div class="row" *ngIf="processService.tasks.length">
     <app-current-task-item *ngFor="let task of processService.tasks;" [task]="task"></app-current-task-item>

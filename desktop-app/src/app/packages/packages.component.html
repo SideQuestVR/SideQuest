@@ -1,8 +1,9 @@
 <div class="container">
 
-  <div *ngIf="!isConnected()">
-    <h4 class="text-dark-theme">
-      No device connected...</h4>
+  <div *ngIf="!isConnected()" class="white-text">
+    <br>You are not currently connected.
+    <br><br>
+    <div class="pure-material-button-contained" routerLink="/setup">Open Setup Instructions</div>
   </div>
   <div *ngIf="isConnected()">
     <div class="row">
