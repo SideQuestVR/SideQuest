@@ -19,7 +19,7 @@ export class StreamOptionsComponent implements OnInit {
         device: '',
     };
     osPlatform: string;
-    constructor(private appService: AppService, private adbService: AdbClientService) {
+    constructor(public appService: AppService, private adbService: AdbClientService) {
         appService.webService.isWebviewOpen = false;
         appService.resetTop();
         this.osPlatform = this.appService.os.platform();

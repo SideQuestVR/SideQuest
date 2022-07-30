@@ -24,7 +24,7 @@ export class HeaderBannerComponent implements OnInit {
     isOutOfDate: boolean;
     // the latest available version of the in-headset app
     private latestAppVersion: string | null = null;
-    constructor(private appService: AppService, public adb: AdbClientService) {}
+    constructor(public appService: AppService, public adb: AdbClientService) {}
 
     ngOnInit() {
         setInterval(() => {
