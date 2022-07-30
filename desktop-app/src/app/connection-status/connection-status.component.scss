@@ -13,7 +13,7 @@
   z-index: 200;
   top: 0px;
   left: 0px;
-  right: 270px;
+  right: 0px;
   bottom: 0px;
   background: #111124;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
@@ -22,7 +22,7 @@
 
 .right-side-diagnostics{
   position: absolute;
-  width: 245px;
+  width: 545px;
   top: 56px;
   right: 20px;
 }
@@ -50,4 +50,21 @@
   display: inline-block;
   margin-left: 5px;
   vertical-align: middle;
+}
+
+@media only screen and (max-width: 1448px){
+
+
+  .right-side-diagnostics{
+    width: 445px;
+  }
+}
+
+
+@media only screen and (max-width: 1279px){
+
+
+  .right-side-diagnostics{
+    width: 345px;
+  }
 }

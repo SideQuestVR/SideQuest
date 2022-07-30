@@ -46,7 +46,7 @@ export class FilesComponent implements OnInit {
     ) {
         this.appService.resetTop();
         appService.filesComponent = this;
-        appService.isFilesOpen = true;
+        //  appService.isFilesOpen = true;
         appService.webService.isWebviewOpen = false;
     }
     ngOnAfterViewInit() {

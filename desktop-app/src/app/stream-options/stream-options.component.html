@@ -1,0 +1,111 @@
+<div class="inner-app-container">
+  <div class="screen-description">Stream your headset to your PC. Put your headset on before clicking Start Stream.</div>
+
+  <div class="pure-material-button-contained spaced" (click)="runscrcpy()">Start Stream</div>
+  <div class="pure-material-button-contained spaced" (click)="appService.opn('https://www.oculus.com/casting')">Oculus Casting</div>
+
+  <div class="divider divider-margin-top margin-bottom"></div>
+  <div class="row">
+    <div class="col s12 fixed-height">
+      Always On Top
+      <div class="grey-text small">
+        Make scrcpy window always on top (above other windows).
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
+      <div class="switch">
+        <label>
+          Off
+          <input type="checkbox" [(ngModel)]="scrcpy_options.always_on_top" />
+          <span class="lever"></span>
+          On
+        </label>
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
+      Bit Rate
+      <div class="grey-text small">
+        Encode the video at the given bit-rate, expressed in bits/s. Unit suffixes are supported: 'K' (x1000) and 'M'
+        (x1000000).
+      </div>
+    </div>
+    <div class="col s12 input-field fixed-height">
+      <input id="bit_rate_" [(ngModel)]="scrcpy_options.bit_rate" type="text" />
+      <label for="bit_rate_" class="active">Bit Rate</label>
+    </div>
+    <div class="col s12 fixed-height">
+      Crop
+      <div class="grey-text small">
+        Crop the device screen on the server. The values are expressed in the device natural orientation (typically,
+        portrait for a phone, landscape for a tablet). Any MaxSize value is computed on the cropped size.
+      </div>
+    </div>
+    <div class="col s12 input-field fixed-height">
+      <input id="crop_" [(ngModel)]="scrcpy_options.crop" type="text" />
+      <label for="crop_" class="active">Crop</label>
+      <div class="pure-material-button-contained spaced flat active" (click)="scrcpy_options.crop = '1280:720:1500:350'">Quest 1 Crop</div>
+      <div class="pure-material-button-contained spaced flat active" (click)="scrcpy_options.crop = '1600:900:2017:510'">Quest 2 Crop</div>
+    </div>
+    <div class="col s12 fixed-height">
+      Fullscreen
+      <div class="grey-text small">
+        Start in fullscreen.
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
+      <div class="switch">
+        <label>
+          Off
+          <input type="checkbox" [(ngModel)]="scrcpy_options.fullscreen" />
+          <span class="lever"></span>
+          On
+        </label>
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
+      No Input
+      <div class="grey-text small">
+        Disable device control (mirror the device in read-only).
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
+      <div class="switch">
+        <label>
+          Off
+          <input type="checkbox" [(ngModel)]="scrcpy_options.no_control" />
+          <span class="lever"></span>
+          On
+        </label>
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
+      Max FPS
+      <div class="grey-text small">
+        Limit the frame rate of screen capture. 0 is unlimited.
+      </div>
+    </div>
+    <div class="col s12 input-field fixed-height">
+      <input id="max_fps_" [(ngModel)]="scrcpy_options.max_fps" type="text" />
+      <label for="max_fps_" class="active">Max FPS</label>
+    </div>
+    <div class="col s12 fixed-height">
+      Max Size
+      <div class="grey-text small">
+        Limit both the width and height of the video to value. The other dimension is computed so that the device
+        aspect-ratio is preserved. 0 is unlimited.
+      </div>
+    </div>
+    <div class="col s12 input-field fixed-height">
+      <input id="max_size_" [(ngModel)]="scrcpy_options.max_size" type="text" />
+      <label for="max_size_" class="active">Max Size</label>
+    </div>
+    <div class="col s12" *ngIf="osPlatform === 'darwin'">
+      To use ScrCpy on mac you will need to install Homebrew and then install scrcpy with <span class="chip">brew install scrcpy</span>
+      <br><br>
+    </div>
+    <div class="col s12" *ngIf="osPlatform === 'linux'">
+      To use ScrCpy on Linux you will need to install snap package manager with <span class="chip">sudo snap install scrcpy</span>
+    </div>
+  </div>
+</div>
+

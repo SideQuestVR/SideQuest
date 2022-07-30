@@ -5,6 +5,9 @@
        position="bottom" [innerHTML]="'<i class=material-icons>' + task.icon + '</i>' + task.status">
   </div>
 </div>
-<div class="col s2 package-height centered package-item">
-  <i class="material-icons red-text cursor settings" (click)="task.running?processService.skipCurrent(task):deleteItem()">close</i>
+<div class="col s2 package-height centered package-item right-align">
+  <i class="material-icons white-text cursor settings" (click)="task.running?processService.skipCurrent(task):deleteItem()">close</i>
+</div>
+<div class="col s12 no-padding">
+  <div class="divider margin-bottom"></div>
 </div>

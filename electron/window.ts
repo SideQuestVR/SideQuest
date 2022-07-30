@@ -54,8 +54,8 @@ export class AppWindow {
             height: windowState.height,
             x: windowState.x,
             y: windowState.y,
-            minWidth: 800,
-            minHeight: 480,
+            minWidth: 1024,
+            minHeight: 640,
             show: !showAfterSetup,
             webPreferences: {
                 webviewTag: true,

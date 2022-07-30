@@ -25,7 +25,7 @@ export class PackagesComponent implements OnInit {
     isBackingUp = true;
     isOpen: boolean;
     sub: Subscription;
-    show_all: boolean;
+    hide_system_apps = true;
     search: string;
     savePath: string;
     perms: any;
@@ -43,21 +43,32 @@ export class PackagesComponent implements OnInit {
     ) {
         appService.webService.isWebviewOpen = false;
         appService.resetTop();
-        appService.isPackagesOpen = true;
-        this.appService.setTitle('Installed Apps');
+        // appService.isPackagesOpen = true;
+        //  this.appService.setTitle('Installed Apps');
         this.sub = router.events.subscribe(val => {
             if (val instanceof NavigationEnd) {
                 this.routerPackage = route.snapshot.paramMap.get('packageName');
             }
         });
-        this.show_all = !!localStorage.getItem('packages_show_all');
+        let hide_system_apps = localStorage.getItem('hide_system_apps');
+        this.hide_system_apps = !hide_system_apps || hide_system_apps === 'true';
+        this.setShowAll();
+    }
+
+    get totalApps() {
+        return this.myApps.filter(p => {
+            return (
+                (p.name && p.name.toLowerCase().indexOf(this.search.toLowerCase())) > -1 ||
+                p.packageName.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+            );
+        }).length;
     }
 
     setShowAll() {
-        if (this.show_all) {
-            localStorage.setItem('packages_show_all', 'true');
+        if (this.hide_system_apps) {
+            localStorage.setItem('hide_system_apps', 'true');
         } else {
-            localStorage.removeItem('packages_show_all');
+            localStorage.setItem('hide_system_apps', 'false');
         }
         this.isOpen = false;
     }
@@ -137,7 +148,8 @@ export class PackagesComponent implements OnInit {
         if (isConnected && !this.isOpen) {
             this.isOpen = true;
             this.adbService
-                .getPackages(this.show_all)
+                .getPackages(!this.hide_system_apps)
+                .then(() => this.packageService.getAppIndex())
                 .then(() => {
                     this.myApps = this.adbService.devicePackages
                         .map(p => {

@@ -45,27 +45,12 @@
                routerLink="/webview"><i class="material-icons left">public</i>Go to url</div><br>
           <div class="btn-flat waves-light waves-light full-width center-align white-text"
                (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';favoriteType = 'browserFavourites';favouriteMax = 20;favoritePathType = 'Url';manageFavs.openModal()"
-          ><i class="material-icons left">edit</i>Manage</div><br>
-          <div class="btn-flat waves-light waves-light full-width center-align white-text"
-               (click)="addCurrentFavourite()"
-          ><i class="material-icons left">add</i>Add Current</div><br>
+          ><i class="material-icons left">edit</i>Manage Favs</div><br>
           <ng-container *ngFor="let favourite of favourites.browserFavourites">
             <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
                  (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none';webService.loadUrl(favourite.uri)"
                  routerLink="/webview"><img *ngIf="favourite.icon" class="left browser-menu-image" src="{{favourite.icon}}"/>{{favourite.name}}</div><br>
           </ng-container>
-        </div>
-        <div class="user-menu" #userMenu>
-<!--          <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--               *ngIf="isConnected()&&osPlatform === 'win32'"-->
-<!--               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';scrcpyModal.openModal();">-->
-<!--            <i class="material-icons left">live_tv</i>Streaming</div>-->
-<!--          <div class="btn-flat waves-light waves-light full-width center-align white-text" *ngIf="adbService.deviceIp"-->
-<!--               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';wifiModal.openModal()"><i-->
-<!--            class="material-icons left">wifi</i>Wifi</div>-->
-<!--          <div class="btn-flat waves-light waves-light full-width center-align white-text"-->
-<!--               (click)="userMenu.style.display = 'none';userMenuBack.style.display = 'none';adbModal.openModal()"><i-->
-<!--            class="material-icons left">input</i>ADB Commands</div>-->
         </div>
 
         <app-link *ngIf="appService.updateAvailable"
@@ -90,12 +75,12 @@
            class="material-icons white-text no-outline" position="bottom" tooltip="Forward">
           arrow_forward
         </i>
-        <i mz-tooltip (click)="scrcpyModal.openModal();" *ngIf="isConnected()&&osPlatform === 'win32'"
+        <i mz-tooltip routerLink="/streaming" *ngIf="isConnected()&&osPlatform === 'win32'"
            class="material-icons white-text no-outline" position="bottom"
            tooltip="Stream from your headset to your PC with ScrCpy.">
           live_tv
         </i>
-        <i mz-tooltip *ngIf="adbService.deviceIp" (click)="wifiModal.openModal()"
+        <i mz-tooltip *ngIf="adbService.deviceIp" routerLink="/wireless"
            class="material-icons no-outline"
            [ngClass]="{'green-text':adbService.wifiEnabled,'white-text':!adbService.wifiEnabled}" position="bottom"
            tooltip="Enable wireless mode. (Experimental)">
@@ -128,6 +113,12 @@
            tooltip="Device settings & tools">
           build
         </i>
+        <i id="support-screen" routerLink="/setup" mz-tooltip
+           class="material-icons white-text no-outline" position="bottom"
+           tooltip="Help and support with SideQuest">
+          contact_support
+        </i>
+
         <i mz-tooltip (click)="commandMenu.style.display = 'block';commandMenuBack.style.display = 'block'"
            class="material-icons white-text no-outline"
            position="bottom" tooltip="Run ADB commands">
@@ -156,11 +147,11 @@
   <div class="top-dnd-backing">
 
     <div class="top-banner">
-      <div>
-        <a href="#/" class="logo">
-          <img src="assets/images/new-logo.png" />
-        </a>
-      </div>
+<!--      <div>-->
+<!--        <a href="#/" class="logo">-->
+<!--          <img src="assets/images/new-logo.png" />-->
+<!--        </a>-->
+<!--      </div>-->
       <div class="top-buttons hide-on-med-and-down">
       </div>
       <div class="well well-lg drop-message center-align" *ngIf="dragAndDropService.isDragging">
@@ -173,42 +164,6 @@
       <a class="waves-effect waves-light synthrideerz"
          (click)="webService.loadUrl('https://synthriderz.com/beatmaps/recent')">
         <img src="assets/images/Synth.png" class="responsive-img" /></a>&nbsp;&nbsp;&nbsp;
-    </div>
-    <div *ngIf="appService.isFilesOpen" class="beast-saber-buttons">
-      <ng-container *ngFor="let favourite of favourites.fileFavourites">
-        <a href="javascript:void(0)" class="waves-effect waves-light synthrideerz margin-right"
-           (click)="appService.filesComponent.open(favourite.uri)"
-           mz-tooltip tooltip="{{favourite.name}}">
-          <img *ngIf="favourite.icon" src="{{favourite.icon}}" class="responsive-img" /></a>
-      </ng-container>
-      <ng-container>
-        <a href="javascript:void(0)" class="btn-floating pink-button waves-effect waves-light" mz-tooltip tooltip="Manage"
-           (click)="manageFavs.openModal(); favouriteMax = 10; favoritePathType = 'Url';"><i class="material-icons">add</i></a>
-      </ng-container>
-
-    </div>
-    <div class="sync-songs" *ngIf="appService.showTaskActions">
-      <div class="waves-effect waves-light btn small-button pink-button" mz-tooltip position="bottom"
-           tooltip="Clear out the finished tasks." (click)="processService.clearDone()">
-        Clear Done
-      </div>
-      &nbsp;&nbsp;
-      <div class="waves-effect waves-light btn small-button pink-button" mz-tooltip position="bottom"
-           tooltip="Restart the failed tasks." (click)="processService.retryFailed()">
-        Retry Failed
-      </div>
-      &nbsp;&nbsp;
-      <div class="waves-effect waves-light btn small-button pink-button" mz-tooltip position="bottom"
-           tooltip="Clear out the failed tasks." (click)="processService.clearFailed()">
-        Clear Failed
-      </div>
-      &nbsp;&nbsp;
-      <div class="waves-effect waves-light btn small-button red" mz-tooltip position="bottom"
-           tooltip="Clear out the finished tasks." (click)="processService.clearAll()">
-        Clear All
-      </div>
-      &nbsp;&nbsp;
-
     </div>
     <div id="searchFilterContainer" *ngIf="appService.showSearch">
       <div class="search" *ngIf="false">
@@ -261,37 +216,37 @@
 </mz-modal>
 
 
-<mz-modal #wifiModal [fixedFooter]="true">
-  <mz-modal-header>
-    <h4>Wireless</h4>
-  </mz-modal-header>
-  <mz-modal-content>
-    <div class="center-align">
-      Enable wifi mode to install apps wirelessly.<br>
-      <div class="chip">Experimental</div>
-      <br><br><br>
-      <i mz-tooltip class="material-icons large cursor" [ngClass]="{'green-text':adbService.wifiEnabled}"
-         (click)="adbService.wifiEnabled=!adbService.wifiEnabled;adbService.toggleWifiMode()" position="bottom"
-         tooltip="Enable wireless mode. (Experimental)">
-        wifi
-      </i>
-      <br>
-      <br>
-      <div>
-        <h5>Device IP:</h5>
-        {{adbService.deviceIp}}<br>
-        <a class="waves-effect waves-dark btn search-button-margin white black-text" mz-modal-close
-           (click)="connectWifi()">Connect</a>
-        <br><br>
-        <a class="waves-effect waves-dark btn search-button-margin white black-text" mz-modal-close
-           (click)="adbCommandToRun = 'adb disconnect';runAdbCommand()">Reset</a>
-      </div>
-    </div>
-  </mz-modal-content>
-  <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
-  </mz-modal-footer>
-</mz-modal>
+<!--<mz-modal #wifiModal [fixedFooter]="true">-->
+<!--  <mz-modal-header>-->
+<!--    <h4>Wireless</h4>-->
+<!--  </mz-modal-header>-->
+<!--  <mz-modal-content>-->
+<!--    <div class="center-align">-->
+<!--      Enable wifi mode to install apps wirelessly.<br>-->
+<!--      <div class="chip">Experimental</div>-->
+<!--      <br><br><br>-->
+<!--      <i mz-tooltip class="material-icons large cursor" [ngClass]="{'green-text':adbService.wifiEnabled}"-->
+<!--         (click)="adbService.wifiEnabled=!adbService.wifiEnabled;adbService.toggleWifiMode()" position="bottom"-->
+<!--         tooltip="Enable wireless mode. (Experimental)">-->
+<!--        wifi-->
+<!--      </i>-->
+<!--      <br>-->
+<!--      <br>-->
+<!--      <div>-->
+<!--        <h5>Device IP:</h5>-->
+<!--        {{adbService.deviceIp}}<br>-->
+<!--        <a class="waves-effect waves-dark btn search-button-margin white black-text" mz-modal-close-->
+<!--           (click)="connectWifi()">Connect</a>-->
+<!--        <br><br>-->
+<!--        <a class="waves-effect waves-dark btn search-button-margin white black-text" mz-modal-close-->
+<!--           (click)="adbCommandToRun = 'adb disconnect';runAdbCommand()">Reset</a>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </mz-modal-content>-->
+<!--  <mz-modal-footer>-->
+<!--    <button mz-button [flat]="true" mz-modal-close>Close</button>-->
+<!--  </mz-modal-footer>-->
+<!--</mz-modal>-->
 
 
 <mz-modal #logcatModal [fixedFooter]="true" [options]="{dismissible: false}">
@@ -425,125 +380,126 @@
 </mz-modal>
 
 
-<mz-modal #scrcpyModal [fixedFooter]="true">
-  <mz-modal-header>
-    <h4>Stream Options</h4>
-  </mz-modal-header>
-  <mz-modal-content>
-    <div class="row">
-      <div class="col s6 fixed-height">
-        Always On Top
-        <div class="grey-text small">
-          Make scrcpy window always on top (above other windows).
-        </div>
-      </div>
-      <div class="col s6 fixed-height">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" [(ngModel)]="scrcpy_options.always_on_top" />
-            <span class="lever"></span>
-            On
-          </label>
-        </div>
-      </div>
-      <div class="col s6 fixed-height">
-        Bit Rate
-        <div class="grey-text small">
-          Encode the video at the given bit-rate, expressed in bits/s. Unit suffixes are supported: 'K' (x1000) and 'M'
-          (x1000000).
-        </div>
-      </div>
-      <div class="col s6 input-field fixed-height">
-        <input id="bit_rate_" [(ngModel)]="scrcpy_options.bit_rate" type="text" />
-        <label for="bit_rate_" class="active">Bit Rate</label>
-      </div>
-      <div class="col s6 fixed-height">
-        Crop
-        <div class="grey-text small">
-          Crop the device screen on the server. The values are expressed in the device natural orientation (typically,
-          portrait for a phone, landscape for a tablet). Any MaxSize value is computed on the cropped size.
-        </div>
-      </div>
-      <div class="col s6 input-field fixed-height">
-        <input id="crop_" [(ngModel)]="scrcpy_options.crop" type="text" />
-        <label for="crop_" class="active">Crop</label>
-        <div class="btn pink-button small-button waves-light waves-effect margin-right" (click)="scrcpy_options.crop = '1280:720:1500:350'">Quest 1 Crop</div>
-        <div class="btn pink-button small-button waves-light waves-effect margin-right" (click)="scrcpy_options.crop = '1600:900:2017:510'">Quest 2 Crop</div>
-      </div>
-      <div class="col s6 fixed-height">
-        Fullscreen
-        <div class="grey-text small">
-          Start in fullscreen.
-        </div>
-      </div>
-      <div class="col s6 fixed-height">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" [(ngModel)]="scrcpy_options.fullscreen" />
-            <span class="lever"></span>
-            On
-          </label>
-        </div>
-      </div>
-      <div class="col s6 fixed-height">
-        No Input
-        <div class="grey-text small">
-          Disable device control (mirror the device in read-only).
-        </div>
-      </div>
-      <div class="col s6 fixed-height">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" [(ngModel)]="scrcpy_options.no_control" />
-            <span class="lever"></span>
-            On
-          </label>
-        </div>
-      </div>
-      <div class="col s6 fixed-height">
-        Max FPS
-        <div class="grey-text small">
-          Limit the frame rate of screen capture. 0 is unlimited.
-        </div>
-      </div>
-      <div class="col s6 input-field fixed-height">
-        <input id="max_fps_" [(ngModel)]="scrcpy_options.max_fps" type="text" />
-        <label for="max_fps_" class="active">Max FPS</label>
-      </div>
-      <div class="col s6 fixed-height">
-        Max Size
-        <div class="grey-text small">
-          Limit both the width and height of the video to value. The other dimension is computed so that the device
-          aspect-ratio is preserved. 0 is unlimited.
-        </div>
-      </div>
-      <div class="col s6 input-field fixed-height">
-        <input id="max_size_" [(ngModel)]="scrcpy_options.max_size" type="text" />
-        <label for="max_size_" class="active">Max Size</label>
-      </div>
-      <div class="col s12" *ngIf="osPlatform === 'darwin'">
-        To use ScrCpy on mac you will need to install Homebrew and then install scrcpy with <span class="chip">brew install scrcpy</span>
-        <br><br>
-      </div>
-      <div class="col s12" *ngIf="osPlatform === 'linux'">
-        To use ScrCpy on Linux you will need to install snap package manager with <span class="chip">sudo snap install scrcpy</span>
-      </div>
-    </div>
-  </mz-modal-content>
-  <mz-modal-footer>
-    <div class="left margin-left"><br>Put your headset on before clicking Start Stream</div>
-    <button mz-button [flat]="true" class="footer-margin-right" mz-modal-close>Close</button>
-    <button mz-button class="pink-button footer-margin-right" mz-modal-close (click)="runscrcpy()">Start Stream</button>
-    <button mz-button class="pink-button" mz-modal-close (click)="appService.opn('https://www.oculus.com/casting')">Oculus Casting</button>
-  </mz-modal-footer>
-</mz-modal>
+<!--<mz-modal #scrcpyModal [fixedFooter]="true">-->
+<!--  <mz-modal-header>-->
+<!--    <h4>Stream Options</h4>-->
+<!--  </mz-modal-header>-->
+<!--  <mz-modal-content>-->
+<!--    <div class="row">-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        Always On Top-->
+<!--        <div class="grey-text small">-->
+<!--          Make scrcpy window always on top (above other windows).-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        <div class="switch">-->
+<!--          <label>-->
+<!--            Off-->
+<!--            <input type="checkbox" [(ngModel)]="scrcpy_options.always_on_top" />-->
+<!--            <span class="lever"></span>-->
+<!--            On-->
+<!--          </label>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        Bit Rate-->
+<!--        <div class="grey-text small">-->
+<!--          Encode the video at the given bit-rate, expressed in bits/s. Unit suffixes are supported: 'K' (x1000) and 'M'-->
+<!--          (x1000000).-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 input-field fixed-height">-->
+<!--        <input id="bit_rate_" [(ngModel)]="scrcpy_options.bit_rate" type="text" />-->
+<!--        <label for="bit_rate_" class="active">Bit Rate</label>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        Crop-->
+<!--        <div class="grey-text small">-->
+<!--          Crop the device screen on the server. The values are expressed in the device natural orientation (typically,-->
+<!--          portrait for a phone, landscape for a tablet). Any MaxSize value is computed on the cropped size.-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 input-field fixed-height">-->
+<!--        <input id="crop_" [(ngModel)]="scrcpy_options.crop" type="text" />-->
+<!--        <label for="crop_" class="active">Crop</label>-->
+<!--        <div class="btn pink-button small-button waves-light waves-effect margin-right" (click)="scrcpy_options.crop = '1280:720:1500:350'">Quest 1 Crop</div>-->
+<!--        <div class="btn pink-button small-button waves-light waves-effect margin-right" (click)="scrcpy_options.crop = '1600:900:2017:510'">Quest 2 Crop</div>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        Fullscreen-->
+<!--        <div class="grey-text small">-->
+<!--          Start in fullscreen.-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        <div class="switch">-->
+<!--          <label>-->
+<!--            Off-->
+<!--            <input type="checkbox" [(ngModel)]="scrcpy_options.fullscreen" />-->
+<!--            <span class="lever"></span>-->
+<!--            On-->
+<!--          </label>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        No Input-->
+<!--        <div class="grey-text small">-->
+<!--          Disable device control (mirror the device in read-only).-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        <div class="switch">-->
+<!--          <label>-->
+<!--            Off-->
+<!--            <input type="checkbox" [(ngModel)]="scrcpy_options.no_control" />-->
+<!--            <span class="lever"></span>-->
+<!--            On-->
+<!--          </label>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        Max FPS-->
+<!--        <div class="grey-text small">-->
+<!--          Limit the frame rate of screen capture. 0 is unlimited.-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 input-field fixed-height">-->
+<!--        <input id="max_fps_" [(ngModel)]="scrcpy_options.max_fps" type="text" />-->
+<!--        <label for="max_fps_" class="active">Max FPS</label>-->
+<!--      </div>-->
+<!--      <div class="col s6 fixed-height">-->
+<!--        Max Size-->
+<!--        <div class="grey-text small">-->
+<!--          Limit both the width and height of the video to value. The other dimension is computed so that the device-->
+<!--          aspect-ratio is preserved. 0 is unlimited.-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col s6 input-field fixed-height">-->
+<!--        <input id="max_size_" [(ngModel)]="scrcpy_options.max_size" type="text" />-->
+<!--        <label for="max_size_" class="active">Max Size</label>-->
+<!--      </div>-->
+<!--      <div class="col s12" *ngIf="osPlatform === 'darwin'">-->
+<!--        To use ScrCpy on mac you will need to install Homebrew and then install scrcpy with <span class="chip">brew install scrcpy</span>-->
+<!--        <br><br>-->
+<!--      </div>-->
+<!--      <div class="col s12" *ngIf="osPlatform === 'linux'">-->
+<!--        To use ScrCpy on Linux you will need to install snap package manager with <span class="chip">sudo snap install scrcpy</span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </mz-modal-content>-->
+<!--  <mz-modal-footer>-->
+<!--    <div class="left margin-left"><br>Put your headset on before clicking Start Stream</div>-->
+<!--    <button mz-button [flat]="true" class="footer-margin-right" mz-modal-close>Close</button>-->
+<!--    <button mz-button class="pink-button footer-margin-right" mz-modal-close (click)="runscrcpy()">Start Stream</button>-->
+<!--    <button mz-button class="pink-button" mz-modal-close (click)="appService.opn('https://www.oculus.com/casting')">Oculus Casting</button>-->
+<!--  </mz-modal-footer>-->
+<!--</mz-modal>-->
 
 <mz-modal #manageFavs [fixedFooter]="true">
   <mz-modal-header>
     <button mz-button class="right pink-button" (click)="showAddFavourite = !showAddFavourite">{{showAddFavourite? 'Hide' : 'Add New'}}</button>
+    <button mz-button class="right pink-button margin-right" *ngIf="!showAddFavourite" (click)="addCurrentFavourite()"><i class="material-icons left">add</i>Add Current to favs</button>
     <h4>Manage Favourites</h4>
   </mz-modal-header>
   <mz-modal-content>
@@ -565,7 +521,7 @@
       <div class="row fav-padding">
         <div class="col s4">Name</div>
         <div class="col s4">{{favoritePathType}}</div>
-        <div class="col s4">Icon Url</div>
+        <div class="col s4">Icon Url (Optional)</div>
       </div>
       <hr>
       <div class="no-margin" *ngIf="!this.favourites[favoriteType].length">
@@ -581,8 +537,8 @@
           <i class="material-icons delete-button orange-text" (click)="removeFromFavourites(favoriteType, i)">close</i>
         </div>
       </div>
-
     </ng-container>
+
   </mz-modal-content>
   <mz-modal-footer>
     <button mz-button [flat]="true" mz-modal-close (click)="resetFavourites(favoriteType); showAddFavourite = false;">Cancel</button>

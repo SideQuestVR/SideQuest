@@ -9,5 +9,17 @@
   float: right;
 }
 .chip-padding {
-  padding-top: 3px !important;
+  padding-top: 5px !important;
+}
+.app-icon{
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  background-size: cover;
+  background-position: center center;
+  display: inline-block;
+  vertical-align: middle;
+}
+.app-name{
+  vertical-align: middle;
 }

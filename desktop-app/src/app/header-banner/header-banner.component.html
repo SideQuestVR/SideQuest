@@ -1,0 +1,33 @@
+<div class="banner-container">
+  <div class="right in-vr-installer">
+    <img src="assets/images/in-vr-logo.png" class="left"/>
+    <div class="right">
+      <div class="in-vr-title">SideQuest inside your VR headset</div>
+      <div class="in-vr-description">Discover, Download & Play thousands of FREE VR apps and games with SideQuest's VR App</div>
+<!--      <div class="pure-material-button-contained" mz-tooltip position="bottom"-->
+<!--           tooltip="Clear out the finished tasks.">-->
+<!--        Install SideQuest in your headset-->
+<!--      </div>-->
+      <ng-container *ngIf="!adb.isReady">
+        <div class="pure-material-button-contained " routerLink="/setup">
+          Open Setup Instructions
+        </div>
+        </ng-container>
+      <ng-container *ngIf="adb.isReady">
+        <div class="pure-material-button-contained " (click)="install()" *ngIf="!isLoading && (adb.notInstalled || isOutOfDate)">
+          {{ (adb.notInstalled ? 'Install SideQuest in your Headset' : 'Update SideQuest in your Headset') }}
+        </div>
+        <div *ngIf="!adb.notInstalled && !isOutOfDate && !isLoading " class="in-vr-installed">
+          Latest version installed <i class="material-icons green-text done-icon">done</i>
+        </div>
+        <div *ngIf="isLoading" class="loader-tiny"></div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="back-button pointer" routerLink="/webview">
+    <i class="material-icons">arrow_back_ios</i> Back Home
+  </div>
+  <div class="title">
+    {{appService.pageTitle}}
+  </div>
+</div>

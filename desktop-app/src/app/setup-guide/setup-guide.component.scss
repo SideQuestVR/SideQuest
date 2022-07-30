@@ -1,11 +1,10 @@
 .setup-image {
   width: 100%;
-  max-width: 600px;
+  max-height: 450px;
   cursor: pointer;
   margin: 10px auto;
   margin-bottom: 2px;
   display: block;
-
 }
 .setup-image.tall{
   max-width: 280px;
@@ -16,14 +15,14 @@
   margin-left: 1em;
 }
 .setup-container{
-  width: calc(100% - 250px);
+  width: calc(100% - 550px);
   padding-right: 20px;
   padding-bottom: 20px;
   position: relative;
 }
 .left-arrow, .right-arrow{
   position: absolute;
-  top: 150px;
+  top: 220px;
   left: 5px;
   z-index: 10;
 }
@@ -34,4 +33,44 @@
 
 .flip-horizontal{
   transform: scaleX(-1);
+}
+.tab{
+  text-align: center;
+  padding: 10px;
+  width:50%;
+  display: inline-block;
+  height: 60px;
+  line-height: 40px;
+  color: white;
+  background: #24284E;
+  cursor: pointer;
+}
+.tab.active{
+  background: #7289DA;
+}
+.tab-underline{
+  border: 1px solid #CFCFCF;
+}
+.description-section{
+  max-width: 1024px;
+}
+.setup-image-container{
+  background: #000000;
+  margin-top: 20px;
+}
+
+
+@media only screen and (max-width: 1448px){
+
+  .setup-container {
+    width: calc(100% - 450px);
+  }
+}
+
+
+@media only screen and (max-width: 1279px){
+
+  .setup-container {
+    width: calc(100% - 350px);
+  }
 }

@@ -13,7 +13,7 @@ export class CurrentTasksComponent implements OnInit {
         this.appService.resetTop();
         appService.webService.isWebviewOpen = false;
         this.appService.showTaskActions = true;
-        appService.isTasksOpen = true;
+        //   appService.isTasksOpen = true;
     }
 
     ngOnInit() {

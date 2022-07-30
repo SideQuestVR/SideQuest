@@ -3,6 +3,7 @@ import { LoadingSpinnerService } from './loading-spinner.service';
 import { WebviewService } from './webview.service';
 import { FilesComponent } from './files/files.component';
 import { HeaderComponent } from './header/header.component';
+import { Router } from '@angular/router';
 declare let __dirname, process;
 export enum FolderType {
     MAIN,
@@ -26,14 +27,15 @@ export class AppService {
     showTaskActions: boolean;
     updateAvailable: boolean;
     showRepo: boolean;
-    isSetupOpen: boolean;
-    isFilesOpen: boolean;
-    isPackagesOpen: boolean;
-    isSettingsOpen: boolean;
-    isTasksOpen: boolean;
+    // isSetupOpen: boolean;
+    // isFilesOpen: boolean;
+    // isPackagesOpen: boolean;
+    // isSettingsOpen: boolean;
+    // isTasksOpen: boolean;
     hideNSFW: boolean;
     filesComponent: FilesComponent;
     appData: string;
+    apkPath: string;
     fs: any;
     path: any;
     nativeApp: any;
@@ -62,7 +64,7 @@ export class AppService {
     downloadResolves: any = {};
     extractResolves: any = {};
     headerComponent: HeaderComponent;
-    constructor(private spinnerService: LoadingSpinnerService) {
+    constructor(private spinnerService: LoadingSpinnerService, private router: Router) {
         this.path = (<any>window).require('path');
         this.fs = (<any>window).require('fs');
         this.request = (<any>window).require('request');
@@ -78,6 +80,8 @@ export class AppService {
         this.remote = (<any>window).require('@electron/remote');
         this.nativeApp = this.remote.app;
         this.appData = this.path.join(this.nativeApp.getPath('appData'), 'SideQuest');
+
+        this.apkPath = this.path.join(this.appData, 'experimental.apk');
         this.exec = (<any>window).require('child_process').exec;
         this.execSync = (<any>window).require('child_process').execSync;
         this.uuidv4 = (<any>window).require('uuid/v4');
@@ -123,6 +127,50 @@ export class AppService {
             }
         });
     }
+
+    isPageOpen(page: string) {
+        return this.router.url.includes(page);
+    }
+
+    get pageTitle() {
+        if (this.isSettingsOpen) {
+            return 'Headset Settings';
+        } else if (this.isFilesOpen) {
+            return 'File Manager';
+        } else if (this.isPackagesOpen) {
+            return 'App Manager';
+        } else if (this.isTasksOpen) {
+            return 'Task Manager';
+        } else if (this.isSetupOpen) {
+            return 'Setup & Support';
+        } else if (this.isWirelessOpen) {
+            return 'Wireless Connection';
+        } else if (this.isStreamingOpen) {
+            return 'Streaming Options';
+        }
+    }
+    get isSetupOpen() {
+        return this.isPageOpen('/setup');
+    }
+    get isFilesOpen() {
+        return this.isPageOpen('/device-files');
+    }
+    get isPackagesOpen() {
+        return this.isPageOpen('/packages');
+    }
+    get isSettingsOpen() {
+        return this.isPageOpen('/tools');
+    }
+    get isTasksOpen() {
+        return this.isPageOpen('/tasks');
+    }
+    get isWirelessOpen() {
+        return this.isPageOpen('/wireless');
+    }
+    get isStreamingOpen() {
+        return this.isPageOpen('/streaming');
+    }
+
     extract(path, options, callback, task?) {
         return this.extractFileAPI(options.dir, path, task).then(callback);
     }
@@ -155,10 +203,6 @@ export class AppService {
         this.showCustomActions = false;
         this.showTaskActions = false;
         this.showRepo = false;
-        this.isFilesOpen = false;
-        this.isPackagesOpen = false;
-        this.isSettingsOpen = false;
-        this.isTasksOpen = false;
     }
     doesFileExist(path) {
         try {

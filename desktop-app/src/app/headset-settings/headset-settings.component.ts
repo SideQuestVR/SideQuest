@@ -104,7 +104,7 @@ export class HeadsetSettingsComponent implements OnInit {
     constructor(public adbService: AdbClientService, public appService: AppService, private statusService: StatusBarService) {
         this.appService.resetTop();
         appService.webService.isWebviewOpen = false;
-        appService.isSettingsOpen = true;
+        //   appService.isSettingsOpen = true;
     }
 
     async ngOnInit() {

@@ -1,4 +1,7 @@
-<div class="container text-dark-theme">
+
+<div class="inner-app-container">
+  <div class="screen-description">Manage settings on your headset.</div>
+  <div class="divider divider-margin-top margin-bottom"></div>
   <div *ngIf="!adbService.isReady" class="diagnostics-inner white-text">
     <br>You are not currently connected.
     <br><br>
@@ -7,200 +10,191 @@
   <ng-container *ngIf="adbService.isReady">
     <h4 class="section-title">Quality & Performance</h4>
     <div class="section-container card z-depth-2">
-      <div class="row">
-        <div class="col s6">
-          <h5 class="section-title">Set CPU and GPU level</h5>
-          <h4 class="description-section">
-            This can improve performance for apps & games at the expense of quicker battery draining and your device may get a little hotter than normal but totally within limits.
-          </h4>
-          <p>
-            <label>
-              <input name="cpuGpuLevel" type="radio" value="app-app" [(ngModel)]="cpuGpuLevel" (click)="setGPU(GPU._app)"/>
-              <span>Set by App ( Default )</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="cpuGpuLevel" type="radio" value="2-2" [(ngModel)]="cpuGpuLevel" (click)="setGPU(GPU._2)"/>
-              <span>Level 2</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="cpuGpuLevel" type="radio" value="4-4" [(ngModel)]="cpuGpuLevel" (click)="setGPU(GPU._4)"/>
-              <span>Level 4</span>
-            </label>
-          </p>
-          <h5 class="section-title">Default Texture Size</h5>
-          <div class="description-section">
-            This will change how high quality some of the in game textures are rendered at.
-          </div>
-          <div class="inline margin-right">
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="1216-1344" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest1)"/>
-                <span>Default - Quest 1</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="1440-1584" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest2)"/>
-                <span>Default - Quest 2</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="512-563" [(ngModel)]="textureSize" (click)="setSSO(SSO._512)"/>
-                <span>512</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="768-845" [(ngModel)]="textureSize" (click)="setSSO(SSO._768)"/>
-                <span>768</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="1024-1127" [(ngModel)]="textureSize" (click)="setSSO(SSO._1024)"/>
-                <span>1024</span>
-              </label>
-            </p>
-          </div>
-          <div class="inline">
-
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="1280-1408" [(ngModel)]="textureSize" (click)="setSSO(SSO._1280)"/>
-                <span>1280</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="1536-1690" [(ngModel)]="textureSize" (click)="setSSO(SSO._1536)"/>
-                <span>1536</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="2048-2253" [(ngModel)]="textureSize" (click)="setSSO(SSO._2048)"/>
-                <span>2048</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="2560-2816" [(ngModel)]="textureSize" (click)="setSSO(SSO._2560)"/>
-                <span>2560</span>
-              </label>
-            </p>
-            <p>
-              <label>
-                <input name="textureSize" type="radio" value="3072-3380" [(ngModel)]="textureSize" (click)="setSSO(SSO._3072)"/>
-                <span>3072</span>
-              </label>
-            </p>
-          </div>
-
-          <h5 class="section-title">Refresh Rate</h5>
-          <h4 class="description-section">This will allow you to change to 90Hz refresh rate for 90fps support in games on Quest 2.</h4>
-          <p>
-            <label>
-              <input name="refreshRate" type="radio" value="60" [(ngModel)]="refreshRate" (click)="setRR(RR._60)"/>
-              <span>60Hz</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="refreshRate" type="radio" value="72" [(ngModel)]="refreshRate" (click)="setRR(RR._72)"/>
-              <span>72Hz ( Default )</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="refreshRate" type="radio" value="90" [(ngModel)]="refreshRate" (click)="setRR(RR._90)"/>
-              <span>90Hz</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="refreshRate" type="radio" value="120" [(ngModel)]="refreshRate" (click)="setRR(RR._120)"/>
-              <span>120Hz</span>
-            </label>
-          </p>
-        </div>
-        <div class="col s6">
-
-          <h5 class="section-title">
-            Set FFR ( Fixed Foveated Rendering ) level
-          </h5>
-
-          <h4 class="description-section">
-            This will change how the view is rendered in the outer edges of the viewscreen for each eye. Higher is better
-            performance, lower is better quality.
-          </h4>
-
-          <p>
-            <label>
-              <input name="fixedFoveatedRendering" type="radio" value="0" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.OFF)"/>
-              <span>Off</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="fixedFoveatedRendering" type="radio" value="1" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.LOW)"/>
-              <span>Low</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="fixedFoveatedRendering" type="radio" value="2" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.MEDIUM)"/>
-              <span>Medium ( Default )</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="fixedFoveatedRendering" type="radio" value="3" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.HIGH)"/>
-              <span>High</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="fixedFoveatedRendering" type="radio" value="4" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.HIGH_TOP)"/>
-              <span>High Top</span>
-            </label>
-          </p>
-          <h5 class="section-title">Chromatic Aberration</h5>
-          <h4 class="description-section">
-            This will enable/disable chromatic aberration.
-          </h4>
-          <p>
-            <label>
-              <input name="chromaticAberration" type="radio" value="1" [(ngModel)]="chromaticAberration" (click)="setCa(CA.ON)"/>
-              <span>On ( Default )</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="chromaticAberration" type="radio" value="0" [(ngModel)]="chromaticAberration" (click)="setCa(CA.OFF)"/>
-              <span>Off</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="chromaticAberration" type="radio" value="-1" [(ngModel)]="chromaticAberration" (click)="setCa(CA.APP)"/>
-              <span>App Selected</span>
-            </label>
-          </p>
-        </div>
+      <h5 class="section-title">Set CPU and GPU level</h5>
+      <h4 class="description-section">
+        This can improve performance for apps & games at the expense of quicker battery draining and your device may get a little hotter than normal but totally within limits.
+      </h4>
+      <p>
+        <label>
+          <input name="cpuGpuLevel" type="radio" value="app-app" [(ngModel)]="cpuGpuLevel" (click)="setGPU(GPU._app)"/>
+          <span>Set by App ( Default )</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="cpuGpuLevel" type="radio" value="2-2" [(ngModel)]="cpuGpuLevel" (click)="setGPU(GPU._2)"/>
+          <span>Level 2</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="cpuGpuLevel" type="radio" value="4-4" [(ngModel)]="cpuGpuLevel" (click)="setGPU(GPU._4)"/>
+          <span>Level 4</span>
+        </label>
+      </p>
+      <h5 class="section-title">Default Texture Size</h5>
+      <div class="description-section">
+        This will change how high quality some of the in game textures are rendered at.
       </div>
+      <div class="inline margin-right">
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="1216-1344" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest1)"/>
+            <span>Default - Quest 1</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="1440-1584" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest2)"/>
+            <span>Default - Quest 2</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="512-563" [(ngModel)]="textureSize" (click)="setSSO(SSO._512)"/>
+            <span>512</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="768-845" [(ngModel)]="textureSize" (click)="setSSO(SSO._768)"/>
+            <span>768</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="1024-1127" [(ngModel)]="textureSize" (click)="setSSO(SSO._1024)"/>
+            <span>1024</span>
+          </label>
+        </p>
+      </div>
+      <div class="inline">
+
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="1280-1408" [(ngModel)]="textureSize" (click)="setSSO(SSO._1280)"/>
+            <span>1280</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="1536-1690" [(ngModel)]="textureSize" (click)="setSSO(SSO._1536)"/>
+            <span>1536</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="2048-2253" [(ngModel)]="textureSize" (click)="setSSO(SSO._2048)"/>
+            <span>2048</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="2560-2816" [(ngModel)]="textureSize" (click)="setSSO(SSO._2560)"/>
+            <span>2560</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input name="textureSize" type="radio" value="3072-3380" [(ngModel)]="textureSize" (click)="setSSO(SSO._3072)"/>
+            <span>3072</span>
+          </label>
+        </p>
+      </div>
+
+      <h5 class="section-title">Refresh Rate</h5>
+      <h4 class="description-section">This will allow you to change to 90Hz refresh rate for 90fps support in games on Quest 2.</h4>
+      <p>
+        <label>
+          <input name="refreshRate" type="radio" value="60" [(ngModel)]="refreshRate" (click)="setRR(RR._60)"/>
+          <span>60Hz</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="refreshRate" type="radio" value="72" [(ngModel)]="refreshRate" (click)="setRR(RR._72)"/>
+          <span>72Hz ( Default )</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="refreshRate" type="radio" value="90" [(ngModel)]="refreshRate" (click)="setRR(RR._90)"/>
+          <span>90Hz</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="refreshRate" type="radio" value="120" [(ngModel)]="refreshRate" (click)="setRR(RR._120)"/>
+          <span>120Hz</span>
+        </label>
+      </p>
+
+      <h5 class="section-title">
+        Set FFR ( Fixed Foveated Rendering ) level
+      </h5>
+
+      <h4 class="description-section">
+        This will change how the view is rendered in the outer edges of the viewscreen for each eye. Higher is better
+        performance, lower is better quality.
+      </h4>
+
+      <p>
+        <label>
+          <input name="fixedFoveatedRendering" type="radio" value="0" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.OFF)"/>
+          <span>Off</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="fixedFoveatedRendering" type="radio" value="1" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.LOW)"/>
+          <span>Low</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="fixedFoveatedRendering" type="radio" value="2" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.MEDIUM)"/>
+          <span>Medium ( Default )</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="fixedFoveatedRendering" type="radio" value="3" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.HIGH)"/>
+          <span>High</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="fixedFoveatedRendering" type="radio" value="4" [(ngModel)]="fixedFoveatedRendering" (click)="setFFR(FFR.HIGH_TOP)"/>
+          <span>High Top</span>
+        </label>
+      </p>
+      <h5 class="section-title">Chromatic Aberration</h5>
+      <h4 class="description-section">
+        This will enable/disable chromatic aberration.
+      </h4>
+      <p>
+        <label>
+          <input name="chromaticAberration" type="radio" value="1" [(ngModel)]="chromaticAberration" (click)="setCa(CA.ON)"/>
+          <span>On ( Default )</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="chromaticAberration" type="radio" value="0" [(ngModel)]="chromaticAberration" (click)="setCa(CA.OFF)"/>
+          <span>Off</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="chromaticAberration" type="radio" value="-1" [(ngModel)]="chromaticAberration" (click)="setCa(CA.APP)"/>
+          <span>App Selected</span>
+        </label>
+      </p>
     </div>
 
     <h4 class="section-title">Streaming & Video</h4>
 
     <div class="section-container card z-depth-2">
-
-      <div class="row">
-        <div class="col s6">
 
           <h5 class="section-title">Tetiana's Presets</h5>
 
@@ -248,20 +242,18 @@
             </label>
           </p>
 
-<!--          <h5 class="section-title">Full Rate Capture</h5>-->
-<!--          <h4 class="description-section">-->
-<!--            This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.-->
-<!--          </h4>-->
-<!--          <div class="switch">-->
-<!--            <label>-->
-<!--              Off-->
-<!--              <input type="checkbox" class="disable-reviews" [checked]="fullRateCaptureEnabled" (click)="fullRateCaptureEnabled ? setFullRate(GU.OFF) : setFullRate(GU.ON)">-->
-<!--              <span class="lever disable-reviews-switch"></span>-->
-<!--              On-->
-<!--            </label>-->
-<!--          </div>-->
-        </div>
-        <div class="col s6">
+          <!--          <h5 class="section-title">Full Rate Capture</h5>-->
+          <!--          <h4 class="description-section">-->
+          <!--            This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.-->
+          <!--          </h4>-->
+          <!--          <div class="switch">-->
+          <!--            <label>-->
+          <!--              Off-->
+          <!--              <input type="checkbox" class="disable-reviews" [checked]="fullRateCaptureEnabled" (click)="fullRateCaptureEnabled ? setFullRate(GU.OFF) : setFullRate(GU.ON)">-->
+          <!--              <span class="lever disable-reviews-switch"></span>-->
+          <!--              On-->
+          <!--            </label>-->
+          <!--          </div>-->
 
 
           <h5 class="section-title">Video Capture FPS</h5>
@@ -317,8 +309,6 @@
               <span>20mbps</span>
             </label>
           </p>
-        </div>
-      </div>
     </div>
     <h4 class="section-title">Experimental & Miscellaneous </h4>
     <div class="section-container card z-depth-2">

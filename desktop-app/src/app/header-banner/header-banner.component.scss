@@ -1,0 +1,70 @@
+.banner-container{
+  background: linear-gradient(89.97deg, #1A1D3C 0.02%, #2A3067 99.96%);
+  //background-size: cover;
+  height: 170px;
+  width: 100%;
+  position: relative;
+  top: 35px;
+  padding-right: 46px;
+}
+.back-button{
+  position: absolute;
+  height: 21px;
+  left: 46px;
+  top: 32px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  align-items: center;
+  text-align: center;
+  color: #B9BBD2;
+  i{
+    vertical-align: text-bottom;
+  }
+}
+.title{
+  position: absolute;
+  height: 35px;
+  left: 46px;
+  top: 77px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 35px;
+  display: flex;
+  align-items: center;
+
+  color: #FFFFFF;
+}
+.in-vr-title, .in-vr-installed{
+  color: white;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 23px;
+  margin-top: 24px;
+  margin-bottom: 10px;
+}
+.in-vr-installed{
+  margin-top: 10px;
+}
+.in-vr-description{
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  max-width: 300px;
+  line-height: 16px;
+  margin-bottom: 10px;
+}
+.in-vr-installed, .in-vr-description{
+  color: #B9BBD2;
+}
+.in-vr-installer img{
+  margin-top: 10px;
+  margin-right: 19px;
+}
+.done-icon{
+  vertical-align: text-bottom;
+  font-size: 1.5em;
+}

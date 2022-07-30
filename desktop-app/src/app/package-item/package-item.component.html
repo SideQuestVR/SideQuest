@@ -1,5 +1,5 @@
 <div class="col s10 package-height chip-padding package-item">
-  <span class="chip"><img *ngIf="package.icon" [src]="package.icon">{{package.name?package.name:package.packageName}}</span>
+  <div *ngIf="package.icon" [style.background-image]="'url(' + package.icon + ')'" class="app-icon circle"></div><span class="app-name">{{package.name?package.name:package.packageName}}</span>
 </div>
 <div class="col s2 package-height centered package-item">
   <i class="material-icons cursor grey-text settings" (click)="openSettings()">settings</i>

@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { ContentComponent } from './content/content.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MzButtonModule, MzCheckboxModule, MzModalModule, MzTooltipModule } from 'ngx-materialize';
@@ -29,10 +28,12 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { HeadsetSettingsComponent } from './headset-settings/headset-settings.component';
 import { SetupGuideComponent } from './setup-guide/setup-guide.component';
 import { ConnectionStatusComponent } from './connection-status/connection-status.component';
+import { HeaderBannerComponent } from './header-banner/header-banner.component';
+import { WirelessConnectionComponent } from './wireless-connection/wireless-connection.component';
+import { StreamOptionsComponent } from './stream-options/stream-options.component';
 @NgModule({
     declarations: [
         AppComponent,
-        ContentComponent,
         HeaderComponent,
         StatusBarComponent,
         LoadingSpinnerComponent,
@@ -50,6 +51,9 @@ import { ConnectionStatusComponent } from './connection-status/connection-status
         HeadsetSettingsComponent,
         SetupGuideComponent,
         ConnectionStatusComponent,
+        HeaderBannerComponent,
+        WirelessConnectionComponent,
+        StreamOptionsComponent,
     ],
     imports: [
         BrowserModule,

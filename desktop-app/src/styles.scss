@@ -8,9 +8,21 @@ body {
   background:#12152d;
 }
 body{
-
   overflow-x: hidden;
 }
+
+
+
+.loader-tiny {
+  border: 2px solid #f3f3f3; /* Light grey */
+  border-top: 2px solid #E51253; /* Pink */
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -213,14 +225,50 @@ code > pre, .code{
 .modal-fixed-footer{
   overflow: hidden!important;
 }
+.screen-description{
+  font-size: 20px;
+  line-height: 23px;
+  color: white;
+  margin-top: 27px;
+  margin-bottom: 27px;
+}
 
+.divider-margin-top{
+  margin-top: 25px;
+}
+.pointer{
+  cursor: pointer;
+}
 
+.inner-app-container{
+  padding-left: 80px;
+  padding-right: 80px;
+  color: white;
+}
+.margin-top{
+  margin-top: 1.5em;
+}
+.modal{
+  background: #444444!important;
+  color: white;
+}
+.modal .modal-footer {
+  background: #444444!important;
+  color: white;
+}
 
+.no-tasks{
+  padding-left: 50px;
 
-
-
-
-
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  display: flex;
+  align-items: center;
+  margin-top: 27px;
+  color: #FFFFFF;
+}
 
 
 
@@ -262,8 +310,8 @@ code > pre, .code{
   border: none;
 }
 .pure-material-button-contained.spaced{
-  margin-bottom: 5px;
-  margin-right: 5px;
+  margin-bottom: 1em;
+  margin-right: 30px;
 }
 
 .pure-material-button-contained.slim{

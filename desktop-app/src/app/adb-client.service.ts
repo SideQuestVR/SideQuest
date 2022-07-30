@@ -25,6 +25,10 @@ interface ADBDevice {
     providedIn: 'root',
 })
 export class AdbClientService {
+    VR_APP_PACKAGE = 'quest.side.vr';
+    notInstalled: boolean;
+    appVersion: string | null = null;
+    appVersionCode: string | null = null;
     ADB: any;
     adbPath: string;
     devicePackages: string[] = [];
@@ -41,7 +45,9 @@ export class AdbClientService {
     localFiles: any;
     hasSynthRiderz: any;
     deviceIp: string;
-    wifiEnabled: boolean;
+    get wifiEnabled(): boolean {
+        return this.deviceSerial && this.deviceSerial.includes(':5555') && this.isReady;
+    }
     wifiHost: string;
     isBatteryCharging: boolean;
     batteryLevel: number;
@@ -398,11 +404,18 @@ export class AdbClientService {
                 }
                 this.devices = devices;
             })
-            .then(status => {
+            .then(async status => {
                 this.updateConnectedStatus();
+                if (this.isReady) {
+                    try {
+                        this.appVersion = await this.getAppVersion(false);
+                        this.appVersionCode = await this.getAppVersion(true);
+                    } catch {}
+                }
                 requestAnimationFrame(this.connectedStatus.bind(this));
             })
             .catch(err => {
+                console.warn(err);
                 alert(
                     this.appService.os.platform() === 'win32'
                         ? `It looks like there is something wrong with your install.
@@ -418,6 +431,23 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             this.adbResolves[uuid] = { resolve, reject, callback };
             this.appService.electron.ipcRenderer.send('adb-command', { command, settings, uuid });
         });
+    }
+
+    copyToClipboard(value: string) {
+        const { clipboard } = (window as any).require('electron');
+        clipboard.writeText(value);
+    }
+    async getAppVersion(isCode: boolean): Promise<string | null> {
+        const versionInfo = await this.runAdbCommand('shell dumpsys package ' + this.VR_APP_PACKAGE);
+        this.notInstalled = versionInfo.includes('Unable to find package');
+        const versionParts = versionInfo
+            .split('\n')
+            .map(x => x.trim())
+            .filter(d => d.includes(isCode ? 'versionCode' : 'versionName'));
+        if (versionParts.length) {
+            return versionParts[0].split('=')[1].split(' minSdk')[0];
+        }
+        return null;
     }
     async setupAdb() {
         try {
@@ -1135,7 +1165,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             batteyInfo.split('\n ').forEach(element => {
                 let attribute = element.replace(/\s/g, '').split(':');
                 const matcher = /true|false|[0-9].{0,}/g;
-                if (attribute[1].match(matcher)) {
+                if (attribute.length > 1 && attribute[1].match(matcher)) {
                     try {
                         attribute[1] = JSON.parse(attribute[1]);
                         Object.assign(batteryObject, { [attribute[0]]: attribute[1] });

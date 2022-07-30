@@ -1,0 +1,25 @@
+<div class="inner-app-container">
+  <div *ngIf="!isConnected()">
+    <br>You are not currently connected.
+    <br><br>
+    <div class="pure-material-button-contained" routerLink="/setup">Open Setup Instructions</div>
+  </div>
+  <div *ngIf="isConnected()">
+    <div class="screen-description">Enable wifi mode to install apps wirelessly. You must be connected with USB to enable wifi mode.</div>
+
+    <div class="pure-material-button-contained spaced" (click)="connectWifi()">Connect</div>
+    <div class="pure-material-button-contained spaced flat active" (click)="reset()">Reset</div>
+
+    <div class="divider divider-margin-top margin-bottom"></div>
+    <div class="screen-description">After you connect you will see an arrow appear in the top left, at that point you can disconnect the usb cable.</div>
+
+    <div class="">
+      <i class="material-icons large" [ngClass]="{'green-text':adbService.wifiEnabled}">
+        wifi
+      </i>
+    </div>
+    <div class="screen-description">Device IP: {{adbService.deviceIp}}</div>
+
+  </div>
+
+</div>

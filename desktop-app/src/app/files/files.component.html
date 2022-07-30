@@ -1,6 +1,6 @@
 <div *ngIf="isConnected()" class="top-bar">
   <nav class="pink lighten-2 breadcrumb-wrapper ">
-    <div class="nav-wrapper container">
+    <div class="nav-wrapper inner-app-container">
       <div class="col s12 truncate">
         <a *ngFor="let breadcrumb of breadcrumbs; let i = index" href="javascript:void(0)" class="breadcrumb"
           (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}<span *ngIf="i === breadcrumbs.length-1 && folderSize"> ({{folderSize}})</span> </a>
@@ -8,7 +8,7 @@
     </div>
   </nav>
 </div>
-<div class="container files-section">
+<div class="inner-app-container files-section">
   <div *ngIf="!isConnected()" class="white-text">
     <br>You are not currently connected.
     <br><br>
@@ -21,6 +21,18 @@
       <div class="grey-text">{{this.currentPath}}</div>
 
     </div>
+
+    <div class="beast-saber-buttons">
+      <ng-container *ngFor="let favourite of appService.headerComponent.favourites.fileFavourites">
+        <a href="javascript:void(0)" class="waves-effect waves-light synthrideerz margin-right"
+           (click)="appService.filesComponent.open(favourite.uri)"
+           mz-tooltip tooltip="{{favourite.name}}">
+          <img *ngIf="favourite.icon" src="{{favourite.icon}}" class="responsive-img" /></a>
+      </ng-container>
+      <div class="divider divider-margin-top margin-bottom"></div>
+
+    </div>
+
     <div *ngFor="let file of files" class="cursor text-dark-theme">
       <div class="file" (click)="selectFile($event, file);  $event.stopPropagation()">
         <div class="right">
@@ -48,6 +60,9 @@
     <i class="large material-icons">add</i>
   </a>
   <ul>
+    <li mz-tooltip position="left" tooltip="Manage favourite folders"
+        (click)="appService.headerComponent.manageFavs.openModal(); appService.headerComponent.favouriteMax = 10; appService.headerComponent.favoritePathType = 'Url';"
+    ><a class="btn-floating red"><i class="material-icons">favorite</i></a></li>
     <li mz-tooltip position="left" tooltip="Upload file to this folder" (click)="uploadFiles()"><a
         class="btn-floating purple"><i class="material-icons">file_upload</i></a></li>
     <li mz-tooltip position="left" tooltip="Make new folder in this folder" (click)="mkDirModal.openModal()"><a

@@ -40,6 +40,7 @@ export class HeaderComponent implements OnInit {
     @ViewChild('beatOnModal', { static: false }) beatOnModal;
     @ViewChild('mainLogo', { static: false }) mainLogo;
     @ViewChild('safeModal', { static: false }) safeModal;
+    @ViewChild('manageFavs', { static: false }) manageFavs;
     ConnectionStatus = ConnectionStatus;
     folder = FolderType;
     isAlive = true;

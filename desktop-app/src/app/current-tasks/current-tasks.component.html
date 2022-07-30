@@ -1,15 +1,30 @@
-
-
-
-<div class="container">
-  <div *ngIf="!processService.tasks.length" class="white-text">
-
-    <br>No tasks running.
-    <br><br>
-    <div class="pure-material-button-contained" routerLink="/">Back Home</div>
+<div class="inner-app-container">
+  <div class="screen-description">Manage tasks for downloading, transferring and installing to your headset.</div>
+  <div class="sync-songs" *ngIf="appService.showTaskActions">
+    <div class="pure-material-button-contained spaced flat active" mz-tooltip position="bottom"
+         tooltip="Clear out the finished tasks." (click)="processService.clearDone()">
+      Clear Done
+    </div>
+    <div class="pure-material-button-contained spaced flat active" mz-tooltip position="bottom"
+         tooltip="Restart the failed tasks." (click)="processService.retryFailed()">
+      Retry Failed
+    </div>
+    <div class="pure-material-button-contained spaced flat active" mz-tooltip position="bottom"
+         tooltip="Clear out the failed tasks." (click)="processService.clearFailed()">
+      Clear Failed
+    </div>
+    <div class="pure-material-button-contained spaced active red" mz-tooltip position="bottom"
+         tooltip="Clear out the finished tasks." (click)="processService.clearAll()">
+      Clear All
+    </div>
+  </div>
+  <div class="divider divider-margin-top margin-bottom"></div>
+  <div *ngIf="!processService.tasks.length" class="no-tasks">
+    No tasks running...
+    <!--  <div class="pure-material-button-contained" routerLink="/">Back Home</div>-->
   </div>
 
-  <div class="row" *ngIf="processService.tasks.length">
+  <div class="row margin-bottom" *ngIf="processService.tasks.length">
     <app-current-task-item *ngFor="let task of processService.tasks;" [task]="task"></app-current-task-item>
   </div>
 </div>
