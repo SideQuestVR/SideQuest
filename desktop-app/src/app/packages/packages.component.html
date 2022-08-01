@@ -1,17 +1,18 @@
 <div class="inner-app-container">
+  <div class="right">
+    <div class="input-field no-margin search-width">
+      <input id="SearchPackage" [(ngModel)]="search" type="text" class="no-margin" />
+      <label for="SearchPackage">Search apps...</label>
+    </div>
+    <div class="switch right margin-right margin-top">
+      <label>
+        <input type="checkbox" [(ngModel)]="hide_system_apps" (change)="setShowAll()" />
+        <span class="lever"></span>
+        Hide System Apps
+      </label>
+    </div>
+  </div>
   <div class="screen-description">Manage settings on your headset.</div>
-
-  <div class="input-field right no-margin search-width">
-    <input id="SearchPackage" [(ngModel)]="search" type="text" class="no-margin" />
-    <label for="SearchPackage">Search apps...</label>
-  </div>
-  <div class="switch right margin-right margin-top">
-    <label>
-      Hide System Apps
-      <input type="checkbox" [(ngModel)]="hide_system_apps" (change)="setShowAll()" />
-      <span class="lever"></span>
-    </label>
-  </div>
   <div class="pure-material-button-contained spaced flat active" mz-tooltip position="bottom"
        tooltip="Trigger cloud backup for your apps." (click)="cloudBackup.openModal()">
     Cloud Backup
