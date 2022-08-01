@@ -312,8 +312,8 @@
 
 <mz-modal #manageFavs [fixedFooter]="true">
   <mz-modal-header>
-    <div class="pure-material-button-contained spaced" (click)="showAddFavourite = !showAddFavourite">{{showAddFavourite? 'Hide' : 'Add New'}}</div>
-    <div class="pure-material-button-contained spaced" *ngIf="!showAddFavourite" (click)="addCurrentFavourite()"><i class="material-icons left">add</i>Add Current to favs</div>
+    <div class="pure-material-button-contained spaced right" (click)="showAddFavourite = !showAddFavourite">{{showAddFavourite? 'Hide' : 'Add New'}}</div>
+    <div class="pure-material-button-contained spaced right" *ngIf="!showAddFavourite" (click)="addCurrentFavourite()">Add Current to favs</div>
    <h4>Manage Favourites</h4>
   </mz-modal-header>
   <mz-modal-content>
@@ -359,6 +359,6 @@
   </mz-modal-content>
   <mz-modal-footer>
     <div class="pure-material-button-contained flat active spaced" (click)="resetFavourites(favoriteType); showAddFavourite = false;manageFavs.closeModal()">Cancel</div>
-    <div class="pure-material-button-contained spaced" (click)="saveFavourites(favoriteType); showAddFavourite = false;manageFavs.closeModal()">Cancel</div>
+    <div class="pure-material-button-contained spaced" (click)="saveFavourites(favoriteType); showAddFavourite = false;manageFavs.closeModal()">Save</div>
 </mz-modal-footer>
 </mz-modal>

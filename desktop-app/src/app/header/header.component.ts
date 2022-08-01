@@ -169,13 +169,6 @@ export class HeaderComponent implements OnInit {
             favouriteList.push(favourite);
         }
     }
-    runscrcpy() {
-        this.scrcpy_options.device = this.adbService.deviceSerial;
-        this.appService
-            .runScrCpy(this.scrcpy_options)
-            .then(() => this.statusService.showStatus('Stream closed.'))
-            .catch(e => this.statusService.showStatus('ScrCpy Error: ' + JSON.stringify(e), true));
-    }
     saveFavourites(type: string) {
         localStorage.setItem(type, JSON.stringify(this.favourites[type]));
     }
@@ -193,16 +186,6 @@ export class HeaderComponent implements OnInit {
     runAdbCommand() {
         return this.adbService.runAdbCommand(this.adbCommandToRun).catch(e => {
             this.statusService.showStatus(e, true);
-        });
-    }
-    connectWifi() {
-        this.adbCommandToRun = 'adb tcpip 5555';
-        this.adbService.deviceStatusMessage = 'Attempting wifi connection...';
-        (this.isConnected() ? this.runAdbCommand() : Promise.resolve()).then(() => {
-            setTimeout(() => {
-                this.adbCommandToRun = 'adb connect ' + this.adbService.deviceIp + ':5555';
-                this.runAdbCommand();
-            }, 5000);
         });
     }
     isConnected() {
