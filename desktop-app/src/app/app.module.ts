@@ -9,7 +9,6 @@ import { HeaderComponent } from './header/header.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { RouterModule } from '@angular/router';
-import { SetupComponent } from './setup/setup.component';
 import { AppRoutes } from './app.routes';
 import { LoadingSpinnerSmallComponent } from './loading-spinner-small/loading-spinner-small.component';
 import { PackagesComponent } from './packages/packages.component';
@@ -37,7 +36,6 @@ import { StreamOptionsComponent } from './stream-options/stream-options.componen
         HeaderComponent,
         StatusBarComponent,
         LoadingSpinnerComponent,
-        SetupComponent,
         LoadingSpinnerSmallComponent,
         PackagesComponent,
         PackageItemComponent,

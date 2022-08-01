@@ -49,8 +49,6 @@ export class AppComponent implements OnInit, AfterViewInit {
             });
     }
     ngAfterViewInit() {
-        this.spinnerService.setSpinner(this.spinner);
-        this.statusService.setStatus(this.status);
         this.webService.setWebView(this.webview.nativeElement);
     }
     setExterHelp() {

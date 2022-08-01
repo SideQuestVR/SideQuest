@@ -50,10 +50,11 @@
                  routerLink="/webview"><img *ngIf="favourite.icon" class="left browser-menu-image" src="{{favourite.icon}}"/>{{favourite.name}}</div><br>
           </ng-container>
         </div>
+        <div class="pure-material-button-contained slim update-available" *ngIf="appService.updateAvailable" (click)="updateAvailable()">Update Available</div>
 
-        <app-link *ngIf="appService.updateAvailable"
-                  class="waves-effect waves-light btn-flat update-available link small-button warning" (click)="updateAvailable()"
-                  text="Update"></app-link>
+<!--        <app-link *ngIf="appService.updateAvailable"-->
+<!--                  class="waves-effect waves-light btn-flat  link small-button warning" (click)="updateAvailable()"-->
+<!--                  text="Update"></app-link>-->
         <i mz-tooltip routerLink="/webview" (click)="doBack()"
            class="material-icons white-text no-outline" position="bottom" tooltip="Back">
           arrow_back
@@ -159,26 +160,6 @@
          (click)="webService.loadUrl('https://synthriderz.com/beatmaps/recent')">
         <img src="assets/images/Synth.png" class="responsive-img" /></a>&nbsp;&nbsp;&nbsp;
     </div>
-    <div id="searchFilterContainer" *ngIf="appService.showSearch">
-      <div class="search" *ngIf="false">
-        <div class="input-field inline search-box">
-          <input id="searchBox" class="input-dark-theme" type="text" />
-          <label for="searchBox" class="active label-dark-theme">
-            Search
-          </label>
-        </div>
-        <a class="waves-effect waves-dark btn search-button-margin white black-text">search</a>
-        <a class="waves-effect waves-dark btn search-button-margin white black-text" (click)="selectAppToInstall()">Pick
-          APK/OBB</a>
-      </div>
-      <div class="filters" style="display: none">
-        <div class="input-field inline filter ">
-          <select id="filterDropdown">
-            <option>All</option>
-          </select>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -196,7 +177,7 @@
           Address
         </label>
       </div>
-      <a class="waves-effect waves-dark btn search-button-margin white black-text" routerLink="/webview"
+      <a class="pure-material-button-contained search-button-margin" routerLink="/webview"
          (click)="webService.loadUrl(webService.currentAddress);" mz-modal-close>Open</a>
 
       <br><br>
@@ -263,7 +244,9 @@
           <option value="silent">silent</option>
         </select>
       </div>
-      <div class="col s3"><button mz-button class="green" (click)="startLogcat(); isStarted = true;">{{isStarted?'Restart':'Start'}}</button></div>
+      <div class="col s3">
+        <button mz-button class="green" (click)="startLogcat(); isStarted = true;">{{isStarted?'Restart':'Start'}}</button>
+      </div>
     </div>
   </mz-modal-footer>
 </mz-modal>

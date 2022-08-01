@@ -333,10 +333,12 @@ export class AdbClientService {
         this.diagBegin();
         this.deviceStatus = this.getConnectedStatus();
         this.setConnectionCssClass();
-        for (let i = 0; i < this.devices.length; i++) {
-            this.getDeviceName(this.devices[i]);
-        }
-        this.displayDevices = this.devices;
+        (async () => {
+            for (let i = 0; i < this.devices.length; i++) {
+                await this.getDeviceName(this.devices[i]);
+            }
+            this.displayDevices = this.devices;
+        })();
         document.getElementById('connection-status').className = 'connection-status-' + status;
         switch (this.deviceStatus) {
             case ConnectionStatus.LINUX_PERMS:

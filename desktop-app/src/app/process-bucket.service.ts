@@ -1,11 +1,19 @@
 import { Injectable } from '@angular/core';
 import { StatusBarService } from './status-bar.service';
-export interface ProcessTask {
+export class ProcessTask {
+    constructor(private statusService?: StatusBarService) {}
     key: string;
     name: string;
     app_name?: string;
     icon: string;
-    status?: string;
+    private _status?;
+    get status(): string {
+        return this._status;
+    }
+    set status(d) {
+        this.statusService.showStatus(d, false, true);
+        this._status = d;
+    }
     running?: boolean;
     fail_once?: boolean;
     percent?: string;

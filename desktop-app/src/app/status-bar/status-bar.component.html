@@ -1,8 +1,33 @@
-<div class="status-bar" [ngClass]="{'status-bar-warning':isWarning}" *ngIf="isActive">
-  <i class="material-icons right white-text cursor" (click)="statusService.hideStatus()" mz-tooltip position="top"
-    tooltip="Close this status.">close</i>
-  <div *ngIf="isWarning" class="right btn small-button green" (click)="getHelp.emit(statusMessage)">Get Help</div>
-  <span class="status-message truncate" [innerHTML]="statusMessage | sanitizeHtml">
-
-  </span>
+<div class="status" [ngClass]="{'status-open': isActive}">
+  <div class='sq-toast sq-toast--top-right' *ngIf="isActive && (notification.isError || notification.isSuccess)">
+    <div @anim>
+      <div class='sq-toast__message' [ngClass]="{
+      'sq-toast__message--info': notification.isInfo,
+      'sq-toast__message--success': notification.isSuccess,
+      'sq-toast__message--error': notification.isError
+    }">
+        <div class='sq-toast__message__icon-box' [ngClass]="{
+      'sq-toast__message__icon-box--info': notification.isInfo,
+      'sq-toast__message__icon-box--success': notification.isSuccess,
+      'sq-toast__message__icon-box--error': notification.isError
+    }">
+          <div class='sq-toast__message__icon-box__icon'>
+            <svg *ngIf='notification.isError' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.5405 16.069L14.9416 1.64366C13.6359 -0.547887 10.3666 -0.547887 9.06078 1.64366L0.459539 16.069C-0.846244 18.2606 0.785985 21 3.39997 21H20.6C23.214 21 24.8462 18.2606 23.5405 16.069ZM13.4618 17.7408C13.0797 18.0943 12.5961 18.2699 12.0085 18.2699C11.4112 18.2699 10.9203 18.0943 10.5382 17.7408C10.1562 17.3872 9.96274 16.9564 9.96274 16.446C9.96274 15.9239 10.1538 15.4954 10.5358 15.1606C10.9203 14.8257 11.4112 14.6572 12.0085 14.6572C12.6057 14.6572 13.0942 14.8257 13.4714 15.1606C13.8487 15.4954 14.0373 15.9239 14.0373 16.446C14.0373 16.9564 13.8462 17.3872 13.4618 17.7408ZM13.3554 13.6831H10.6471L9.98208 5.95183H14.0373L13.3554 13.6831Z" fill="white"/>
+            </svg>
+            <svg *ngIf='notification.isSuccess' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 0C5.37378 0 0 5.37377 0 12C0 18.6262 5.37378 24 12 24C18.6289 24 24 18.6262 24 12C24 5.37377 18.6289 0 12 0ZM15.9607 12.7199L13.322 15.3586L10.6833 17.9973L8.0446 15.3586L5.40589 12.7199L8.0446 10.0812L10.6833 12.7199L13.322 10.0812L15.9607 7.44246L18.5995 10.0812L15.9607 12.7199Z" fill="white"/>
+            </svg>
+            <svg *ngIf='notification.isInfo' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.9987 0C5.37317 0 0 5.37377 0 12C0 18.6262 5.37317 24 11.9987 24C18.6268 24 24 18.6262 24 12C24 5.37377 18.6268 0 11.9987 0ZM10.7838 5.47279C11.1049 5.157 11.5116 4.99911 12.0067 4.99911C12.5017 4.99911 12.9085 5.157 13.2296 5.47279C13.5533 5.78858 13.7112 6.19268 13.7112 6.68778C13.7112 7.18287 13.5507 7.58965 13.2296 7.91079C12.9085 8.23194 12.5017 8.39518 12.0067 8.39518C11.5009 8.39518 11.0915 8.23461 10.7758 7.91079C10.46 7.58965 10.3021 7.18287 10.3021 6.68778C10.2995 6.19268 10.46 5.78858 10.7838 5.47279ZM14.8886 19.0036H9.11138V16.9242H10.6607V11.5665H9.11138V9.48706H13.3527V11.5665V16.9242H14.8886V19.0036Z" fill="white"/>
+            </svg>
+          </div>
+        </div>
+        <div class='sq-toast__message__text-box'>
+          {{notification.isSuccess ? 'Success' : notification.isError ? 'Error' : ''}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="status-bar-inner" [innerHTML]="notification.message | sanitizeHtml"></div>
 </div>

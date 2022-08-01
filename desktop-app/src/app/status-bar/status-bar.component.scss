@@ -7,9 +7,132 @@
   left: 0;
   color: white;
   width: 100%;
-  padding: 5px;
-  padding-left: 10px;
+}
+.status-bar-inner{
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 80px;
 }
 .status-bar-warning {
   background-color: #ff9800;
+}
+.status{
+  background-color: #E51253;
+  position: fixed;
+  z-index: 9999;
+  bottom: -45px;
+  left: 0;
+  color: white;
+  width: 100%;
+  transition: bottom 350ms;
+}
+.status-open{
+  bottom: 0px;
+}
+
+
+
+
+
+
+
+
+$info-icon-background-color: rgba(114, 137, 218, 1);
+$success-icon-background-color: rgba(97, 185, 72, 1);
+$warning-icon-background-color: rgba(251, 176, 59, 1);
+$error-icon-background-color: rgba(229, 18, 83, 1);
+
+$toast-text-color: rgba(255, 255, 255, 1);
+
+$info-background-color: rgba(71, 98, 195, 1);
+$success-background-color: rgba(58, 137, 36, 1);
+$warning-background-color: rgba(211, 135, 15, 1);
+$error-background-color: rgba(155, 10, 54, 1);
+
+$info-shadow-color: rgba(114, 137, 218, 0.4);
+$success-shadow-color: rgba(97, 185, 72, 0.4);
+$warning-shadow-color: rgba(251, 176, 59, 0.4);
+$error-shadow-color: rgba(229, 18, 83, 0.4);
+
+
+.sq-toast {
+  position: fixed;
+  min-width: 6rem;
+  opacity: 0.9;
+  font-family: Roboto, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0;
+  z-index: 9999;
+  text-align: right;
+}
+@media (max-width: 1024px)
+{
+  .sq-toast{
+    width: 90%;
+  }
+}
+
+.sq-toast--top-right {
+  bottom: -4px;
+  right: 0px;
+}
+
+.sq-toast__message {
+  display: inline-block;
+  color: $toast-text-color;
+  min-height: 42px;
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+.sq-toast__message--info {
+  background-color: $info-background-color;
+  box-shadow: 0 4px 10px $info-shadow-color;
+}
+.sq-toast__message--success {
+  background-color: $success-background-color;
+  box-shadow: 0 4px 10px $success-shadow-color;
+}
+.sq-toast__message--warning {
+  background-color: $warning-background-color;
+  box-shadow: 0 4px 10px $warning-shadow-color;
+}
+.sq-toast__message--error {
+  background-color: $error-background-color;
+  box-shadow: 0 4px 10px $error-shadow-color;
+}
+
+.sq-toast__message__icon-box {
+  width: 42px;
+  height: 42px;
+  float: left;
+}
+
+.sq-toast__message__text-box {
+  padding: 1.2em;
+  margin-left: 3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sq-toast__message__icon-box--info {
+  background-color: $info-icon-background-color;
+}
+.sq-toast__message__icon-box--success {
+  background-color: $success-icon-background-color;
+}
+.sq-toast__message__icon-box--warning {
+  background-color: $warning-icon-background-color;
+}
+.sq-toast__message__icon-box--error {
+  background-color: $error-icon-background-color;
+}
+
+.sq-toast__message__icon-box__icon {
+  font-size: 2rem;
+  margin: .5rem;
+  text-align: center;
 }

@@ -198,7 +198,6 @@ export class AppService {
         }
     }
     resetTop() {
-        this.showSearch = false;
         this.showBrowserBar = false;
         this.showCustomActions = false;
         this.showTaskActions = false;

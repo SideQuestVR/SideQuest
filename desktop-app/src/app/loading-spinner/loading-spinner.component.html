@@ -6,8 +6,8 @@
     <span class="spinner-loading-message truncate" [innerHTML]="loadingTask ? loadingTask.status : loadingMessage"></span>
     <div *ngIf="isConfirm">
       <br><br>
-      <a class="btn waves-effect waves-light red" (click)="cancel()">Cancel</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a class="btn waves-effect waves-light pink-button" (click)="confirm()">Continue</a>
+      <div class="pure-material-button-contained flat active" (click)="cancel()">Cancel</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <div class="pure-material-button-contained" (click)="confirm()">Continue</div>
     </div>
   </div>
 </div>

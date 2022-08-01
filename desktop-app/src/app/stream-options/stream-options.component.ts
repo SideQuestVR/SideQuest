@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { AdbClientService } from '../adb-client.service';
+import { StatusBarService } from '../status-bar.service';
 
 @Component({
     selector: 'app-stream-options',
@@ -19,7 +20,7 @@ export class StreamOptionsComponent implements OnInit {
         device: '',
     };
     osPlatform: string;
-    constructor(public appService: AppService, private adbService: AdbClientService) {
+    constructor(public appService: AppService, private adbService: AdbClientService, private statusService: StatusBarService) {
         appService.webService.isWebviewOpen = false;
         appService.resetTop();
         this.osPlatform = this.appService.os.platform();
@@ -29,8 +30,9 @@ export class StreamOptionsComponent implements OnInit {
 
     runscrcpy() {
         this.scrcpy_options.device = this.adbService.deviceSerial;
-        this.appService.runScrCpy(this.scrcpy_options);
-        // .then(() => this.statusService.showStatus('Stream closed.'))
-        // .catch(e => this.statusService.showStatus('ScrCpy Error: ' + JSON.stringify(e), true));
+        this.appService
+            .runScrCpy(this.scrcpy_options)
+            .then(() => this.statusService.showStatus('Stream closed.'))
+            .catch(e => this.statusService.showStatus('ScrCpy Error: ' + JSON.stringify(e), true));
     }
 }

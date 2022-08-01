@@ -12,8 +12,6 @@ export class CurrentTasksComponent implements OnInit {
     constructor(public processService: ProcessBucketService, public appService: AppService) {
         this.appService.resetTop();
         appService.webService.isWebviewOpen = false;
-        this.appService.showTaskActions = true;
-        //   appService.isTasksOpen = true;
     }
 
     ngOnInit() {

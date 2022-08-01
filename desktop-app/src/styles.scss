@@ -818,3 +818,24 @@ input[type=checkbox]:not(:disabled).tabbed:focus ~ .lever::before {
   background-color: #afafaf;
   border-color: #8f8f8f;
 }
+
+$switch-bg-color: #E51253 !default;
+$switch-checked-lever-bg: desaturate(lighten($switch-bg-color, 25%), 25%) !default;
+
+.switch label input[type=checkbox] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + .lever {
+    background-color: $switch-checked-lever-bg!important;
+
+    &:before, &:after {
+      left: 18px;
+    }
+
+    &:after {
+      background-color: $switch-bg-color!important;
+    }
+  }
+}

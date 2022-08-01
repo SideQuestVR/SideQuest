@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdbClientService, ConnectionStatus } from '../adb-client.service';
 import { AppService } from '../app.service';
+import { StatusBarService } from '../status-bar.service';
 
 @Component({
     selector: 'app-wireless-connection',
@@ -8,7 +9,7 @@ import { AppService } from '../app.service';
     styleUrls: ['./wireless-connection.component.scss'],
 })
 export class WirelessConnectionComponent implements OnInit {
-    constructor(public adbService: AdbClientService, appService: AppService) {
+    constructor(public adbService: AdbClientService, appService: AppService, private statusService: StatusBarService) {
         appService.webService.isWebviewOpen = false;
         appService.resetTop();
     }
@@ -16,7 +17,9 @@ export class WirelessConnectionComponent implements OnInit {
     ngOnInit() {}
 
     connectWifi() {
-        this.adbService.deviceStatusMessage = 'Attempting wifi connection...';
+        let status = 'Attempting wifi connection...';
+        this.statusService.showStatus(status, false, true);
+        this.adbService.deviceStatusMessage = status;
         ((this.adbService.isReady ? this.adbService.runAdbCommand('adb tcpip 5555') : Promise.resolve()) as any).then(() => {
             setTimeout(() => {
                 this.adbService.runAdbCommand('adb connect ' + this.adbService.deviceIp + ':5555');
@@ -26,6 +29,7 @@ export class WirelessConnectionComponent implements OnInit {
 
     reset() {
         this.adbService.runAdbCommand('adb disconnect');
+        this.statusService.showStatus('Resetting ADB connection...', false, true);
     }
 
     isConnected() {

@@ -70,8 +70,8 @@
 
         <h4>Game Data Backups</h4>
         Backup data files from your SD Card for this app/game. This will attempt to save game data and OBB files for the game from the SD Card and not the internal storage. Does not work for all games.<br><br>
-        <a class="waves-effect waves-light btn backup-this-package"
-           (click)="backupData(currentPackage.package.packageName)">Backup Game Data</a><br><br>
+        <div class="pure-material-button-contained backup-this-package"
+           (click)="backupData(currentPackage.package.packageName)">Backup Game Data</div><br><br>
         <div class="row" *ngFor="let backup of dataBackups">
           <div class="col s3">
             <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
@@ -88,7 +88,7 @@
         <br><br>
         <h4>APK Backups</h4>
         Backup your APK file from your device.<br><br>
-        <a class="waves-effect waves-light btn backup-this-package margin-right"
+        <a class="pure-material-button-contained margin-right"
            (click)="backupApk(currentPackage.package.packageName)">Backup APK File</a><br><br>
         <div class="row" *ngFor="let backup of backups">
           <div class="col s3">
@@ -108,11 +108,11 @@
       <div class="col s5">
 
         <h4>Manage App</h4>
-        <a class="waves-effect waves-light btn green" (click)="launchApp()">Launch App</a><br><br>
-        <a class="waves-effect waves-light btn orange " (click)="forceClose()">Force Close App</a><br><br>
-        <a class="waves-effect waves-light btn orange " (click)="clearData()">Clear App Data</a><br><br>
-        <a class="waves-effect waves-light btn red " (click)="uninstallApk()">Uninstall App</a><br><br>
-        <a class="waves-effect waves-light btn"
+        <a class="pure-material-button-contained" (click)="launchApp()">Launch App</a><br><br>
+        <a class="pure-material-button-contained flat active " (click)="forceClose()">Force Close App</a><br><br>
+        <a class="pure-material-button-contained flat active " (click)="clearData()">Clear App Data</a><br><br>
+        <a class="pure-material-button-contained flat active " (click)="uninstallApk()">Uninstall App</a><br><br>
+        <a class="pure-material-button-contained flat active"
            (click)="appService.openFolder(folder.APP_BACKUP,currentPackage.package.packageName)">Open Backups</a>
 
         <br><br><br><br>
