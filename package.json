@@ -106,7 +106,7 @@
         "extract-zip": "^1.6.7",
         "md5": "^2.2.1",
         "mkdirp": "^1.0.3",
-        "node-fetch": "2.6.1",
+        "node-fetch": "2.6.7",
         "node-stream-zip": "^1.9.1",
         "opn": "^6.0.0",
         "ping": "^0.2.2",
