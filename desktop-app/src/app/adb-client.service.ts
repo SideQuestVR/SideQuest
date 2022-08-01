@@ -160,17 +160,21 @@ export class AdbClientService {
         });
     }
     launchApp(packageName) {
-        return this.adbCommand('shell', {
-            serial: this.deviceSerial,
-            command: 'dumpsys package ' + packageName + " | grep -A 1 'filter' | head -n 1 | cut -d ' ' -f 10",
-        }).then(res =>
-            res
-                ? this.adbCommand('shell', {
-                      serial: this.deviceSerial,
-                      command: 'am start -n ' + res.trim(),
-                  })
-                : Promise.reject('Could not find activity name for ' + packageName)
+        return this.runAdbCommand(
+            `adb shell monkey -p ${packageName} -c com.oculus.intent.category.VR -c android.intent.category.LAUNCHER -vvv 3`
         );
+        //
+        // return this.adbCommand('shell', {
+        //     serial: this.deviceSerial,
+        //     command: 'dumpsys package ' + packageName + " | grep -A 1 'filter' | head -n 1 | cut -d ' ' -f 10",
+        // }).then(res =>
+        //     res
+        //         ? this.adbCommand('shell', {
+        //               serial: this.deviceSerial,
+        //               command: 'am start -n -a com.example.ACTION_NAME ' + res.trim(),
+        //           })
+        //         : Promise.reject('Could not find activity name for ' + packageName)
+        // );
     }
 
     installMultiFile(filepath) {
