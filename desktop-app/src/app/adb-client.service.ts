@@ -163,18 +163,6 @@ export class AdbClientService {
         return this.runAdbCommand(
             `adb shell monkey -p ${packageName} -c com.oculus.intent.category.VR -c android.intent.category.LAUNCHER -vvv 3`
         );
-        //
-        // return this.adbCommand('shell', {
-        //     serial: this.deviceSerial,
-        //     command: 'dumpsys package ' + packageName + " | grep -A 1 'filter' | head -n 1 | cut -d ' ' -f 10",
-        // }).then(res =>
-        //     res
-        //         ? this.adbCommand('shell', {
-        //               serial: this.deviceSerial,
-        //               command: 'am start -n -a com.example.ACTION_NAME ' + res.trim(),
-        //           })
-        //         : Promise.reject('Could not find activity name for ' + packageName)
-        // );
     }
 
     installMultiFile(filepath) {
@@ -1108,52 +1096,51 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
     }
 
     async getPackagePermissions(packagename) {
-        return this.adbCommand('shell', { serial: this.deviceSerial, command: 'dumpsys package ' + packagename }).then(data => {
-            let lines = data.split('\n').map(l => l.trim());
-            let start_needs = lines.indexOf('requested permissions:') + 1;
-            let end_needs = lines.indexOf('install permissions:');
-            let start = lines.indexOf('runtime permissions:') + 1;
-            let end = lines.indexOf('Dexopt state:');
-
-            let current = lines
-                .slice(start_needs, end_needs)
-                .filter(l => l && l.startsWith('android.permission'))
-                .map(p => p.split(':')[0].trim());
-
-            let installed = lines
-                .slice(end_needs, start)
-                .filter(l => l && l.startsWith('android.permission') && l.trim().endsWith('granted=true'))
-                .map(p => p.split(':')[0].trim());
-
-            let read_perm = 'android.permission.READ_EXTERNAL_STORAGE';
-            let write_perm = 'android.permission.WRITE_EXTERNAL_STORAGE';
-            let record_perm = 'android.permission.RECORD_AUDIO';
-
-            let permsList = [];
-            if (~current.indexOf(read_perm) && !~installed.indexOf(read_perm)) {
-                permsList.push(read_perm);
+        let requested_permissions = await this.runAdbCommand(
+            `adb shell "dumpsys package ${packagename} | grep permission | sed -n '/runtime permissions/,$p' | grep -v 'runtime'"`
+        );
+        let granted_audio = '',
+            granted_read_storage = '',
+            granted_write_storage = '';
+        try {
+            granted_audio = await this.runAdbCommand(
+                `adb shell "dumpsys package ${packagename} | grep 'android.permission.RECORD_AUDIO: granted=true'"`
+            );
+        } catch {}
+        try {
+            granted_write_storage = await this.runAdbCommand(
+                `adb shell "dumpsys package ${packagename} | grep 'android.permission.WRITE_EXTERNAL_STORAGE: granted=true'"`
+            );
+        } catch {}
+        try {
+            granted_read_storage = await this.runAdbCommand(
+                `adb shell "dumpsys package ${packagename} | grep 'android.permission.READ_EXTERNAL_STORAGE: granted=true'"`
+            );
+        } catch {}
+        let read_perm = 'android.permission.READ_EXTERNAL_STORAGE';
+        let write_perm = 'android.permission.WRITE_EXTERNAL_STORAGE';
+        let record_perm = 'android.permission.RECORD_AUDIO';
+        let perms_list = [];
+        if (requested_permissions.includes(read_perm)) {
+            perms_list.push(read_perm);
+        }
+        if (requested_permissions.includes(write_perm)) {
+            perms_list.push(write_perm);
+        }
+        if (requested_permissions.includes(record_perm)) {
+            perms_list.push(record_perm);
+        }
+        return perms_list.map(d => {
+            let permission = d.split(':')[0];
+            let enabled = false;
+            if (permission.includes(record_perm) && granted_audio.length > 0) {
+                enabled = true;
+            } else if (permission.endsWith(write_perm) && granted_write_storage.length > 0) {
+                enabled = true;
+            } else if (permission.endsWith(read_perm) && granted_read_storage.length > 0) {
+                enabled = true;
             }
-            if (~current.indexOf(write_perm) && !~installed.indexOf(write_perm)) {
-                permsList.push(write_perm);
-            }
-            if (~current.indexOf(record_perm) && !~installed.indexOf(record_perm)) {
-                permsList.push(record_perm);
-            }
-            let perms = permsList.map(p => ({ permission: p, enabled: false }));
-            lines
-                .slice(start, end)
-                .filter(l => l && l.startsWith('android.permission'))
-                .forEach(l => {
-                    let parts = l.split(':');
-                    if (parts.length) {
-                        let perm = parts[0].trim();
-                        let index = permsList.indexOf(perm);
-                        if (~index) {
-                            perms[index].enabled = parts.length > 1 && parts[1].trim() === 'granted=true';
-                        }
-                    }
-                });
-            return perms;
+            return { permission, enabled };
         });
     }
     async getFreeSpace() {

@@ -44,6 +44,7 @@
   color: white;
   background: #24284E;
   cursor: pointer;
+  border-top: 2px #7289DA;
 }
 .tab.active{
   background: #7289DA;
@@ -73,4 +74,8 @@
   .setup-container {
     width: calc(100% - 350px);
   }
+}
+.extra-margin-bottom{
+  margin-bottom: 45px;
+  margin-top: 20px;
 }

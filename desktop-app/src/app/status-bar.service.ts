@@ -12,6 +12,7 @@ export class StatusBarService {
         this.status = status;
     }
     showStatus(message: string, isError?: boolean, isInfo?: boolean) {
+        console.warn('here');
         this.status.showStatus(message, isError, isInfo);
     }
     hideStatus() {

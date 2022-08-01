@@ -179,7 +179,16 @@ export class HeaderComponent implements OnInit {
     saveFavourites(type: string) {
         localStorage.setItem(type, JSON.stringify(this.favourites[type]));
     }
-
+    async setLocalIcon(fav: FavouriteItem) {
+        const res = await this.appService.remote.dialog.showOpenDialog({
+            filters: [{ name: 'Pictures', extensions: ['png', 'jpg', 'jpeg'] }],
+            properties: ['openFile'],
+            defaultPath: this.appService.backupPath,
+        });
+        if (res && res.filePaths && res.filePaths.length === 1) {
+            fav.icon = res.filePaths[0];
+        }
+    }
     ngOnInit() {}
     runAdbCommand() {
         return this.adbService.runAdbCommand(this.adbCommandToRun).catch(e => {

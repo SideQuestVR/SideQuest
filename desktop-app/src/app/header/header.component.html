@@ -185,26 +185,27 @@
 
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close routerLink="/webview" (click)="webService.loadUrl(webUrl || 'https://sidequestvr.com');" >SideQuest Home</button>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
+    <div class="pure-material-button-contained spaced flat active" (click)="bookmarksModal.closeModal()">Close</div>
+    <div class="pure-material-button-contained spaced" routerLink="/webview" (click)="bookmarksModal.closeModal(); webService.loadUrl(webUrl || 'https://sidequestvr.com');" >SideQuest Home</div>
   </mz-modal-footer>
 </mz-modal>
 
 
 <mz-modal #logcatModal [fixedFooter]="true" [options]="{dismissible: false}">
   <mz-modal-header>
-    <button mz-button class="right red" mz-modal-close (click)="stopLogcat(); currentLogCat.length = 0; isStarted = false;">Close</button>
-    <button mz-button class="right red margin-right" (click)="stopLogcat(); isStarted = false;">Stop</button>
-    <button mz-button class="right margin-right" *ngIf="!saveLogcatPath" (click)="selectLogcatOutput();">Pick Output Folder</button>
-    <button mz-button class="right red margin-right" *ngIf="saveLogcatPath" (click)="cancelLogcatOutput();">Cancel Output</button>
-    <h4>ADB Logcat</h4>
+    <div class="pure-material-button-contained spaced red" (click)="logcatModal.closeModal();stopLogcat(); currentLogCat.length = 0; isStarted = false;">Close</div>
+    <div class="pure-material-button-contained spaced red" (click)="stopLogcat(); isStarted = false;">Stop</div>
+    <div class="pure-material-button-contained spaced" *ngIf="!saveLogcatPath" (click)="selectLogcatOutput();">Pick Output Folder</div>
+    <div class="pure-material-button-contained spaced red" *ngIf="saveLogcatPath" (click)="cancelLogcatOutput(); isStarted = false;">Cancel Output</div>
+
+  <h4>ADB Logcat</h4>
   </mz-modal-header>
   <mz-modal-content>
     Select your options and click start to begin receiving logcat messages.
     <div class="truncate">{{saveLogcatPath ? 'Saving to: ' + appService.path.join(saveLogcatPath,'logcat.log')  : ''}}
+      <div class="pure-material-button-contained spaced red" *ngIf="saveLogcatPath" (click)="clearLogcatFile();">Clear File</div>
 
-      <button mz-button class="red small-button margin-left" *ngIf="saveLogcatPath" (click)="clearLogcatFile();">Clear File</button>
-    </div>
+  </div>
     <br>
     <div class="button-section">
       <div class="code logcat-block">
@@ -245,8 +246,8 @@
         </select>
       </div>
       <div class="col s3">
-        <button mz-button class="green" (click)="startLogcat(); isStarted = true;">{{isStarted?'Restart':'Start'}}</button>
-      </div>
+        <div class="pure-material-button-contained" (click)="startLogcat(); isStarted = true;">{{isStarted?'Restart':'Start'}}</div>
+    </div>
     </div>
   </mz-modal-footer>
 </mz-modal>
@@ -275,7 +276,7 @@
     Thank you and have a great day!
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button class="pink-button" mz-modal-close>Back to Safety</button>
+    <div class="pure-material-button-contained" (click)="safeModal.closeModal(); ">Back to Safety</div>
   </mz-modal-footer>
 </mz-modal>
 
@@ -303,30 +304,17 @@
     <br><br>
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
-    <button mz-button class="pink-button" (click)="runAdbCommand()">Run Command</button>
-  </mz-modal-footer>
-</mz-modal>
-
-<mz-modal #closeAppModal [fixedFooter]="true">
-  <mz-modal-header>
-    <h4>Close SideQuest</h4>
-  </mz-modal-header>
-  <mz-modal-content>
-    Are you sure you want to close SideQuest? This will cancel any running tasks.
-  </mz-modal-content>
-  <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close>Cancel</button>
-    <button mz-button class="pink-button" mz-modal-close (click)="closeApp()">Exit SideQuest Now</button>
-  </mz-modal-footer>
+    <div class="pure-material-button-contained flat active spaced" (click)="adbModal.closeModal(); ">Close</div>
+    <div class="pure-material-button-contained" (click)="runAdbCommand()">Run Command</div>
+ </mz-modal-footer>
 </mz-modal>
 
 
 <mz-modal #manageFavs [fixedFooter]="true">
   <mz-modal-header>
-    <button mz-button class="right pink-button" (click)="showAddFavourite = !showAddFavourite">{{showAddFavourite? 'Hide' : 'Add New'}}</button>
-    <button mz-button class="right pink-button margin-right" *ngIf="!showAddFavourite" (click)="addCurrentFavourite()"><i class="material-icons left">add</i>Add Current to favs</button>
-    <h4>Manage Favourites</h4>
+    <div class="pure-material-button-contained spaced" (click)="showAddFavourite = !showAddFavourite">{{showAddFavourite? 'Hide' : 'Add New'}}</div>
+    <div class="pure-material-button-contained spaced" *ngIf="!showAddFavourite" (click)="addCurrentFavourite()"><i class="material-icons left">add</i>Add Current to favs</div>
+   <h4>Manage Favourites</h4>
   </mz-modal-header>
   <mz-modal-content>
     Manage your favourites here. If you need to undo click RESET at the bottom. When you are done click SAVE.<br><br>
@@ -357,9 +345,12 @@
       <div dragula="SONGS" [(dragulaModel)]="this.favourites[favoriteType]" >
         <div class="row fav-padding relative" *ngFor="let fav of this.favourites[favoriteType]; let i = index">
           <i class="material-icons drag-indicator grey-text">drag_indicator</i>
-          <div class="col s4"><input type="text" [(ngModel)]="fav.name"/></div>
-          <div class="col s4"><input type="text" [(ngModel)]="fav.uri"/></div>
-          <div class="col s4"><input type="text" [(ngModel)]="fav.icon"/></div>
+          <div class="col s3 m4"><input type="text" [(ngModel)]="fav.name"/></div>
+          <div class="col s3"><input type="text" [(ngModel)]="fav.uri"/></div>
+          <div class="col s3"><input type="text" [(ngModel)]="fav.icon"/></div>
+          <div class="col s3 center-align m2">
+            <div class="pure-material-button-contained" (click)="setLocalIcon(fav)">Pick Icon</div>
+          </div>
           <i class="material-icons delete-button orange-text" (click)="removeFromFavourites(favoriteType, i)">close</i>
         </div>
       </div>
@@ -367,7 +358,7 @@
 
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close (click)="resetFavourites(favoriteType); showAddFavourite = false;">Cancel</button>
-    <button mz-button class="pink-button" mz-modal-close (click)="saveFavourites(favoriteType); showAddFavourite = false;">Save</button>
-  </mz-modal-footer>
+    <div class="pure-material-button-contained flat active spaced" (click)="resetFavourites(favoriteType); showAddFavourite = false;manageFavs.closeModal()">Cancel</div>
+    <div class="pure-material-button-contained spaced" (click)="saveFavourites(favoriteType); showAddFavourite = false;manageFavs.closeModal()">Cancel</div>
+</mz-modal-footer>
 </mz-modal>

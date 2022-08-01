@@ -59,6 +59,7 @@ export class AppWindow {
             show: !showAfterSetup,
             webPreferences: {
                 webviewTag: true,
+                webSecurity: process.env.NODE_ENV !== 'dev',
                 nodeIntegration: true,
                 contextIsolation: false,
             },

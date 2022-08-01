@@ -1,36 +1,36 @@
 <div class="relative">
   <div class="tab" [ngClass]="{'active': !isSupport}" (click)="isSupport = false">Setup Instructions</div>
   <div class="tab" [ngClass]="{'active': isSupport}" (click)="isSupport = true">Support Options</div>
-<!--  <div class="tab-underline"></div>-->
+  <!--  <div class="tab-underline"></div>-->
 </div>
 
 <div class="inner-app-container text-dark-theme relative margin-top" *ngIf="isSupport">
-<app-connection-status #connectionStatus></app-connection-status>
-<div class="setup-container">
-  <div class="screen-description">Get help and support from SideQuest.</div>
-  <div class="divider divider-margin-top margin-bottom"></div>
-  <div class="hint-text">
-    <div class="pure-material-button-contained button-margin-bottom" (click)="connectionStatus.helpOpen = true">Fix It For Me</div>
-    <p>We have many solutions baked in to help you solve the most common problems. This is the best option becuase this info will always be the most up to date.</p><br>
-    <br><br>
-    <div class="pure-material-button-contained button-margin-bottom" (click)="appService.opn('https://sdq.st/support')">Open Support Community</div>
-    <p>If you are still having trouble then please visit our support community on SideQuest.</p><br>
-    <br><br>
-    <div *ngIf="adb.diagnostics.usb && adb.diagnostics.usb.log" class="pure-material-button-contained button-margin-bottom" (click)="uploadLogs();">{{'Upload Logs'}}</div>
-    <p *ngIf="adb.diagnostics.usb && adb.diagnostics.usb.log">If instructed to upload logs by a SideQuest support person, please click this button.</p><br>
-    <div *ngIf="link">
-      Copy and paste this link into your support request:
-      <h3>{{link}}</h3>
-      <div class="pure-material-button-contained button-margin-bottom" (click)="copyToClipboard()">Copy to Clipboard</div>
-    </div>
-    <div id="thankYou">
-      <ng-container *ngIf="link">Thank you!</ng-container>
+  <app-connection-status #connectionStatus></app-connection-status>
+  <div class="setup-container">
+        <div class="screen-description">Get help and support from SideQuest.</div>
+        <div class="divider divider-margin-top margin-bottom"></div>
+    <div class="hint-text">
+      <p>We have many solutions baked in to help you solve the most common problems. This is the best option becuase this info will always be the most up to date.</p>
+      <div class="pure-material-button-contained extra-margin-bottom" (click)="connectionStatus.helpOpen = true">Fix It For Me</div>
+      <br>
+      <p>If you are still having trouble then please visit our support community on SideQuest.</p>
+      <div class="pure-material-button-contained extra-margin-bottom" (click)="appService.opn('https://sdq.st/support')">Open Support Community</div>
+      <br>
+      <p *ngIf="adb.diagnostics.usb && adb.diagnostics.usb.log">If instructed to upload logs by a SideQuest support person, please click this button.</p>
+      <div *ngIf="adb.diagnostics.usb && adb.diagnostics.usb.log" class="pure-material-button-contained extra-margin-bottom" (click)="uploadLogs();">{{'Upload Logs'}}</div>
+      <div *ngIf="link">
+        Copy and paste this link into your support request:
+        <h3>{{link}}</h3>
+        <div class="pure-material-button-contained button-margin-bottom" (click)="copyToClipboard()">Copy to Clipboard</div>
+      </div>
+      <div id="thankYou">
+        <ng-container *ngIf="link">Thank you!</ng-container>
+      </div>
     </div>
   </div>
-</div>
 
 </div>
-<div class="inner-app-container text-dark-theme relative margin-top" *ngIf="!isSupport">
+<div class="inner-app-container text-dark-theme relative inner-app-container-margin-top" *ngIf="!isSupport">
   <div class="pure-material-button-contained flat" [ngClass]="{'active': page === 1}" (click)="page = 1">Step 1: Create Org</div> >
   <div class="pure-material-button-contained flat" [ngClass]="{'active': page === 2}" (click)="page = 2">Step 2: Dev Mode</div> >
   <div class="pure-material-button-contained flat clearfix" [ngClass]="{'active': page === 3}" (click)="page = 3">Step 3: Connect</div>
@@ -67,7 +67,7 @@
       <div class="setup-image-container">
         <video class="setup-image tall" #enableDevMode autoplay="true" loop="true" controls="false" src="https://sidequestvr.com/assets/videos/enable_dev_mode.mp4" (error)="videoError(enableDevMode, $event, 'assets/setup/enable_dev_mode.mp4')" (click)="open('https://sidequestvr.com/assets/images/get-sidequest/verify.png')"></video>
       </div>
-        <h3 i18n>
+      <h3 i18n>
         Step 2: Enable Developer Mode and Reboot
       </h3>
       <div class="description-section" i18n>
@@ -81,7 +81,7 @@
       <div class="setup-image-container">
         <video class="setup-image" #connectAccept autoplay="true" loop="true" controls="false"  src="https://sidequestvr.com/assets/videos/connect_accept.mp4" (error)="videoError(connectAccept, $event, 'assets/setup/connect_accept.mp4')"></video>
       </div>
-        <h3 i18n>
+      <h3 i18n>
         Step 3: Connect USB Cable and Allow USB Debugging
       </h3>
       <div class="description-section" i18n>

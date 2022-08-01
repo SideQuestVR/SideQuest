@@ -65,6 +65,7 @@ export class ElectronService {
 
     async installFromToken(token) {
         let res = await this.adbService.adbCommand('installFromToken', { token });
+        console.log(res);
         res.forEach((l, i) => {
             switch (l.type) {
                 case 'Mod':
@@ -126,7 +127,7 @@ export class ElectronService {
                 switch (url[0]) {
                     case 'sidequest://w/':
                         this.adbService.runAdbCommand('adb shell am start -a android.intent.action.VIEW -d ' + url[1]).then(() => {
-                            this.statusService.showStatus('Launching WebXR in browser...');
+                            this.statusService.showStatus('Launching WebXR in browser...', false, true);
                         });
                         this.webviewService.isWebviewLoading = false;
                         break;

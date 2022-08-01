@@ -72,10 +72,8 @@ export class ProcessBucketService {
                 _name = 'app data restore';
                 break;
         }
-        if (!this.tasks.length) {
-            this.statusService.showStatus('Starting ' + _name + '...');
-        }
-        this.tasks.push({
+        let task = new ProcessTask(this.statusService);
+        Object.assign(task, {
             key,
             name,
             app_name,
@@ -83,6 +81,7 @@ export class ProcessBucketService {
             status,
             resolve,
         });
+        this.tasks.push(task);
         this.left_length = this.tasks.filter(t => !t.failed && !t.running && !t.cancelled && !t.succeeded).length;
     }
 

@@ -11,6 +11,7 @@
     <h4 class="section-title">Quality & Performance</h4>
     <div class="section-container card z-depth-2">
       <h5 class="section-title">Set CPU and GPU level</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
         This can improve performance for apps & games at the expense of quicker battery draining and your device may get a little hotter than normal but totally within limits.
       </h4>
@@ -33,76 +34,73 @@
         </label>
       </p>
       <h5 class="section-title">Default Texture Size</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <div class="description-section">
         This will change how high quality some of the in game textures are rendered at.
       </div>
-      <div class="inline margin-right">
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="1216-1344" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest1)"/>
-            <span>Default - Quest 1</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="1440-1584" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest2)"/>
-            <span>Default - Quest 2</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="512-563" [(ngModel)]="textureSize" (click)="setSSO(SSO._512)"/>
-            <span>512</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="768-845" [(ngModel)]="textureSize" (click)="setSSO(SSO._768)"/>
-            <span>768</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="1024-1127" [(ngModel)]="textureSize" (click)="setSSO(SSO._1024)"/>
-            <span>1024</span>
-          </label>
-        </p>
-      </div>
-      <div class="inline">
-
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="1280-1408" [(ngModel)]="textureSize" (click)="setSSO(SSO._1280)"/>
-            <span>1280</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="1536-1690" [(ngModel)]="textureSize" (click)="setSSO(SSO._1536)"/>
-            <span>1536</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="2048-2253" [(ngModel)]="textureSize" (click)="setSSO(SSO._2048)"/>
-            <span>2048</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="2560-2816" [(ngModel)]="textureSize" (click)="setSSO(SSO._2560)"/>
-            <span>2560</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input name="textureSize" type="radio" value="3072-3380" [(ngModel)]="textureSize" (click)="setSSO(SSO._3072)"/>
-            <span>3072</span>
-          </label>
-        </p>
-      </div>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="1216-1344" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest1)"/>
+          <span>Default - Quest 1</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="1440-1584" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest2)"/>
+          <span>Default - Quest 2</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="512-563" [(ngModel)]="textureSize" (click)="setSSO(SSO._512)"/>
+          <span>512</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="768-845" [(ngModel)]="textureSize" (click)="setSSO(SSO._768)"/>
+          <span>768</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="1024-1127" [(ngModel)]="textureSize" (click)="setSSO(SSO._1024)"/>
+          <span>1024</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="1280-1408" [(ngModel)]="textureSize" (click)="setSSO(SSO._1280)"/>
+          <span>1280</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="1536-1690" [(ngModel)]="textureSize" (click)="setSSO(SSO._1536)"/>
+          <span>1536</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="2048-2253" [(ngModel)]="textureSize" (click)="setSSO(SSO._2048)"/>
+          <span>2048</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="2560-2816" [(ngModel)]="textureSize" (click)="setSSO(SSO._2560)"/>
+          <span>2560</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="textureSize" type="radio" value="3072-3380" [(ngModel)]="textureSize" (click)="setSSO(SSO._3072)"/>
+          <span>3072</span>
+        </label>
+      </p>
 
       <h5 class="section-title">Refresh Rate</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">This will allow you to change to 90Hz refresh rate for 90fps support in games on Quest 2.</h4>
       <p>
         <label>
@@ -132,6 +130,7 @@
       <h5 class="section-title">
         Set FFR ( Fixed Foveated Rendering ) level
       </h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
 
       <h4 class="description-section">
         This will change how the view is rendered in the outer edges of the viewscreen for each eye. Higher is better
@@ -169,6 +168,7 @@
         </label>
       </p>
       <h5 class="section-title">Chromatic Aberration</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
         This will enable/disable chromatic aberration.
       </h4>
@@ -196,124 +196,129 @@
 
     <div class="section-container card z-depth-2">
 
-          <h5 class="section-title">Tetiana's Presets</h5>
+      <h5 class="section-title">Tetiana's Presets</h5>
 
-          <h4 class="description-section">
-            Quickly set the video capture resolution while also using 60 FPS and 10Mbps bitrate capture settings too.
-          </h4>
-          <div class="button-section">
-            <div class="pure-material-button-contained spaced flat active" (click)="setTetianasPreset(TP._FHD)">Full HD ( 1920 x 1080 )</div>
-            <div class="pure-material-button-contained spaced flat active" (click)="setTetianasPreset(TP._SQUARE)">Square ( 1600 x 1600 )</div>
-          </div>
+      <div class="divider header-divider-margin margin-bottom"></div>
+      <h4 class="description-section">
+        Quickly set the video capture resolution while also using 60 FPS and 10Mbps bitrate capture settings too.
+      </h4>
+      <div class="button-section">
+        <div class="pure-material-button-contained spaced flat active" (click)="setTetianasPreset(TP._FHD)">Full HD ( 1920 x 1080 )</div>
+        <div class="pure-material-button-contained spaced flat active" (click)="setTetianasPreset(TP._SQUARE)">Square ( 1600 x 1600 )</div>
+      </div>
 
-          <h5 class="section-title">Video Capture Size</h5>
+      <h5 class="section-title">Video Capture Size</h5>
 
-          <h4 class="description-section">
-            This changes the resolution of captured videos on the Quest
-          </h4>
-          <p>
-            <label>
-              <input name="videoCaptureSize" type="radio" value="640-480" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._480)"/>
-              <span>640 x 480</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="videoCaptureSize" type="radio" value="1280-720" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._720)"/>
-              <span>1280 x 720</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="videoCaptureSize" type="radio" value="1920-1080" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._1080)"/>
-              <span>1920 x 1080</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="videoCaptureSize" type="radio" value="1024-1024" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._1024)"/>
-              <span>1024 X 1024 ( Default )</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="videoCaptureSize" type="radio" value="1600-1600" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._1600)"/>
-              <span>1600 X 1600</span>
-            </label>
-          </p>
+      <div class="divider header-divider-margin margin-bottom"></div>
+      <h4 class="description-section">
+        This changes the resolution of captured videos on the Quest
+      </h4>
+      <p>
+        <label>
+          <input name="videoCaptureSize" type="radio" value="640-480" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._480)"/>
+          <span>640 x 480</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="videoCaptureSize" type="radio" value="1280-720" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._720)"/>
+          <span>1280 x 720</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="videoCaptureSize" type="radio" value="1920-1080" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._1080)"/>
+          <span>1920 x 1080</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="videoCaptureSize" type="radio" value="1024-1024" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._1024)"/>
+          <span>1024 X 1024 ( Default )</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="videoCaptureSize" type="radio" value="1600-1600" [(ngModel)]="videoCaptureSize" (click)="setCR(CR._1600)"/>
+          <span>1600 X 1600</span>
+        </label>
+      </p>
 
-          <!--          <h5 class="section-title">Full Rate Capture</h5>-->
-          <!--          <h4 class="description-section">-->
-          <!--            This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.-->
-          <!--          </h4>-->
-          <!--          <div class="switch">-->
-          <!--            <label>-->
-          <!--              Off-->
-          <!--              <input type="checkbox" class="disable-reviews" [checked]="fullRateCaptureEnabled" (click)="fullRateCaptureEnabled ? setFullRate(GU.OFF) : setFullRate(GU.ON)">-->
-          <!--              <span class="lever disable-reviews-switch"></span>-->
-          <!--              On-->
-          <!--            </label>-->
-          <!--          </div>-->
+      <!--          <h5 class="section-title">Full Rate Capture</h5>-->
+      <!--          <h4 class="description-section">-->
+      <!--            This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.-->
+      <!--          </h4>-->
+      <!--          <div class="switch">-->
+      <!--            <label>-->
+      <!--              Off-->
+      <!--              <input type="checkbox" class="disable-reviews" [checked]="fullRateCaptureEnabled" (click)="fullRateCaptureEnabled ? setFullRate(GU.OFF) : setFullRate(GU.ON)">-->
+      <!--              <span class="lever disable-reviews-switch"></span>-->
+      <!--              On-->
+      <!--            </label>-->
+      <!--          </div>-->
 
 
-          <h5 class="section-title">Video Capture FPS</h5>
+      <h5 class="section-title">Video Capture FPS</h5>
 
-          <h4 class="description-section">
-            This changes the frame rate of captured videos on the Quest
-          </h4>
-          <p>
-            <label>
-              <input name="captureFps" type="radio" value="24" [(ngModel)]="captureFps" (click)="setCaptureFPSRate(FPS._24)"/>
-              <span>24fps</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="captureFps" type="radio" value="30" [(ngModel)]="captureFps" (click)="setCaptureFPSRate(FPS._30)"/>
-              <span>30fps</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="captureFps" type="radio" value="60" [(ngModel)]="captureFps" (click)="setCaptureFPSRate(FPS._60)"/>
-              <span>60fps</span>
-            </label>
-          </p>
+      <div class="divider header-divider-margin margin-bottom"></div>
+      <h4 class="description-section">
+        This changes the frame rate of captured videos on the Quest
+      </h4>
+      <p>
+        <label>
+          <input name="captureFps" type="radio" value="24" [(ngModel)]="captureFps" (click)="setCaptureFPSRate(FPS._24)"/>
+          <span>24fps</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="captureFps" type="radio" value="30" [(ngModel)]="captureFps" (click)="setCaptureFPSRate(FPS._30)"/>
+          <span>30fps</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="captureFps" type="radio" value="60" [(ngModel)]="captureFps" (click)="setCaptureFPSRate(FPS._60)"/>
+          <span>60fps</span>
+        </label>
+      </p>
 
-          <h5 class="section-title">Video Capture Bitrate</h5>
+      <h5 class="section-title">Video Capture Bitrate</h5>
 
-          <h4 class="description-section">
-            This changes the quality of captured videos on the Quest
-          </h4>
-          <p>
-            <label>
-              <input name="captureBitrate" type="radio" value="5000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._5K)"/>
-              <span>5mbps</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="captureBitrate" type="radio" value="10000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._10K)"/>
-              <span>10mbps</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="captureBitrate" type="radio" value="15000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._15K)"/>
-              <span>15mbps</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input name="captureBitrate" type="radio" value="20000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._20K)"/>
-              <span>20mbps</span>
-            </label>
-          </p>
+      <div class="divider header-divider-margin margin-bottom"></div>
+      <h4 class="description-section">
+        This changes the quality of captured videos on the Quest
+      </h4>
+      <p>
+        <label>
+          <input name="captureBitrate" type="radio" value="5000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._5K)"/>
+          <span>5mbps</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="captureBitrate" type="radio" value="10000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._10K)"/>
+          <span>10mbps</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="captureBitrate" type="radio" value="15000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._15K)"/>
+          <span>15mbps</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="captureBitrate" type="radio" value="20000000" [(ngModel)]="captureBitrate" (click)="setCaptureBitrate(BR._20K)"/>
+          <span>20mbps</span>
+        </label>
+      </p>
     </div>
     <h4 class="section-title">Experimental & Miscellaneous </h4>
     <div class="section-container card z-depth-2">
 
       <h5 class="section-title">Experimental Mode</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
         This enables experimental features in your Oculus Quest such as Passthrough API support ( requires guardian to be enabled ).
       </h4>
@@ -327,6 +332,7 @@
         </label>
       </div>
       <h5 class="section-title">MTP ( Media Transfer Protocol )</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
         This allows you to transfer files between your computer and your headset using your favourite file explorer. You may need to re-enable this when you re-connect your headset.
       </h4>
@@ -340,15 +346,17 @@
       </div>
 
       <h5 class="section-title">Proximity Sensor</h5>
-
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
-        This disables the proximity sensor effectively keeping your quest awake when not on your head ( requires restart to re-enable ).
+        This disables the proximity sensor effectively keeping your quest awake.
       </h4>
       <div class="button-section">
-        <div class="pure-material-button-contained spaced flat active" (click)="disableProximity()">Disable Proximity Sensor</div>
+        <div class="pure-material-button-contained spaced flat active" (click)="disableProximity(true)">Enable Proximity Sensor</div>
+        <div class="pure-material-button-contained spaced flat active" (click)="disableProximity(false)">Disable Proximity Sensor</div>
       </div>
 
       <h5 class="section-title">Guardian</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
         This will enable/disable the guardian.
       </h4>
@@ -368,6 +376,7 @@
     <div class="section-container card z-depth-2">
 
       <h5 class="section-title">SideQuest Folders</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
         This changes the resolution of captured videos on the Quest
       </h4>
@@ -379,7 +388,7 @@
       </div>
 
       <h5 class="section-title">SideQuest Debugger</h5>
-
+      <div class="divider header-divider-margin margin-bottom"></div>
       <h4 class="description-section">
         Open the SideQuest chromium dev tools.
       </h4>

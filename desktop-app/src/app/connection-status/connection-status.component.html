@@ -1,6 +1,6 @@
 
 <div class="right-side-diagnostics" *ngIf="adb.diagnostics">
-<h3 i18n>Connection Status</h3>
+<h4 i18n>Connection Status</h4>
 <div i18n>
   <div class="status-circle" [ngClass]="{'green': adb.diagnostics.usb && adb.diagnostics.usb.is_connected}"></div>
   <span class="status-text">{{adb.diagnostics.usb && adb.diagnostics.usb.is_connected?'Quest Detected':'Quest Not Detected'}}</span>

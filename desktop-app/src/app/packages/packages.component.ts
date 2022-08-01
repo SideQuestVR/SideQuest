@@ -14,7 +14,7 @@ import { PackageService } from './package.service';
 })
 export class PackagesComponent implements OnInit {
     @ViewChild('appSettingsModal', { static: false }) appSettingsModal;
-
+    isLoadingApp = false;
     folder = FolderType;
     currentPackage: any = { package: { packageName: '', name: '', icon: '' }, versionCode: 0 };
     routerPackage: string;
@@ -225,6 +225,7 @@ export class PackagesComponent implements OnInit {
         });
     }
     getCurrentInstalledInfo() {
+        this.isLoadingApp = true;
         this.adbService
             .getBackups(this.currentPackage.package.packageName)
             .then(backups => (this.backups = backups))
@@ -232,11 +233,13 @@ export class PackagesComponent implements OnInit {
             .then(version => (this.currentPackage.versionCode = version))
             .then(() => this.adbService.getPackagePermissions(this.currentPackage.package.packageName))
             .then(perms => {
+                console.log(perms);
                 perms.forEach((p: any) => {
                     const perm_split = p.permission.split('.');
                     p.display_permission = perm_split[perm_split.length - 1];
                 });
                 this.perms = perms;
+                this.isLoadingApp = false;
             })
             .then(() => this.adbService.getDataBackups(this.currentPackage.package.packageName))
             .then(dataBackups => (this.dataBackups = dataBackups));
@@ -244,18 +247,7 @@ export class PackagesComponent implements OnInit {
     async backupApk(packageName: string) {
         this.appSettingsModal.closeModal();
         let location = await this.adbService.getPackageLocation(packageName);
-        this.adbService.backupPackage(location, packageName).then(savePath => {
-            // if (
-            //     packageName === this.bsaberService.beatSaberPackage &&
-            //     !this.bsaberService.backupExists()
-            // ) {
-            //     this.appService.fs.copyFileSync(savePath, this.appService.path.join(this.appService.appData, 'bsaber-base.apk'));
-            //     this.appService.fs.copyFileSync(
-            //         savePath,
-            //         this.appService.path.join(this.appService.appData, 'bsaber-base_patched.apk')
-            //     );
-            // }
-        });
+        await this.adbService.backupPackage(location, packageName);
     }
     backupData(packageName) {
         this.appSettingsModal.closeModal();

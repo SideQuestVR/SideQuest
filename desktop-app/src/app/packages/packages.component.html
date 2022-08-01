@@ -55,87 +55,88 @@
     <h4>App Settings</h4>
   </mz-modal-header>
   <mz-modal-content>
+    <div *ngIf="isLoadingApp" class="loader-tiny"></div>
+    <ng-container *ngIf="!isLoadingApp">
 
-
-    <br>
-    <div class="row no-margin">
-      <div class="col s7">
+      <div class="row no-margin">
+        <div class="col s7">
 
     <span class="chip">
       <img *ngIf="currentPackage.package.icon" [src]="currentPackage.package.icon">
       {{currentPackage.package.name?currentPackage.package.name:currentPackage.package.packageName}}
     </span><br>
-        <div *ngIf="currentPackage.package.name" class="small-text">{{currentPackage.package.packageName}}</div>
-        <div *ngIf="currentPackage.versionCode" class="small-text">Version: {{currentPackage.versionCode}}</div><br><br>
+          <div *ngIf="currentPackage.package.name" class="small-text">{{currentPackage.package.packageName}}</div>
+          <div *ngIf="currentPackage.versionCode" class="small-text">Version: {{currentPackage.versionCode}}</div><br><br>
 
-        <h4>Game Data Backups</h4>
-        Backup data files from your SD Card for this app/game. This will attempt to save game data and OBB files for the game from the SD Card and not the internal storage. Does not work for all games.<br><br>
-        <div class="pure-material-button-contained backup-this-package"
-           (click)="backupData(currentPackage.package.packageName)">Backup Game Data</div><br><br>
-        <div class="row" *ngFor="let backup of dataBackups">
-          <div class="col s3">
-            <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
-                 (click)="restoreBackup(showBackupFileName(backup))">
-              <i class="material-icons">sync</i>
+          <h4>Game Data Backups</h4>
+          Backup data files from your SD Card for this app/game. This will attempt to save game data and OBB files for the game from the SD Card and not the internal storage. Does not work for all games.<br><br>
+          <div class="pure-material-button-contained backup-this-package"
+               (click)="backupData(currentPackage.package.packageName)">Backup Game Data</div><br><br>
+          <div class="row" *ngFor="let backup of dataBackups">
+            <div class="col s3">
+              <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
+                   (click)="restoreBackup(showBackupFileName(backup))">
+                <i class="material-icons">sync</i>
+              </div>
+            </div>
+            <div class="col s9">
+              <div class="">
+                <span class="backup-name">{{showBackupFileName(backup)}}</span>
+              </div>
             </div>
           </div>
-          <div class="col s9">
-            <div class="">
-              <span class="backup-name">{{showBackupFileName(backup)}}</span>
+          <br><br>
+          <h4>APK Backups</h4>
+          Backup your APK file from your device.<br><br>
+          <a class="pure-material-button-contained margin-right"
+             (click)="backupApk(currentPackage.package.packageName)">Backup APK File</a><br><br>
+          <div class="row" *ngFor="let backup of backups">
+            <div class="col s3">
+              <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
+                   (click)="installBackupApk(backup)">
+                <i class="material-icons">sync</i>
+              </div>
+            </div>
+            <div class="col s9">
+              <div class="">
+                <span class="backup-name">{{showBackupFileName(backup)}}</span>
+              </div>
+            </div>
+          </div>
+          <br><br>
+        </div>
+        <div class="col s5">
+
+          <h4>Manage App</h4>
+          <a class="pure-material-button-contained" (click)="launchApp()">Launch App</a><br><br>
+          <a class="pure-material-button-contained flat active " (click)="forceClose()">Force Close App</a><br><br>
+          <a class="pure-material-button-contained flat active " (click)="clearData()">Clear App Data</a><br><br>
+          <a class="pure-material-button-contained flat active " (click)="uninstallApk()">Uninstall App</a><br><br>
+          <a class="pure-material-button-contained flat active"
+             (click)="appService.openFolder(folder.APP_BACKUP,currentPackage.package.packageName)">Open Backups</a>
+
+          <br><br><br><br>
+
+
+          <h4>Permissions</h4>
+          <div>{{perms && !perms.length ? 'No permissions for this app...' : 'Manage permissions for this app.'}}</div>
+          <br>
+          <div class="row no-margin" *ngFor="let perm of perms">
+            <div class="col s8 small-text">
+              {{perm.display_permission}}
+            </div>
+            <div class="col s4">
+              <div class="switch move-up">
+                <label>
+                  <input type="checkbox" [(ngModel)]="perm.enabled" (change)="setPerm(perm)" />
+                  <span class="lever"></span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
-        <br><br>
-        <h4>APK Backups</h4>
-        Backup your APK file from your device.<br><br>
-        <a class="pure-material-button-contained margin-right"
-           (click)="backupApk(currentPackage.package.packageName)">Backup APK File</a><br><br>
-        <div class="row" *ngFor="let backup of backups">
-          <div class="col s3">
-            <div class="chip cursor restore-backup tooltipped" data-position="right" data-tooltip="Restore this backup"
-                 (click)="installBackupApk(backup)">
-              <i class="material-icons">sync</i>
-            </div>
-          </div>
-          <div class="col s9">
-            <div class="">
-              <span class="backup-name">{{showBackupFileName(backup)}}</span>
-            </div>
-          </div>
-        </div>
-        <br><br>
       </div>
-      <div class="col s5">
-
-        <h4>Manage App</h4>
-        <a class="pure-material-button-contained" (click)="launchApp()">Launch App</a><br><br>
-        <a class="pure-material-button-contained flat active " (click)="forceClose()">Force Close App</a><br><br>
-        <a class="pure-material-button-contained flat active " (click)="clearData()">Clear App Data</a><br><br>
-        <a class="pure-material-button-contained flat active " (click)="uninstallApk()">Uninstall App</a><br><br>
-        <a class="pure-material-button-contained flat active"
-           (click)="appService.openFolder(folder.APP_BACKUP,currentPackage.package.packageName)">Open Backups</a>
-
-        <br><br><br><br>
-
-
-        <h4>Permissions</h4>
-        <div>{{perms && !perms.length ? 'No permissions for this app...' : 'Manage permissions for this app.'}}</div>
-        <br>
-        <div class="row no-margin" *ngFor="let perm of perms">
-          <div class="col s8 small-text">
-            {{perm.display_permission}}
-          </div>
-          <div class="col s4">
-            <div class="switch move-up">
-              <label>
-                <input type="checkbox" [(ngModel)]="perm.enabled" (change)="setPerm(perm)" />
-                <span class="lever"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </ng-container>
 
   </mz-modal-content>
   <mz-modal-footer>

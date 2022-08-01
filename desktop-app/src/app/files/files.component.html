@@ -95,8 +95,8 @@
     </div>
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
-    <button mz-button class="pink-button" mz-modal-close (click)="makeFolder(true)">Make Folder</button>
+    <div class="pure-material-button-contained spaced flat active" (click)="mkDirModal.closeModal()">Close</div>
+    <div class="pure-material-button-contained spaced " (click)="makeFolder(true); mkDirModal.closeModal()">Make Folder</div>
   </mz-modal-footer>
 </mz-modal>
 
@@ -117,16 +117,16 @@
       </div>
     </div>
     <br><br>
-    <button mz-button class="pink-button" (click)="pickLocation()">Select Location</button><br><br>
+    <div class="pure-material-button-contained" (click)="pickLocation()">Select Location</div>
+    <br><br>
     Current Location: {{adbService.savePath}}
 
 
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
-    <button mz-button class="pink-button" mz-modal-close
-      (click)="saveFiles(filesToBeSaved); clearSelection(filesToBeSaved)">Save To PC</button>
-  </mz-modal-footer>
+    <div class="pure-material-button-contained spaced flat active" (click)="filesModal.closeModal()">Close</div>
+    <div class="pure-material-button-contained spaced" (click)="mkDirModal.closeModal(); saveFiles(filesToBeSaved); clearSelection(filesToBeSaved)">Save To PC</div>
+</mz-modal-footer>
 </mz-modal>
 
 <mz-modal #downloadMediaModal [fixedFooter]="true">
@@ -135,14 +135,14 @@
   </mz-modal-header>
   <mz-modal-content>
     Pick a location on your PC to save screenshots and recordings:<br><br>
-    <button mz-button class="pink-button" (click)="pickLocation()">Select Location</button><br><br>
+    <div class="pure-material-button-contained spaced" (click)="pickLocation()">Select Location</div><br><br>
     Current Location: {{adbService.savePath}}
 
 
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
-    <button mz-button class="pink-button" mz-modal-close (click)="downloadMedia()">Save To PC</button>
+    <div class="pure-material-button-contained spaced flat active" (click)="downloadMediaModal.closeModal()">Close</div>
+    <div class="pure-material-button-contained spaced flat active" (click)="downloadMediaModal.closeModal(); downloadMedia()">Save To PC</div>
   </mz-modal-footer>
 </mz-modal>
 
@@ -168,8 +168,8 @@
     WARNING: This cannot be undone!!
   </mz-modal-content>
   <mz-modal-footer>
-    <button mz-button [flat]="true" mz-modal-close>Close</button>
-    <button mz-button class="red" mz-modal-close
-      (click)="deleteFiles(filesToBeDeleted); clearSelection(filesToBeDeleted)">Delete Items</button>
+    <div class="pure-material-button-contained spaced flat active" (click)="confirmModal.closeModal()">Close</div>
+
+    <div class="pure-material-button-contained spaced red" (click)="confirmModal.closeModal();deleteFiles(filesToBeDeleted); clearSelection(filesToBeDeleted)">Delete Items</div>
   </mz-modal-footer>
 </mz-modal>
