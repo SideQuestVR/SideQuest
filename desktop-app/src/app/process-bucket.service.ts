@@ -5,13 +5,14 @@ export class ProcessTask {
     key: string;
     name: string;
     app_name?: string;
+    show_total?: string;
     icon: string;
     private _status?;
     get status(): string {
         return this._status;
     }
     set status(d) {
-        this.statusService.showStatus(d, false, true);
+        this.statusService.showStatus(d.replace(/:\s+/g, ': '), false, true);
         this._status = d;
     }
     running?: boolean;
@@ -87,7 +88,7 @@ export class ProcessBucketService {
 
     async processBucket() {
         const objects = this.tasks.filter(t => !t.failed && !t.running && !t.cancelled && !t.succeeded);
-        const timeout = new Promise(resolve => setTimeout(() => resolve(), 1000));
+        const timeout = () => new Promise(resolve => setTimeout(() => resolve(), 500));
         this.left_length = objects.length;
         if (objects.length) {
             this.is_running = true;
@@ -101,18 +102,22 @@ export class ProcessBucketService {
                     task.succeeded = true;
                     this.currentTask = null;
                     if (!task.cancelled) {
-                        return timeout.then(() => this.processBucket());
+                        return timeout().then(() => this.processBucket());
                     }
                 })
                 .catch(e => {
                     task.running = false;
                     task.status =
-                        (task.app_name ? task.app_name + ': ' : '') + (e.message ? e.message : e.code ? e.code : e.toString());
+                        (task.app_name || '') + (e.message ? e.message : e.code ? e.code : e.reason ? e.reason : e.toString());
                     task.failed = true;
                     this.currentTask = null;
                     this.statusService.showStatus(task.status, true);
                     if (!task.cancelled) {
-                        return timeout.then(() => this.processBucket());
+                        console.log('h1');
+                        return timeout().then(async () => {
+                            console.log('h2');
+                            await this.processBucket();
+                        });
                     }
                 });
             this.tasks = this.tasks.filter(t => t !== task);
@@ -132,7 +137,7 @@ export class ProcessBucketService {
                 );
             }
             this.is_running = false;
-            await timeout.then(() => this.processBucket());
+            await timeout().then(() => this.processBucket());
         }
     }
 

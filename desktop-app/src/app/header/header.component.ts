@@ -290,23 +290,6 @@ export class HeaderComponent implements OnInit {
             }
         );
     }
-    closeApp() {
-        this.appService.remote.getCurrentWindow().close();
-    }
-    pingHeadset() {
-        this.isAlive = true;
-    }
-    minimizeApp() {
-        this.appService.remote.getCurrentWindow().minimize();
-    }
-    maximizeApp() {
-        const win = this.appService.remote.getCurrentWindow();
-        if (win.isMaximized()) {
-            win.unmaximize();
-        } else {
-            win.maximize();
-        }
-    }
     async selectAppToInstall() {
         let files = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openFile', 'multiSelections'],
@@ -321,21 +304,5 @@ export class HeaderComponent implements OnInit {
                 });
             }
         });
-    }
-    confirmRestore() {
-        this.spinnerService.showLoader();
-        this.spinnerService.setMessage('Restoring BMBF<br>Please Wait...');
-        this.beatonService.confirmRestore(this.adbService).then(r => {
-            this.spinnerService.hideLoader();
-            this.statusService.showStatus('BMBF Restored Successfully!!');
-            this.beatOnModal.openModal();
-            this.beatonService.checkHasRestore(this.adbService);
-        });
-    }
-    installAPK(name: string) {
-        return this.adbService.installAPK(this.appService.path.join(this.appService.appData, name), true, true);
-    }
-    removeText(text) {
-        this.replaceText = this.replaceText.filter(d => d !== text);
     }
 }

@@ -65,14 +65,13 @@ export class ElectronService {
 
     async installFromToken(token) {
         let res = await this.adbService.adbCommand('installFromToken', { token });
-        console.log(res);
         res.forEach((l, i) => {
             switch (l.type) {
                 case 'Mod':
                     this.beatonService.downloadSong(l.url, this.adbService);
                     break;
                 case 'APK':
-                    this.adbService.installAPK(l.url, false, false, i + 1, res.length, false, l.name);
+                    this.adbService.installAPK(l.url, false, false, i + 1, res.length, false, l.name + ': ');
                     break;
                 case 'OBB':
                     this.adbService.installObb(l.url, i + 1, res.length, l.name);
@@ -95,7 +94,7 @@ export class ElectronService {
                         this.adbService.installObb(data.url, 0, 0, data.name);
                         break;
                     case '.apk':
-                        this.adbService.installAPK(data.url, false, false, 0, 0, true, data.name);
+                        this.adbService.installAPK(data.url, false, false, 0, 0, true, data.name + ': ');
                         break;
                 }
             });

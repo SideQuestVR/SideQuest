@@ -169,7 +169,7 @@ export class AdbClientService {
         let extention = this.appService.path.extname(filepath);
         switch (extention) {
             case '.apk':
-                return this.installAPK(filepath, true, false, 0, 0, false, this.appService.path.basename(filepath));
+                return this.installAPK(filepath, true, false, 0, 0, false, this.appService.path.basename(filepath) + ': ');
             case '.obb':
                 return this.processService.addItem('file_install', async task => {
                     task.status = 'Transferring OBB file...';
@@ -605,12 +605,12 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         return this.processService.addItem(
             'apk_install',
             task => {
-                name = name ? name + ': ' : '';
                 if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
                     return Promise.reject(name + 'Apk install failed - No device connected!');
                 }
                 const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
-                task.app_name = name;
+                task.show_total = showTotal;
+                task.app_name = name || '';
                 task.status = name + showTotal + 'Installing Apk... ';
                 return this.adbCommand('install', { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal }, status => {
                     if (status.percent && status.size && status.time) {
@@ -619,10 +619,11 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                                 ? name + showTotal + 'Installing Apk...'
                                 : name + showTotal + 'Downloading APK... ' + Math.round(status.percent * 100) + '% ';
                     } else {
-                        task.status =
-                            status === 'Checking APK against blacklist...'
-                                ? name + showTotal + status
-                                : name + showTotal + 'Installing Apk...';
+                        if (status === 'Checking APK against blacklist...') {
+                            task.status = name + showTotal + status;
+                        } else {
+                            task.status = name + showTotal + 'Installing Apk...';
+                        }
                     }
                 })
                     .then(r => {
@@ -638,7 +639,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
-                        let er = e.message ? e.message : e.code ? e.code : e.reason ? e.reason : JSON.stringify(e);
+                        let er = e.message ? e.message : e.code ? e.code : e.reason ? e.reason : e.toString();
                         if (
                             er.indexOf('INSTALL_FAILED_UPDATE_INCOMPATIBLE') > -1 &&
                             er.indexOf('com.oculus.environment.prod.') > -1
@@ -648,9 +649,13 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                             this.installAPK(filePath, isLocal, shouldUninstall, number, total, deleteAfter, name);
                             return Promise.reject('Install failed, uninstalling and trying again...');
                         }
-                        if (er === 'SAFESIDE') {
+                        if (er.includes('SAFESIDE')) {
                             this.appService.headerComponent.safeModal.openModal();
                         }
+                        console.log('app failed', er);
+                        task.status =
+                            (task.app_name ? task.app_name + ': ' : '') +
+                            (e.message ? e.message : e.code ? e.code : e.reason ? e.reason : e.toString());
                         return Promise.reject(er);
                     });
             },
@@ -1031,7 +1036,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
     async installLocalZip(filepath, dontCatchError, cb, task?, deleteAfter?) {
         const typeBasedActions = {
             '.apk': filepath => {
-                this.installAPK(filepath, true, false, 0, 0, deleteAfter);
+                this.installAPK(filepath, true, false, 0, 0, deleteAfter, this.appService.path.basename(filepath));
             },
             '.obb': filepath => {
                 if (this.appService.path.basename(filepath).match(this.obbRegex)) {

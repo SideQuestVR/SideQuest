@@ -22,8 +22,20 @@ app.allowRendererProcessReuse = false;
 // const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';
 import { OPEN_IN_SYSTEM_BROWSER_DOMAINS } from './external-urls';
+
 let has_port = process.argv.indexOf('--port');
 let valid_port = has_port > -1 && process.argv[has_port + 1] && Number.isInteger(Number(process.argv[has_port + 1]));
+
+let installErrorCallback;
+
+process.on('uncaughtException', function(error) {
+    if (error.toString().includes('Error: This socket has been ended by the other party') && installErrorCallback) {
+        installErrorCallback("Couldn't communicate with the headset, try another USB port or cable...");
+        installErrorCallback = null;
+        console.log(error);
+    }
+});
+
 class ADB {
     client;
     _logcat;
@@ -178,6 +190,13 @@ class ADB {
             .catch(e => ecb(e));
     }
     async install(serial, apkpath, isLocal, cb, scb, ecb) {
+        console.log('installapk');
+        let stopUpdate;
+        installErrorCallback = e => {
+            stopUpdate = true;
+            ecb(e);
+            console.log(e, stopUpdate);
+        };
         if (!this.client) return ecb('Not connected.');
         if (isLocal) {
             let found;
@@ -193,21 +212,27 @@ class ADB {
         scb('Transferring APK to device...');
         let stream;
         try {
-            stream = isLocal
-                ? fs.createReadStream(apkpath)
-                : new Readable().wrap(
-                      progress(request(apkpath), {
-                          throttle: 60,
-                      })
-                          .on('progress', state => {
-                              scb(state);
-                          })
-                          .on('end', () => {
-                              scb({
-                                  percent: 1,
-                              });
-                          })
-                  );
+            if (isLocal) {
+                stream = fs.createReadStream(apkpath);
+            } else {
+                stream = new Readable().wrap(
+                    progress(request(apkpath), {
+                        throttle: 60,
+                    })
+                        .on('progress', state => {
+                            if (!stopUpdate) {
+                                scb(state);
+                            }
+                        })
+                        .on('end', () => {
+                            if (!stopUpdate) {
+                                scb({
+                                    percent: 1,
+                                });
+                            }
+                        })
+                );
+            }
         } catch (e) {
             const isInvalidURI = e && typeof e.message === 'string' && e.message.startsWith('Invalid URI "');
             if (isInvalidURI) {
@@ -220,66 +245,6 @@ class ADB {
             .install(serial, stream)
             .then(cb)
             .catch(e => ecb(e));
-
-        // let outpath = isLocal ? apkpath : path.join(app.getPath('appData'), 'SideQuest', new Date().getTime() + '.apk');
-        // let promise;
-        // if (isLocal) {
-        //     let found;
-        //     try {
-        //         found = await this.checkAPK(scb, apkpath);
-        //     } catch (e) {
-        //         return ecb(e);
-        //     }
-        //     if (found) {
-        //         return ecb('SAFESIDE');
-        //     }
-        // }
-        // promise = isLocal
-        //     ? Promise.resolve()
-        //     : new Promise(resolve => {
-        //           progress(request(apkpath), {
-        //               throttle: 60,
-        //           })
-        //               .on('progress', state => {
-        //                   scb(state);
-        //               })
-        //               .on('end', () => {
-        //                   scb({
-        //                       percent: 1,
-        //                       size: 1,
-        //                       time: 1,
-        //                   });
-        //                   resolve();
-        //               })
-        //               .on('error', () => {
-        //                   ecb('Download error! Please try again!');
-        //               })
-        //               .pipe(fs.createWriteStream(outpath));
-        //       });
-        // promise
-        //     .then(
-        //         () =>
-        //             new Promise((resolve, reject) => {
-        //                 console.log('"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"');
-        //                 exec(
-        //                     '"' + this.adbPath + '" -s ' + serial + ' install -r -d "' + outpath + '"',
-        //                     {},
-        //                     (error, stdout, stderr) => {
-        //                         if (error) {
-        //                             reject(error.message ? error.message : error.toString());
-        //                         } else {
-        //                             resolve();
-        //                         }
-        //                     }
-        //                 );
-        //             })
-        //     )
-        //     .then(() => (isLocal ? null : fs.unlinkSync(outpath)))
-        //     .then(cb)
-        //     .catch(e => {
-        //         if (!isLocal) fs.unlinkSync(outpath);
-        //         ecb(e);
-        //     });
     }
     uninstall(serial, packageName, cb, ecb) {
         if (!this.client) return ecb('Not connected.');

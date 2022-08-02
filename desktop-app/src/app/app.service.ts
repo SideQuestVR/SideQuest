@@ -99,29 +99,34 @@ export class AppService {
         }
         this.versionName = 'v' + this.remote.app.getVersion();
         this.electron.ipcRenderer.on('extract-file', (event, data) => {
+            console.log('download-url-progress');
             if (!!this.extractResolves[data.token]) {
                 this.extractResolves[data.token].resolve();
                 delete this.extractResolves[data.token];
             }
         });
         this.electron.ipcRenderer.on('extract-progress', (event, data) => {
+            console.log('download-url-progress');
             if (!!this.extractResolves[data.token]) {
                 this.extractResolves[data.token].scb(data.stats);
             }
         });
         this.electron.ipcRenderer.on('download-url-fail', (event, data) => {
+            console.log('download-url-progress');
             if (!!this.downloadResolves[data.token]) {
                 this.downloadResolves[data.token].reject(data.e);
                 delete this.downloadResolves[data.token];
             }
         });
         this.electron.ipcRenderer.on('download-url', (event, data) => {
+            console.log('download-url-progress');
             if (!!this.downloadResolves[data.token]) {
                 this.downloadResolves[data.token].resolve();
                 delete this.downloadResolves[data.token];
             }
         });
         this.electron.ipcRenderer.on('download-progress', (event, data) => {
+            console.log('download-url-progress');
             if (!!this.downloadResolves[data.token]) {
                 this.downloadResolves[data.token].scb(data.stats);
             }
