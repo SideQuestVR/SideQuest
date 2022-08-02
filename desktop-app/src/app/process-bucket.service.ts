@@ -113,9 +113,7 @@ export class ProcessBucketService {
                     this.currentTask = null;
                     this.statusService.showStatus(task.status, true);
                     if (!task.cancelled) {
-                        console.log('h1');
                         return timeout().then(async () => {
-                            console.log('h2');
                             await this.processBucket();
                         });
                     }

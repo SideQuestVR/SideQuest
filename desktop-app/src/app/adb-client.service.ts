@@ -652,7 +652,6 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                         if (er.includes('SAFESIDE')) {
                             this.appService.headerComponent.safeModal.openModal();
                         }
-                        console.log('app failed', er);
                         task.status =
                             (task.app_name ? task.app_name + ': ' : '') +
                             (e.message ? e.message : e.code ? e.code : e.reason ? e.reason : e.toString());
@@ -1036,7 +1035,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
     async installLocalZip(filepath, dontCatchError, cb, task?, deleteAfter?) {
         const typeBasedActions = {
             '.apk': filepath => {
-                this.installAPK(filepath, true, false, 0, 0, deleteAfter, this.appService.path.basename(filepath));
+                this.installAPK(filepath, true, false, 0, 0, deleteAfter, this.appService.path.basename(filepath) + ': ');
             },
             '.obb': filepath => {
                 if (this.appService.path.basename(filepath).match(this.obbRegex)) {
@@ -1061,10 +1060,6 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 { dir: this.appService.path.join(this.appService.appData, 'tmp') },
                 extractErr => {
                     if (!extractErr) {
-                        if (task) {
-                            task.status = 'Extracted Zip!';
-                        }
-                        resolve();
                         this.appService.fs.readdir(this.appService.path.join(this.appService.appData, 'tmp'), (readErr, files) => {
                             let installableFiles = files.filter((val, index) => {
                                 return Object.keys(typeBasedActions).includes(this.appService.path.extname(val));
@@ -1078,6 +1073,12 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                                     this
                                 );
                             });
+
+                            if (task) {
+                                task.status = installableFiles.length ? 'Extracted Zip!' : 'No installable files in this zip...';
+                                task.failed = !installableFiles.length;
+                            }
+                            resolve();
                         });
                     } else {
                         console.warn(extractErr);
