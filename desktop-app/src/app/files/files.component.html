@@ -61,7 +61,7 @@
   </a>
   <ul>
     <li mz-tooltip position="left" tooltip="Manage favourite folders"
-        (click)="appService.headerComponent.manageFavs.openModal(); appService.headerComponent.favouriteMax = 10; appService.headerComponent.favoritePathType = 'Url';"
+        (click)="appService.headerComponent.favoritePathType = 'commandFavourites';appService.headerComponent.manageFavs.openModal(); appService.headerComponent.favouriteMax = 10; appService.headerComponent.favoritePathType = 'Url';"
     ><a class="btn-floating red"><i class="material-icons">favorite</i></a></li>
     <li mz-tooltip position="left" tooltip="Upload file to this folder" (click)="uploadFiles()"><a
         class="btn-floating purple"><i class="material-icons">file_upload</i></a></li>

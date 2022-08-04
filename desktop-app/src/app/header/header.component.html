@@ -193,10 +193,10 @@
 
 <mz-modal #logcatModal [fixedFooter]="true" [options]="{dismissible: false}">
   <mz-modal-header>
-    <div class="pure-material-button-contained spaced red" (click)="logcatModal.closeModal();stopLogcat(); currentLogCat.length = 0; isStarted = false;">Close</div>
-    <div class="pure-material-button-contained spaced red" (click)="stopLogcat(); isStarted = false;">Stop</div>
-    <div class="pure-material-button-contained spaced" *ngIf="!saveLogcatPath" (click)="selectLogcatOutput();">Pick Output Folder</div>
-    <div class="pure-material-button-contained spaced red" *ngIf="saveLogcatPath" (click)="cancelLogcatOutput(); isStarted = false;">Cancel Output</div>
+    <div class="pure-material-button-contained spaced red right" (click)="logcatModal.closeModal();stopLogcat(); currentLogCat.length = 0; isStarted = false;">Close</div>
+    <div class="pure-material-button-contained spaced red right" (click)="stopLogcat(); isStarted = false;">Stop</div>
+    <div class="pure-material-button-contained spaced right" *ngIf="!saveLogcatPath" (click)="selectLogcatOutput();">Pick Output Folder</div>
+    <div class="pure-material-button-contained spaced red right" *ngIf="saveLogcatPath" (click)="cancelLogcatOutput(); isStarted = false;">Cancel Output</div>
 
   <h4>ADB Logcat</h4>
   </mz-modal-header>
