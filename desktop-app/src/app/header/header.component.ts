@@ -238,7 +238,12 @@ export class HeaderComponent implements OnInit {
         if (this.saveLogcatPath) {
             if (this.appService.fs.existsSync(this.saveLogcatPath)) {
                 this.appService.fs.writeFile(this.appService.path.join(this.saveLogcatPath, 'logcat.log'), '', () => {});
+                this.statusService.showStatus('Cleared log file');
+            } else {
+                this.statusService.showStatus('Log file does not exist', true);
             }
+        } else {
+            this.statusService.showStatus('NO log file selected', true);
         }
     }
     attemptToSaveLogcat(logcat) {
