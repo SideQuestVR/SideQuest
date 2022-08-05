@@ -646,14 +646,26 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                             this.appService.fs.unlink(filePath, err => {});
                         }
                         let er = e.message ? e.message : e.code ? e.code : e.reason ? e.reason : e.toString();
-                        if (
-                            (er.includes('INSTALL_FAILED_UPDATE_INCOMPATIBLE') && er.includes('com.oculus.environment.prod.')) ||
-                            er.includes('INSTALL_FAILED_VERSION_DOWNGRADE')
-                        ) {
-                            let match = er.match(/([A-Za-z]*[A-Za-z\d_]*\.)+[A-Za-z][A-Za-z\d_]*/gm);
-                            await this.adbCommand('uninstall', { serial: this.deviceSerial, packageName: match[0] });
+                        let isCustomHome =
+                            er.includes('INSTALL_FAILED_UPDATE_INCOMPATIBLE') && er.includes('com.oculus.environment.prod.');
+                        let isBeatSaber =
+                            er.includes('INSTALL_FAILED_VERSION_DOWNGRADE') && isLocal && filePath.includes('beat-saber.apk');
+                        if (isCustomHome || isBeatSaber) {
+                            if (isCustomHome) {
+                                let match = er.match(/([A-Za-z]*[A-Za-z\d_]*\.)+[A-Za-z][A-Za-z\d_]*/gm);
+                                await this.adbCommand('uninstall', { serial: this.deviceSerial, packageName: match[0] });
+                            } else {
+                                await this.adbCommand('uninstall', {
+                                    serial: this.deviceSerial,
+                                    packageName: 'com.beatgames.beatsaber',
+                                });
+                            }
                             this.installAPK(filePath, isLocal, shouldUninstall, number, total, deleteAfter, name);
-                            return Promise.reject('Install failed, uninstalling and trying again...');
+                            return Promise.reject(
+                                isCustomHome
+                                    ? 'Install failed, uninstalling and trying again...'
+                                    : 'Newer version installed, uninstalling Beat Saber first'
+                            );
                         }
                         if (er.includes('SAFESIDE')) {
                             this.appService.headerComponent.safeModal.openModal();
