@@ -134,11 +134,13 @@ export class AdbClientService {
     get isReady(): boolean {
         return this.deviceStatus === ConnectionStatus.CONNECTED;
     }
-    runAdbCommand(adbCommandToRun) {
+    runAdbCommand(adbCommandToRun, skipSettingResponse?: boolean) {
         if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
             return Promise.reject('Adb command failed - No device connected!');
         }
-        this.adbResponse = 'Loading...';
+        if (!skipSettingResponse) {
+            this.adbResponse = 'Loading...';
+        }
         let command = adbCommandToRun.trim();
         if (command.substr(0, 3).toLowerCase() === 'adb') {
             command = command.substr(3);
@@ -155,8 +157,12 @@ export class AdbClientService {
                 }
             );
         }).then((resp: string) => {
-            this.adbResponse = resp.trim() || 'Command Completed.';
-            return this.adbResponse;
+            if (skipSettingResponse) {
+                return resp.trim() || 'Command Completed.';
+            } else {
+                this.adbResponse = resp.trim() || 'Command Completed.';
+                return this.adbResponse;
+            }
         });
     }
     launchApp(packageName) {
@@ -432,7 +438,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         clipboard.writeText(value);
     }
     async getAppVersion(isCode: boolean): Promise<string | null> {
-        const versionInfo = await this.runAdbCommand('shell dumpsys package ' + this.VR_APP_PACKAGE);
+        const versionInfo = await this.runAdbCommand('shell dumpsys package ' + this.VR_APP_PACKAGE, true);
         this.notInstalled = versionInfo.includes('Unable to find package');
         const versionParts = versionInfo
             .split('\n')
@@ -1008,7 +1014,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         name = name || packageId;
         const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
         if (!task) this.spinnerService.showLoader();
-        let p: any = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename);
+        let p: any = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename, true);
         if (cb) {
             cb();
         }
@@ -1102,25 +1108,32 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
     }
 
     async getPackagePermissions(packagename) {
-        let requested_permissions = await this.runAdbCommand(
-            `adb shell "dumpsys package ${packagename} | grep permission | sed -n '/runtime permissions/,$p' | grep -v 'runtime'"`
-        );
+        let requested_permissions = '';
+        try {
+            requested_permissions = await this.runAdbCommand(
+                `adb shell "dumpsys package ${packagename} | grep permission | sed -n '/runtime permissions/,$p' | grep -v 'runtime'"`,
+                true
+            );
+        } catch {}
         let granted_audio = '',
             granted_read_storage = '',
             granted_write_storage = '';
         try {
             granted_audio = await this.runAdbCommand(
-                `adb shell "dumpsys package ${packagename} | grep 'android.permission.RECORD_AUDIO: granted=true'"`
+                `adb shell "dumpsys package ${packagename} | grep 'android.permission.RECORD_AUDIO: granted=true'"`,
+                true
             );
         } catch {}
         try {
             granted_write_storage = await this.runAdbCommand(
-                `adb shell "dumpsys package ${packagename} | grep 'android.permission.WRITE_EXTERNAL_STORAGE: granted=true'"`
+                `adb shell "dumpsys package ${packagename} | grep 'android.permission.WRITE_EXTERNAL_STORAGE: granted=true'"`,
+                true
             );
         } catch {}
         try {
             granted_read_storage = await this.runAdbCommand(
-                `adb shell "dumpsys package ${packagename} | grep 'android.permission.READ_EXTERNAL_STORAGE: granted=true'"`
+                `adb shell "dumpsys package ${packagename} | grep 'android.permission.READ_EXTERNAL_STORAGE: granted=true'"`,
+                true
             );
         } catch {}
         let read_perm = 'android.permission.READ_EXTERNAL_STORAGE';

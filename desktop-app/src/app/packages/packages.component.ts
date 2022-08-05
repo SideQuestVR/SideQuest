@@ -107,14 +107,13 @@ export class PackagesComponent implements OnInit {
     async triggerCloudBackup() {
         this.cloudBackupLoading = true;
         this.cloudBackupStatus = 'Starting backup...';
-        await this.adbService.runAdbCommand('adb shell bmgr backup @pm@');
-        await this.adbService.runAdbCommand('adb shell bmgr run');
-        await this.adbService.runAdbCommand('adb shell cmd package list packages');
-        let packages: any = this.adbService.adbResponse;
+        await this.adbService.runAdbCommand('adb shell bmgr backup @pm@', true);
+        await this.adbService.runAdbCommand('adb shell bmgr run', true);
+        let packages: any = await this.adbService.runAdbCommand('adb shell cmd package list packages', true);
         packages = packages.split('\n').map(line => line.replace(/^package:/, ''));
         for (let i = 0; i < packages.length; i++) {
             this.cloudBackupStatus = `Backing up ${Math.round(((i + 1) / packages.length) * 100)}%`;
-            await this.adbService.runAdbCommand('adb shell bmgr fullbackup ' + packages[i]).then(o => console.log(o));
+            await this.adbService.runAdbCommand('adb shell bmgr fullbackup ' + packages[i], true).then(o => console.log(o));
         }
         this.cloudBackupLoading = false;
         this.cloudBackupDone = true;

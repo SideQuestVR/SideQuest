@@ -315,7 +315,9 @@ code > pre, .code{
   margin-bottom: 1em;
   margin-right: 30px;
 }
-
+.pure-material-button-contained.spaced:last-child {
+  margin-right: 2px;
+}
 .pure-material-button-contained.slim{
   padding: 5px 10px;
   height: 25px;
@@ -330,7 +332,9 @@ code > pre, .code{
   background: transparent;
   border: 2px solid #afafaf;
   color: #afafaf;
-  height: 40px;
+  padding: 0 8px;
+  line-height: 30px;
+  height: 34px
 }
 .pure-material-button-contained.small{
   padding: 0 8px;

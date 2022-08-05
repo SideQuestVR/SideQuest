@@ -20,15 +20,15 @@ export class WirelessConnectionComponent implements OnInit {
         let status = 'Attempting wifi connection...';
         this.statusService.showStatus(status, false, true);
         this.adbService.deviceStatusMessage = status;
-        ((this.adbService.isReady ? this.adbService.runAdbCommand('adb tcpip 5555') : Promise.resolve()) as any).then(() => {
+        ((this.adbService.isReady ? this.adbService.runAdbCommand('adb tcpip 5555', true) : Promise.resolve()) as any).then(() => {
             setTimeout(() => {
-                this.adbService.runAdbCommand('adb connect ' + this.adbService.deviceIp + ':5555');
+                this.adbService.runAdbCommand('adb connect ' + this.adbService.deviceIp + ':5555', true);
             }, 3000);
         });
     }
 
     reset() {
-        this.adbService.runAdbCommand('adb disconnect');
+        this.adbService.runAdbCommand('adb disconnect', true);
         this.statusService.showStatus('Resetting ADB connection...', false, true);
     }
 

@@ -124,8 +124,8 @@ export class HeaderBannerComponent implements OnInit {
                 console.warn(e);
                 this.useBundledAPK();
             }
-            await this.adb.runAdbCommand('push "' + this.appService.apkPath + '" /data/local/tmp/sq.apk');
-            await this.adb.runAdbCommand('shell pm install -r /data/local/tmp/sq.apk');
+            await this.adb.runAdbCommand('push "' + this.appService.apkPath + '" /data/local/tmp/sq.apk', true);
+            await this.adb.runAdbCommand('shell pm install -r /data/local/tmp/sq.apk', true);
             // this.toast.show('SideQuest installed to headset!');
             // this.showConfetti = true;
             this.adb.appVersionCode = await this.adb.getAppVersion(true);
@@ -168,7 +168,7 @@ export class HeaderBannerComponent implements OnInit {
     }
 
     async uninstall() {
-        await this.adb.runAdbCommand('uninstall ' + this.adb.VR_APP_PACKAGE);
+        await this.adb.runAdbCommand('uninstall ' + this.adb.VR_APP_PACKAGE, true);
     }
 
     async userUninstall() {
