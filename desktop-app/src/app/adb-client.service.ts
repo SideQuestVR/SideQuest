@@ -647,8 +647,8 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                         }
                         let er = e.message ? e.message : e.code ? e.code : e.reason ? e.reason : e.toString();
                         if (
-                            er.indexOf('INSTALL_FAILED_UPDATE_INCOMPATIBLE') > -1 &&
-                            er.indexOf('com.oculus.environment.prod.') > -1
+                            (er.includes('INSTALL_FAILED_UPDATE_INCOMPATIBLE') && er.includes('com.oculus.environment.prod.')) ||
+                            er.includes('INSTALL_FAILED_VERSION_DOWNGRADE')
                         ) {
                             let match = er.match(/([A-Za-z]*[A-Za-z\d_]*\.)+[A-Za-z][A-Za-z\d_]*/gm);
                             await this.adbCommand('uninstall', { serial: this.deviceSerial, packageName: match[0] });
