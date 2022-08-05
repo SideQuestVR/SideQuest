@@ -649,7 +649,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                         let isCustomHome =
                             er.includes('INSTALL_FAILED_UPDATE_INCOMPATIBLE') && er.includes('com.oculus.environment.prod.');
                         let isBeatSaber =
-                            er.includes('INSTALL_FAILED_VERSION_DOWNGRADE') && isLocal && filePath.includes('beat-saber.apk');
+                            er.includes('INSTALL_FAILED_VERSION_DOWNGRADE') && isLocal && filePath.includes('beat-saber');
                         if (isCustomHome || isBeatSaber) {
                             if (isCustomHome) {
                                 let match = er.match(/([A-Za-z]*[A-Za-z\d_]*\.)+[A-Za-z][A-Za-z\d_]*/gm);
