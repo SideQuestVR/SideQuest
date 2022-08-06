@@ -9,9 +9,13 @@ import { StatusBarService } from '../status-bar.service';
     styleUrls: ['./wireless-connection.component.scss'],
 })
 export class WirelessConnectionComponent implements OnInit {
+    connectWifiIp: string;
     constructor(public adbService: AdbClientService, appService: AppService, private statusService: StatusBarService) {
         appService.webService.isWebviewOpen = false;
         appService.resetTop();
+        if (adbService.deviceIp) {
+            this.connectWifiIp = adbService.deviceIp;
+        }
     }
 
     ngOnInit() {}
@@ -39,5 +43,9 @@ export class WirelessConnectionComponent implements OnInit {
         //   this.open('/sdcard/');
         // }
         return isConnected;
+    }
+
+    connectManualWifi() {
+        this.adbService.runAdbCommand('adb connect ' + this.connectWifiIp + ':5555', true);
     }
 }

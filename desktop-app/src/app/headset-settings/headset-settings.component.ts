@@ -293,7 +293,6 @@ export class HeadsetSettingsComponent implements OnInit {
                 );
             })
             .catch(e => this.statusService.showStatus(e, true));
-        console.log(this.videoCaptureSize);
     }
     setGuardian(guardian: GU) {
         this.runAdbCommand('setprop debug.oculus.guardian_pause ' + (guardian === GU.ON ? 0 : 1))

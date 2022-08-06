@@ -135,7 +135,7 @@ export class AdbClientService {
         return this.deviceStatus === ConnectionStatus.CONNECTED;
     }
     runAdbCommand(adbCommandToRun, skipSettingResponse?: boolean) {
-        if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
+        if (this.deviceStatus !== ConnectionStatus.CONNECTED && !adbCommandToRun.startsWith('adb connect ')) {
             return Promise.reject('Adb command failed - No device connected!');
         }
         if (!skipSettingResponse) {

@@ -1,8 +1,13 @@
 <div class="inner-app-container">
   <div *ngIf="!isConnected()">
-    <br>You are not currently connected.
+    <br>You are not currently connected. You can try entering your quest IP, if Wireless ADB is enabled then it will connect.
     <br><br>
-    <div class="pure-material-button-contained" routerLink="/setup">Open Setup Instructions</div>
+    <div class="pure-material-button-contained spaced" routerLink="/setup">Open Setup Instructions</div>
+    <div class="pure-material-button-contained spaced" (click)="wifiConnectModal.openModal()">Enter IP to connect</div>
+    <br><br>
+    <ng-container *ngIf="adbService.deviceIp">
+      Last known device IP: {{adbService.deviceIp}}
+    </ng-container>
   </div>
   <div *ngIf="isConnected()">
     <div class="screen-description">Enable wifi mode to install apps wirelessly. You must be connected with USB to enable wifi mode.</div>
@@ -23,3 +28,24 @@
   </div>
 
 </div>
+
+<mz-modal #wifiConnectModal [fixedFooter]="true">
+  <mz-modal-header>
+    <h4>Enter Quest Wifi IP</h4>
+  </mz-modal-header>
+  <mz-modal-content>
+    If you previously enable Wireless ADB on your headset then you can enter the IP to connect here.
+
+    <br><br>
+    <div class="button-section">
+      <div class="input-field">
+        <input id="adbCommand" type="text" [(ngModel)]="connectWifiIp" placeholder="IP address like 192.168..." />
+      </div>
+    </div>
+    <br>
+  </mz-modal-content>
+  <mz-modal-footer>
+    <div class="pure-material-button-contained flat active spaced" (click)="wifiConnectModal.closeModal(); ">Close</div>
+    <div class="pure-material-button-contained spaced" (click)="wifiConnectModal.closeModal(); connectManualWifi()">Connect</div>
+  </mz-modal-footer>
+</mz-modal>
