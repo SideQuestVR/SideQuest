@@ -90,6 +90,9 @@ export class HeadsetSettingsComponent implements OnInit {
     textureSize: string;
     captureFps: string;
     captureBitrate: string;
+    textToSend: string;
+    _textToSend: string[];
+    isPassword: boolean;
     FFR = FFR;
     SSO = SSO;
     GU = GU;
@@ -157,6 +160,9 @@ export class HeadsetSettingsComponent implements OnInit {
 
     async getBool(value: string, property: string) {
         const response = await this.getValue(property);
+        if (value === 'fullRateCaptureEnabled') {
+            console.log(response);
+        }
         if (response.trim() === '1') {
             this[value] = true;
         }
@@ -260,6 +266,15 @@ export class HeadsetSettingsComponent implements OnInit {
             .then(() => {
                 this.statusService.showStatus('Capture Bit Rate set OK!!');
                 return this.getString('debug.oculus.capture.bitrate', '5000000', 'captureBitrate');
+            })
+            .catch(e => this.statusService.showStatus(e, true));
+    }
+    setFullRate(fullRate: GU) {
+        console.log('setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0));
+        this.runAdbCommand('setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0))
+            .then(() => {
+                this.statusService.showStatus('Full Rate Capture set OK!!');
+                return this.getBool('fullRateCaptureEnabled', 'debug.oculus.fullRateCapture');
             })
             .catch(e => this.statusService.showStatus(e, true));
     }
@@ -441,5 +456,24 @@ export class HeadsetSettingsComponent implements OnInit {
                 );
             })
             .catch(e => this.statusService.showStatus(e, true));
+    }
+    pasteToDevice() {
+        this._textToSend = this.textToSend.split('');
+        this.textToSend = '';
+        this.inputCharacters()
+            .then(() => {
+                this.statusService.showStatus('Text sent to the device!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e.toString(), true);
+            });
+    }
+    inputCharacters() {
+        let character = this._textToSend.shift();
+        return this.runAdbCommand('adb shell input text "' + character + '"').then(() => {
+            if (this._textToSend.length) {
+                return this.inputCharacters();
+            }
+        });
     }
 }

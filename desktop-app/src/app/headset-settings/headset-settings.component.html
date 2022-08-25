@@ -244,18 +244,18 @@
         </label>
       </p>
 
-      <!--          <h5 class="section-title">Full Rate Capture</h5>-->
-      <!--          <h4 class="description-section">-->
-      <!--            This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.-->
-      <!--          </h4>-->
-      <!--          <div class="switch">-->
-      <!--            <label>-->
-      <!--              Off-->
-      <!--              <input type="checkbox" class="disable-reviews" [checked]="fullRateCaptureEnabled" (click)="fullRateCaptureEnabled ? setFullRate(GU.OFF) : setFullRate(GU.ON)">-->
-      <!--              <span class="lever disable-reviews-switch"></span>-->
-      <!--              On-->
-      <!--            </label>-->
-      <!--          </div>-->
+<!--                <h5 class="section-title">Full Rate Capture</h5>-->
+<!--                <h4 class="description-section">-->
+<!--                  This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.-->
+<!--                </h4>-->
+<!--                <div class="switch">-->
+<!--                  <label>-->
+<!--                    Off-->
+<!--                    <input type="checkbox" class="disable-reviews" [checked]="fullRateCaptureEnabled" (click)="fullRateCaptureEnabled ? setFullRate(GU.OFF) : setFullRate(GU.ON)">-->
+<!--                    <span class="lever disable-reviews-switch"></span>-->
+<!--                    On-->
+<!--                  </label>-->
+<!--                </div>-->
 
 
       <h5 class="section-title">Video Capture FPS</h5>
@@ -367,6 +367,47 @@
           <span class="lever disable-reviews-switch"></span>
           On
         </label>
+      </div>
+
+
+      <h5 class="section-title">Full Rate Capture</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
+      <h4 class="description-section">
+        This will enable/disable the full rate capture for videos recorded i.e. 60/72fps rather than 30fps.
+      </h4>
+      <div class="switch">
+        <label>
+          Off
+          <input type="checkbox" class="disable-reviews" [checked]="fullRateCaptureEnabled" (click)="fullRateCaptureEnabled ? setFullRate(GU.OFF) : setFullRate(GU.ON)">
+          <span class="lever disable-reviews-switch"></span>
+          On
+        </label>
+      </div>
+
+
+
+      <h5 class="section-title">Paste Text to your device</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
+      <h4 class="description-section">
+        If there is a text input field focussed on your headset you can paste / type text in here to have SideQuest type
+        it out on your headset. Good for long passwords you don't want to have to type on a virtual keyboard.
+      </h4>
+
+      <div class="button-section">
+        <div class="input-field ">
+          <input id="devicePaste"
+                 [type]="isPassword?'password':'text'" [(ngModel)]="textToSend" />
+          <label for="devicePaste">Text to Paste</label>
+        </div>
+        <div class="switch">
+          <label>
+            Text
+            <input type="checkbox" [(ngModel)]="isPassword" />
+            <span class="lever"></span>
+            Password
+          </label>
+        </div>
+        <div class="pure-material-button-contained spaced flat active margin-top" (click)="pasteToDevice()">Send</div>
       </div>
 
     </div>
