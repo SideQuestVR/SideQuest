@@ -269,6 +269,18 @@ export class HeadsetSettingsComponent implements OnInit {
             })
             .catch(e => this.statusService.showStatus(e, true));
     }
+    enableBonelabMods() {
+        this.runAdbCommand(
+            'echo https://blrepo.laund.moe/repository.json > ' +
+                '/sdcard/Android/data/com.StressLevelZero.BONELAB/files/repositories.txt'
+        )
+            .then(() => {
+                this.statusService.showStatus('Enabled BONELAB mods OK!!');
+            })
+            .catch(e => {
+                this.statusService.showStatus(e, true);
+            });
+    }
     setFullRate(fullRate: GU) {
         console.log('setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0));
         this.runAdbCommand('setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0))
@@ -470,7 +482,7 @@ export class HeadsetSettingsComponent implements OnInit {
     }
     inputCharacters() {
         let character = this._textToSend.shift();
-        return this.runAdbCommand('adb shell input text "' + character + '"').then(() => {
+        return this.runAdbCommand('input text "' + character + '"').then(() => {
             if (this._textToSend.length) {
                 return this.inputCharacters();
             }
