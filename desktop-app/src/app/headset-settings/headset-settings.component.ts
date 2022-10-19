@@ -274,8 +274,12 @@ export class HeadsetSettingsComponent implements OnInit {
             'echo https://blrepo.laund.moe/repository.json > ' +
                 '/sdcard/Android/data/com.StressLevelZero.BONELAB/files/repositories.txt'
         )
-            .then(() => {
-                this.statusService.showStatus('Enabled BONELAB mods OK!!');
+            .then(res => {
+                if (res.trim()) {
+                    this.statusService.showStatus(res.trim(), true);
+                } else {
+                    this.statusService.showStatus('Enabled BONELAB mods OK!!');
+                }
             })
             .catch(e => {
                 this.statusService.showStatus(e, true);
