@@ -388,6 +388,7 @@ export class AdbClientService {
         } else {
             device.deviceName = device.type;
         }
+        device.deviceName = device.deviceName.replace('Oculus', 'Cockulus');
     }
 
     async connectedStatus() {
