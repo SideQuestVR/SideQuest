@@ -419,8 +419,11 @@ if (app.requestSingleInstanceLock()) {
 
 function parseOpenUrl(argv: string[]) {
     //fs.writeFileSync(path.join(app.getPath('appData'), 'SideQuest', 'test_output_loaded.txt'), JSON.stringify(argv));
-    if (argv[1] && argv[1].length && argv[1].substr(0, 12) === 'sidequest://') {
-        setTimeout(() => mainWindow.webContents.send('open-url', argv[1].toString()), 5000);
+    for (let arg of argv) {
+        if (arg && arg.length && arg.substr(0, 12) === 'sidequest://') {
+            console.log('opening url ' + arg.toString());
+            setTimeout(() => mainWindow.webContents.send('open-url', arg.toString()), 5000);
+        }
     }
 }
 function addWindowDownloadHandler(window) {
