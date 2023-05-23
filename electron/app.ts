@@ -621,7 +621,19 @@ function setupApp() {
     app.on('activate', function() {
         if (mainWindow === null) createWindow();
     });
-    app.setAsDefaultProtocolClient('sidequest');
+    // remove so we can register each time as we run the app.
+    app.removeAsDefaultProtocolClient('sidequest');
+
+    // If we are running a non-packaged version of the app && on windows
+    if (process.env.NODE_ENV === 'dev' && process.platform === 'win32') {
+        console.log('Running in dev mode');
+        // Set the path of electron.exe and your app.
+        // These two additional parameters are only available on windows.
+        app.setAsDefaultProtocolClient('sidequest', process.execPath, [path.resolve(process.argv[1])]);
+    } else {
+        console.log('Running in production');
+        app.setAsDefaultProtocolClient('sidequest');
+    }
     app.on('open-url', function(event, url) {
         event.preventDefault();
     });
