@@ -5,7 +5,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, windows-latest, macOS-11]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -33,9 +33,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-        run:   | 
-          if [ "$RUNNER_OS" == "macOS" ]; then
-              PYTHON_PATH=$(which python3)
-          fi
-          yarn dist
-        shell: bash
+        run: yarn dist
