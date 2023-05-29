@@ -35,7 +35,7 @@ jobs:
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
         run:   | 
           if [ "$RUNNER_OS" == "macOS" ]; then
-              PYTHON_PATH=$(which python)
+              PYTHON_PATH=$(which python3)
           fi
           yarn dist
         shell: bash
