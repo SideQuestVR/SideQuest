@@ -34,7 +34,8 @@ jobs:
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
         run:   | 
-          if [ "$RUNNER_OS" == "Windows" ]; then
+          if [ "$RUNNER_OS" == "macOS" ]; then
               PYTHON_PATH=$(which python)
           fi
           yarn dist
+        shell: bash
