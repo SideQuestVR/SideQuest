@@ -32,4 +32,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-        run: yarn dist
+        run: PYTHON_PATH=$(which python) yarn dist
