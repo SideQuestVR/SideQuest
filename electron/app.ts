@@ -423,6 +423,7 @@ function parseOpenUrl(argv: string[]) {
         if (arg && arg.length && arg.substr(0, 12) === 'sidequest://') {
             console.log('opening url ' + arg.toString());
             setTimeout(() => mainWindow.webContents.send('open-url', arg.toString()), 5000);
+            break;
         }
     }
 }
