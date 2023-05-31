@@ -454,8 +454,9 @@ export class AppService {
             this.spinnerService.showLoader();
             let task = { status: 'Downloading/Extracting ScrCpy...' };
             this.spinnerService.setMessage('', task);
-            let url = 'https://github.com/Genymobile/scrcpy/releases/download/v1.11/scrcpy-win64-v1.11.zip';
-            let downloadPath = this.path.join(this.appData, 'scrcpy', 'scrcpy.exe');
+            let url = 'https://github.com/Genymobile/scrcpy/releases/download/v2.0/scrcpy-win64-v2.0.zip';
+            let folderName = 'scrcpy-win64-v2.0';
+            let downloadPath = this.path.join(this.appData, folderName, 'scrcpy.exe');
             if (this.doesFileExist(downloadPath)) {
                 this.scrcpyBinaryPath = downloadPath;
                 this.spinnerService.hideLoader();
@@ -480,7 +481,7 @@ export class AppService {
                         });
                     };
 
-                    this.extract(path, { dir: this.path.join(this.appData, 'scrcpy') }, callback);
+                    this.extract(path, { dir: this.path.join(this.appData) }, callback);
                     this.scrcpyBinaryPath = downloadPath;
                 });
             });

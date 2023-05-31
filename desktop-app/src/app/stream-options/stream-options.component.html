@@ -3,6 +3,7 @@
 
   <div class="pure-material-button-contained spaced" (click)="runscrcpy()">Start Stream</div>
   <div class="pure-material-button-contained spaced" (click)="appService.opn('https://www.oculus.com/casting')">Oculus Casting</div>
+  <div class="pure-material-button-contained spaced flat active" (click)="disableProximity(false)">Disable Proximity Sensor</div>
 
   <div class="divider divider-margin-top margin-bottom"></div>
   <div class="row">
@@ -37,14 +38,17 @@
       Crop
       <div class="grey-text small">
         Crop the device screen on the server. The values are expressed in the device natural orientation (typically,
-        portrait for a phone, landscape for a tablet). Any MaxSize value is computed on the cropped size.
+        portrait for a phone, landscape for a tablet). Any MaxSize value is computed on the cropped size. The format is width:height:left:top.
       </div>
     </div>
     <div class="col s12 input-field fixed-height">
       <input id="crop_" [(ngModel)]="scrcpy_options.crop" type="text" />
       <label for="crop_" class="active">Crop</label>
-      <div class="pure-material-button-contained spaced flat active" (click)="scrcpy_options.crop = '1280:720:1500:350'">Quest 1 Crop</div>
       <div class="pure-material-button-contained spaced flat active" (click)="scrcpy_options.crop = '1600:900:2017:510'">Quest 2 Crop</div>
+      <div class="pure-material-button-contained spaced flat active" (click)="scrcpy_options.crop = '1280:720:1500:350'">Quest 1 Crop</div>
+      <div class="grey-text small">
+        Please note the Quest Pro uses two slightly angled screens and therefore there isn't a crop setting that works out of the box, since the video would need to be corrected after the fact.
+      </div>
     </div>
     <div class="col s12 fixed-height">
       Fullscreen

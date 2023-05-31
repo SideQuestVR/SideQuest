@@ -126,7 +126,10 @@ export class ElectronService {
                 switch (url[0]) {
                     case 'sidequest://w/':
                         this.adbService
-                            .runAdbCommand('adb shell am start -a android.intent.action.VIEW -d ' + url[1], true)
+                            .runAdbCommand(
+                                'adb shell am start -a android.intent.action.VIEW -d \'"' + new URL(url[1]).toString() + '"\'',
+                                true
+                            )
                             .then(() => {
                                 this.statusService.showStatus('Launching WebXR in browser...', false, true);
                             });

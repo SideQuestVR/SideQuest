@@ -12,7 +12,7 @@ export class StreamOptionsComponent implements OnInit {
     scrcpy_options: any = {
         always_on_top: false,
         bit_rate: '8000000',
-        crop: '1280:720:1500:350',
+        crop: '1600:900:2017:510',
         no_control: true,
         fullscreen: false,
         max_size: '0',
@@ -34,5 +34,16 @@ export class StreamOptionsComponent implements OnInit {
             .runScrCpy(this.scrcpy_options)
             .then(() => this.statusService.showStatus('Stream closed.'))
             .catch(e => this.statusService.showStatus('ScrCpy Error: ' + JSON.stringify(e), true));
+    }
+
+    disableProximity(shouldEnable) {
+        this.runAdbCommand('am broadcast -a com.oculus.vrpowermanager.' + (shouldEnable ? 'automation_disable' : 'prox_close'))
+            .then(() => {
+                this.statusService.showStatus((shouldEnable ? 'Enable' : 'Disable') + ' proximity message sent OK!!');
+            })
+            .catch(e => this.statusService.showStatus(e, true));
+    }
+    runAdbCommand(command: string) {
+        return this.adbService.adbCommand('shell', { command, serial: this.adbService.deviceSerial });
     }
 }
