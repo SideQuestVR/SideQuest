@@ -15,6 +15,7 @@
         "start:local": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev SQ_ENV_CFG=local electron .\" \"cd desktop-app && ng serve -c local --port 4205\"",
         "postinstall": "electron-builder install-app-deps && cd desktop-app && yarn install",
         "dist": "yarn electron-build && yarn platform-tools && yarn app-build && electron-builder",
+        "dist-test": "yarn electron-build && yarn platform-tools && yarn app-build-test && cross-env SQ_ENV_CFG=test electron-builder",
         "angular": "cd desktop-app && ng serve --port 4205",
         "angular:test": "cd desktop-app && ng serve -c test --port 4205",
         "angular:test2": "cd desktop-app && ng serve -c test2 --port 4205",
@@ -25,6 +26,7 @@
         "electron-dev:local": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=local electron .",
         "electron": "yarn electron-build && yarn electron-dev",
         "app-build": "cd desktop-app && ng build --prod --aot && cd ..",
+        "app-build-test": "cd desktop-app && ng build -c test --aot && cd ..",
         "platform-tools": "node build-electron/platform-tools.js",
         "electron-build": "tsc",
         "reset": "rm -rf node_modules && rm -rf desktop-app/node_modules && yarn install && cd desktop-app && yarn install"
