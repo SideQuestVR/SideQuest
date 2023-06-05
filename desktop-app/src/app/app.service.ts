@@ -126,7 +126,6 @@ export class AppService {
             }
         });
         this.electron.ipcRenderer.on('download-progress', (event, data) => {
-            console.log('download-url-progress');
             if (!!this.downloadResolves[data.token]) {
                 this.downloadResolves[data.token].scb(data.stats);
             }

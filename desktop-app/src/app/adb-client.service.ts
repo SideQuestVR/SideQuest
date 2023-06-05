@@ -1026,6 +1026,9 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         name = name || packageId;
         const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';
         if (!task) this.spinnerService.showLoader();
+        if (task) {
+            task.status = name + ': Transferring...';
+        }
         let p: any = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename, true);
         if (cb) {
             cb();
