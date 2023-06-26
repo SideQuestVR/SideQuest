@@ -54,7 +54,7 @@
         },
         "linux": {
             "target": [
-                "tar.xz"
+               "tar.xz"
             ]
         },
         "nsis": {
