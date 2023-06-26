@@ -83,7 +83,8 @@
     "husky": {
         "hooks": {
             "pre-commit": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\"",
-            "post-commit": "git update-index -g && yarn dist"
+            "post-commit": "git update-index -g",
+            "pre-push": "yarn dist"
         }
     },
     "prettier": {
