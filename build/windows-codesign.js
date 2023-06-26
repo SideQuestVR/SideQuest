@@ -18,6 +18,9 @@ async function doSign(file, hash, owner) {
     const debug = Debug ? '/debug' : null;
 
     let args = [
+        'cd',
+        '%LOCALAPPDATA%\\electron-builder\\cache\\winCodeSign\\winCodeSign-2.6.0\\windows-10\\x64\\',
+        '&&',
         'signtool',
         'sign',
         debug,

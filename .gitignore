@@ -30,7 +30,7 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
-.env.test
+.env
 
 build/app
 build/platform-tools
