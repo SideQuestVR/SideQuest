@@ -43,3 +43,4 @@ desktop-app/sources/*.json
 tmp
 .DS_Store
 **/.DS_Store
+
