@@ -602,6 +602,14 @@ function setupApp() {
             mainWindow.focus();
         }
     });
+    app.on('web-contents-created', (e, webContents) => {
+        webContents.on('will-redirect', (e, url) => {
+            if (/^file:/.test(url)) {
+                console.warn('Prevented redirect to ' + url);
+                e.preventDefault();
+            }
+        });
+    });
     app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
         if (process.env.NODE_ENV === 'dev') {
             // Verification logic.
