@@ -46,6 +46,8 @@
         },
         "win": {
             "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+            "sign": "./build/windows-codesign.js",
+            "publish": ["github"],
             "target": [
                 "nsis"
             ]
