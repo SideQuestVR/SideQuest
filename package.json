@@ -46,6 +46,8 @@
         },
         "win": {
             "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+            "sign": "./build/windows-codesign.js",
+            "publish": ["github"],
             "target": [
                 "nsis"
             ]
@@ -81,7 +83,8 @@
     "husky": {
         "hooks": {
             "pre-commit": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\"",
-            "post-commit": "git update-index -g"
+            "post-commit": "git update-index -g",
+            "pre-push": "yarn dist"
         }
     },
     "prettier": {
