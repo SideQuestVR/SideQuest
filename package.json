@@ -79,7 +79,7 @@
             "build/**/*"
         ],
         "afterSign": "build/notarize.js"
-    },
+    }, 
     "husky": {
         "hooks": {
             "pre-commit": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\"",
