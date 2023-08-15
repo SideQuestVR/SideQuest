@@ -30,7 +30,7 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
-.env.test
+.env
 
 build/app
 build/platform-tools
@@ -43,3 +43,4 @@ desktop-app/sources/*.json
 tmp
 .DS_Store
 **/.DS_Store
+
