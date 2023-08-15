@@ -161,7 +161,7 @@ class ADB {
                 }
                 cb(tasks);
             } else {
-                ecb(error || 'Nothing to install.');
+                ecb(error || 'Nothing to install.' + JSON.stringify(body));
             }
         });
     }
