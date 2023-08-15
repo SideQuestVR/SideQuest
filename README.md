@@ -1,7 +1,7 @@
 # SideQuest
 Below is the documentation of SideQuest with instructions for building and signing then application.
 
-## Build Steps
+### Build Steps
 
 Clone the repo
 
@@ -76,3 +76,7 @@ GH_TOKEN - The github personal access token used to upload releases
 WIN_CSC_LINK - The base64 encoded .p12 file ( Windows Code Signing Cert ). as a string. Do not include the `-----BEGIN CERTIFICATE-----` or `-----END CERTIFICATE-----` parts just the base64 string.
 
 WIN_CSC_KEY_PASSWORD - The passphrase used when generating the .p12 file for windows.
+
+Edit: Windows signing no longer works without a usb dongle because fuck the signing industry. 
+
+You'll need this on the path to build for windows locally: C:\Users\USER\AppData\Local\electron-builder\Cache\winCodeSign\winCodeSign-2.6.0\windows-10\x64
