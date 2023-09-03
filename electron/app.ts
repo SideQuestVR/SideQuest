@@ -161,7 +161,15 @@ class ADB {
                 }
                 cb(tasks);
             } else {
-                ecb(error || 'Nothing to install.' + JSON.stringify(body) + ': ' + token);
+                ecb(
+                    error ||
+                        'Nothing to install.' +
+                            JSON.stringify(body) +
+                            ':' +
+                            token +
+                            ':' +
+                            `${getEnvCfg().http_url || 'https://api.sidequestvr.com'}/install-from-key`
+                );
             }
         });
     }

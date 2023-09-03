@@ -30,7 +30,7 @@
         "platform-tools": "node build-electron/platform-tools.js",
         "electron-build": "tsc",
         "reset": "rm -rf node_modules && rm -rf desktop-app/node_modules && yarn install && cd desktop-app && yarn install"
-    },
+    }, 
     "build": {
         "productName": "SideQuest",
         "appId": "com.sidequestvr.app",
