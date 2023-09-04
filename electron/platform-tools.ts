@@ -47,7 +47,11 @@ if (!__fs.existsSync(outputPath)) {
                         __fs.readdir(path.join(__dirname, 'platform-tools'), function(err, files) {
                             files.forEach(function(file) {
                                 var curPath = path.join(__dirname, 'platform-tools', file);
-                                if (!__fs.lstatSync(curPath).isDirectory()) {
+                                if (
+                                    !__fs.lstatSync(curPath).isDirectory() &&
+                                    file !== 'make_f2fs.exe' &&
+                                    file !== 'make_f2fs_casefold.exe'
+                                ) {
                                     __fs.rename(curPath, path.join(outputPath, file), function(err) {
                                         if (err) console.log(err);
                                     });
