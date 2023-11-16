@@ -13,15 +13,15 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16.14.2'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
       - name: "Install build deps on linux"
         run:   |
           echo $RUNNER_OS;
           if [ "$RUNNER_OS" == "Linux" ]; then
                sudo apt-get install libusb-1.0-0-dev
                sudo apt-get install libudev-dev
-          fi
-          if [ "$RUNNER_OS" == "macOS" ]; then
-               python3 -m pip install packaging
           fi
         shell: bash
       - name: "Install dependencies"
