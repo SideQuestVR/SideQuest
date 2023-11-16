@@ -395,6 +395,20 @@
       </div>
 
 
+      <h5 class="section-title">Stereo Capture</h5>
+      <div class="divider header-divider-margin margin-bottom"></div>
+      <h4 class="description-section">
+        This will enable/disable the stereo video capture for videos recorded i.e. side-by-side view.
+      </h4>
+      <div class="switch">
+        <label>
+          Off
+          <input type="checkbox" class="disable-reviews" [checked]="sbsEnabled == '2'" (click)="sbsEnabled == '2' ? setSBS(GU.OFF) : setSBS(GU.ON)">
+          <span class="lever disable-reviews-switch"></span>
+          On
+        </label>
+      </div>
+
 
       <h5 class="section-title">Paste Text to your device</h5>
       <div class="divider header-divider-margin margin-bottom"></div>

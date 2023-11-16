@@ -84,6 +84,7 @@ export class HeadsetSettingsComponent implements OnInit {
     chromaticAberration: string;
     guardianEnabled: boolean;
     fullRateCaptureEnabled: boolean;
+    sbsEnabled: string;
     fixedFoveatedRendering: string;
     videoCaptureSize: string;
     cpuGpuLevel: string;
@@ -126,6 +127,9 @@ export class HeadsetSettingsComponent implements OnInit {
         await this.getBool('experimentalEnabled', 'debug.oculus.experimentalEnabled');
         await this.getBool('guardianEnabled', 'debug.oculus.guardian_pause');
         await this.getBool('fullRateCaptureEnabled', 'debug.oculus.fullRateCapture');
+        await this.getString('debug.oculus.screenCaptureEye', '1', 'sbsEnabled');
+
+        //setSBS
         await this.getString('debug.oculus.refreshRate', '72', 'refreshRate');
         await this.getString('debug.oculus.forceChroma', '1', 'chromaticAberration');
         await this.getString('debug.oculus.foveation.level', '2', 'fixedFoveatedRendering');
@@ -284,6 +288,15 @@ export class HeadsetSettingsComponent implements OnInit {
             .catch(e => {
                 this.statusService.showStatus(e, true);
             });
+    }
+    setSBS(sbs: GU) {
+        console.log('setprop debug.oculus.screenCaptureEye ' + (sbs === GU.ON ? 2 : 1));
+        this.runAdbCommand('setprop debug.oculus.screenCaptureEye ' + (sbs === GU.ON ? 2 : 1))
+            .then(() => {
+                this.statusService.showStatus('SBS Capture set OK!!');
+                return this.getString('debug.oculus.screenCaptureEye', '1', 'sbsEnabled');
+            })
+            .catch(e => this.statusService.showStatus(e, true));
     }
     setFullRate(fullRate: GU) {
         console.log('setprop debug.oculus.fullRateCapture ' + (fullRate === GU.ON ? 1 : 0));
