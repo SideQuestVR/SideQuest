@@ -434,6 +434,7 @@ function addWindowDownloadHandler(window) {
         let name = item.getFilename();
         let etx = path.extname(url.split('?')[0]).toLowerCase();
         let etx2 = urls.length ? path.extname(urls[0].split('?')[0]).toLowerCase() : etx;
+        console.log(url);
         if (~url.indexOf('https://beatsaver.com/cdn')) {
             // beat saber mods /songs
             mainWindow.webContents.send('open-url', 'sidequest://bsaber/#' + url);
@@ -452,7 +453,11 @@ function addWindowDownloadHandler(window) {
             BrowserWindow.getAllWindows()
                 .filter(b => b !== mainWindow)
                 .forEach(b => b.close());
-        } else if (~url.indexOf('ssl.hwcdn.net/') || ~url.indexOf('patreonusercontent.com/')) {
+        } else if (
+            ~url.indexOf('ssl.hwcdn.net/') ||
+            ~url.indexOf('patreonusercontent.com/') ||
+            (~url.indexOf('https://itchio-mirror.') && ~url.indexOf('cloudflarestorage.com'))
+        ) {
             //itch.io & patreon
             mainWindow.webContents.send('pre-open-url', { url, name });
             BrowserWindow.getAllWindows()
