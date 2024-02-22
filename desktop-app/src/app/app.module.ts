@@ -57,7 +57,7 @@ import { StreamOptionsComponent } from './stream-options/stream-options.componen
         BrowserModule,
         DragulaModule.forRoot(),
         FormsModule,
-        RouterModule.forRoot(AppRoutes, { useHash: true }),
+        RouterModule.forRoot(AppRoutes, { useHash: true, relativeLinkResolution: 'legacy' }),
         MzTooltipModule,
         MzModalModule,
         MzButtonModule,
