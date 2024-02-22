@@ -13,7 +13,7 @@ import { PackageService } from './package.service';
     styleUrls: ['./packages.component.scss'],
 })
 export class PackagesComponent implements OnInit {
-    @ViewChild('appSettingsModal', { static: false }) appSettingsModal;
+    @ViewChild('appSettingsModal') appSettingsModal;
     isLoadingApp = false;
     folder = FolderType;
     currentPackage: any = { package: { packageName: '', name: '', icon: '' }, versionCode: 0 };

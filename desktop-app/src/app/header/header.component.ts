@@ -35,12 +35,12 @@ interface LogCatEntry {
     styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-    @ViewChild('header', { static: false }) header;
-    @ViewChild('bookmarksModal', { static: false }) bookmarksModal;
-    @ViewChild('beatOnModal', { static: false }) beatOnModal;
-    @ViewChild('mainLogo', { static: false }) mainLogo;
-    @ViewChild('safeModal', { static: false }) safeModal;
-    @ViewChild('manageFavs', { static: false }) manageFavs;
+    @ViewChild('header') header;
+    @ViewChild('bookmarksModal') bookmarksModal;
+    @ViewChild('beatOnModal') beatOnModal;
+    @ViewChild('mainLogo') mainLogo;
+    @ViewChild('safeModal') safeModal;
+    @ViewChild('manageFavs') manageFavs;
     ConnectionStatus = ConnectionStatus;
     folder = FolderType;
     isAlive = true;

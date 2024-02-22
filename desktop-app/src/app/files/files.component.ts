@@ -22,9 +22,9 @@ declare let M;
     styleUrls: ['./files.component.scss'],
 })
 export class FilesComponent implements OnInit {
-    @ViewChild('filesModal', { static: false }) filesModal;
-    @ViewChild('fixedAction', { static: false }) fixedAction;
-    @ViewChild('downloadMediaModal', { static: false }) downloadMediaModal;
+    @ViewChild('filesModal') filesModal;
+    @ViewChild('fixedAction') fixedAction;
+    @ViewChild('downloadMediaModal') downloadMediaModal;
     @ViewChild('mkDirModal', { static: true }) mkDirModal;
     files: FileFolderListing[] = [];
     selectedFiles: FileFolderListing[] = [];
