@@ -195,7 +195,6 @@
       }
     }
   },
-  "defaultProject": "desktop-app",
   "cli": {
     "packageManager": "yarn"
   },
