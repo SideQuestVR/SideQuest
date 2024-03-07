@@ -733,7 +733,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return recurse();
         });
     }
-    async getLocalFoldersRecursive(root: string) {
+    async getLocalFoldersRecursive(root: string) : Promise<void> {
         return new Promise(resolve => {
             this.appService.fs.readdir(root, async (err, entries) => {
                 entries = entries.map(f => {
@@ -1053,7 +1053,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         }
         return p;
     }
-    async installLocalZip(filepath, dontCatchError, cb, task?, deleteAfter?) {
+    async installLocalZip(filepath, dontCatchError, cb, task?, deleteAfter?) : Promise<void> {
         const typeBasedActions = {
             '.apk': filepath => {
                 this.installAPK(filepath, true, false, 0, 0, deleteAfter, this.appService.path.basename(filepath) + ': ');

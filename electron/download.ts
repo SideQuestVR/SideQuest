@@ -46,7 +46,7 @@ module.exports = function(url, path, progress) {
             })
                 .on('end', function() {
                     file.end();
-                    resolve();
+                    resolve(true);
                 })
                 .on('error', function(err) {
                     reject(err);

@@ -4,7 +4,7 @@ import { AppService, FolderType } from '../app.service';
 import { LoadingSpinnerService } from '../loading-spinner.service';
 import { StatusBarService } from '../status-bar.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { PackageService } from './package.service';
 
 @Component({

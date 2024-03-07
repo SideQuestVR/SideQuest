@@ -40,7 +40,7 @@
 
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-import 'core-js/es7/reflect';
+// import 'core-js/es7/reflect';
 
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
@@ -69,7 +69,7 @@ import 'zone.js';  // Included with Angular CLI.
  */
 (window as any).global = window;
 
-import * as Hammer from "hammerjs";
-import * as $ from 'jquery';
-window['$'] = window['jQuery'] = $;
-window['Hammer'] = Hammer;
+// import * as Hammer from 'hammerjs';
+// import * as $ from 'jquery';
+// window['$'] = window['jQuery'] = $;
+// window['Hammer'] = Hammer;

@@ -117,7 +117,7 @@
         "request-progress": "^3.0.0",
         "semver": "^7.6.0",
         "targz": "^1.0.1",
-        "usb-detection2": "../usb-detection2",
+        "usb-detection2": "../node-usb-detection",
         "wait-on": "^7.2.0",
         "yauzl": "^3.1.0"
     },

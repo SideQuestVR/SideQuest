@@ -10,7 +10,7 @@ export class LoadingSpinnerComponent implements OnInit {
     isActive: boolean;
     isConfirm: boolean;
     isLoading: boolean;
-    loadingMessage: string;
+    loadingMessage: string ;
     loadingTask: any;
     confirmResolve: () => void;
     confirmReject: () => void;

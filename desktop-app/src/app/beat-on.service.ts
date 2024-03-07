@@ -208,7 +208,7 @@ export class BeatOnService {
     }
 
     downloadSong(downloadUrl, adbService) {
-        return this.processService.addItem('song_download', async task => {
+        return this.processService.addItem('song_download', async (task) : Promise<void> => {
             let parts = downloadUrl.split('/');
             let zipPath = this.appService.path.join(this.appService.appData, this.appService.uuidv4() + '.zip');
             const requestOptions = {

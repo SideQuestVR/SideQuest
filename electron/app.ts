@@ -17,7 +17,6 @@ const request = require('request');
 const progress = require('request-progress');
 //without this, there's a bug in electron that makes facebook pages ruin everything, see https://github.com/electron/electron/issues/25469
 app.commandLine.appendSwitch('disable-features', 'CrossOriginOpenerPolicy');
-app.allowRendererProcessReuse = false;
 
 // const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';

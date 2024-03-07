@@ -135,21 +135,22 @@ export class FilesComponent implements OnInit {
                 .then(() => setTimeout(() => this.uploadFile(files, task), 500));
         }
     }
-    uploadFile(files, task): Promise<any> {
+    uploadFile(files, task): Promise<void> {
         if (!files.length) {
             return Promise.resolve();
         }
         const f = files.shift();
         const savePath = f.save; // this.appService.path.posix.join(this.currentPath, this.appService.path.basename(f));
         if (!this.appService.fs.existsSync(f.file)) {
-            return Promise.resolve().then(() => setTimeout(() => this.uploadFile(files, task), 500));
+            Promise.resolve().then(() => setTimeout(() => this.uploadFile(files, task), 500));
+            return;
         }
         if (this.appService.fs.lstatSync(f.file).isDirectory()) {
             return new Promise(async resolve => {
                 this.folderName = this.appService.path.basename(f.file);
                 await this.makeFolder();
                 await this.uploadFolder(f.file, files, task);
-                resolve();
+                resolve(null);
             });
         }
         task.status = 'Transferring ' + this.appService.path.basename(f.file) + ' to ' + f.save;

@@ -18,7 +18,7 @@ export class AudicaService {
     ) {}
 
     downloadSong(downloadUrl, adbService) {
-        return this.processService.addItem('song_download', async task => {
+        return this.processService.addItem('song_download', async (task) : Promise<void> => {
             let parts = downloadUrl.split('/');
             let zipPath = this.appService.path.join(this.appService.appData, this.appService.path.basename(downloadUrl));
             let ws = this.appService.fs.createWriteStream(zipPath);
