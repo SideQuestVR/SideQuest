@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { AdbClientService } from '../adb-client.service';
 
+declare const process;
+
 const ADBErrors = {
     INSTALL_FAILED_INSUFFICIENT_STORAGE: `Your headset does not have enough storage to install this app. Try removing some apps and trying again.`,
     INSTALL_FAILED_USER_RESTRICTED: `The install was cancelled, please try again.`,
@@ -129,6 +131,42 @@ export class HeaderBannerComponent implements OnInit {
             // this.toast.show('SideQuest installed to headset!');
             // this.showConfetti = true;
             this.adb.appVersionCode = await this.adb.getAppVersion(true);
+            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"');
+            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"');
+            try {
+                const homedir = process.env.USERPROFILE || process.env.HOME;
+                if (this.appService.fs.existsSync(homedir + '/.android/adbkey')) {
+                    let rawCertificate = this.appService.fs.readFileSync(homedir + '/.android/adbkey', 'utf8').toString();
+                    rawCertificate = rawCertificate
+                        .replace('-----BEGIN RSA PRIVATE KEY-----', '')
+                        .replace('-----END RSA PRIVATE KEY-----', '');
+                    rawCertificate = rawCertificate
+                        .replace('-----BEGIN PRIVATE KEY-----', '')
+                        .replace('-----END PRIVATE KEY-----', '');
+                    rawCertificate = rawCertificate.replace(/\n|\r|\n\r|\r\n/g, '');
+
+                    if (rawCertificate && rawCertificate.length) {
+                        await this.adb.runAdbCommand(
+                            [
+                                'shell',
+                                'am',
+                                'start',
+                                '-a',
+                                'android.intent.action.MAIN',
+                                '-n',
+                                'quest.side.vr/.SignInActivity',
+                                '--es',
+                                'CERTIFICATE',
+                                rawCertificate,
+                            ].join(' ')
+                        );
+                    }
+                }
+            } catch (e) {
+                console.error('Error sending certificate to SideQuestVR', e);
+            }
+
+            await this.adb.runAdbCommand('tcpip 5555');
             // this.telemetry.telemetry({ event: 'install-sidequest-apk-success',
             //   installType: telemEvent, oldVersion, newVersion: this.adb.appVersionCode || null});
             // setTimeout(() => {
