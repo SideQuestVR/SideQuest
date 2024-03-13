@@ -36,7 +36,7 @@ export class HeaderBannerComponent implements OnInit {
     }
 
     setOutOfDate() {
-        // any time we don't know the currently installed app version or we don't know the latest available version, treat it as up to date
+        // any time we don't know the currently installed app version, or we don't know the latest available version, treat it as up to date
         if (this.latestAppVersion !== null && this.adb.appVersionCode !== null && this.adb.appVersionCode !== undefined) {
             if (Number(this.adb.appVersionCode) < Number(this.latestAppVersion)) {
                 this.isOutOfDate = true;
@@ -47,6 +47,10 @@ export class HeaderBannerComponent implements OnInit {
     }
 
     async getLatestApk() {
+        this.latestAppVersion = '28';
+        this.setOutOfDate();
+        return;
+
         const { apk, version } = await this.getExperimentalAPK();
         if (apk.length) {
             this.latestAppVersion = version;
@@ -119,6 +123,7 @@ export class HeaderBannerComponent implements OnInit {
             // this.telemetry.telemetry({ event: 'install-sidequest-apk', installType: telemEvent, oldVersion });
             this.isLoading = true;
             try {
+                throw new Error('bypass_experimental');
                 await this.getLatestApk();
                 await this.downloadExperimentalAPK();
             } catch (e) {

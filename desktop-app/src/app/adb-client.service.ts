@@ -623,6 +623,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 task.show_total = showTotal;
                 task.app_name = name || '';
                 task.status = name + showTotal + 'Installing Apk... ';
+                console.log('Installing filePath', filePath, 'Name', name);
                 return this.adbCommand('install', { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal }, status => {
                     if (status.percent && status.size && status.time) {
                         task.status =
