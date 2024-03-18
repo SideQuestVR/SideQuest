@@ -35,7 +35,10 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "allowedCommonJsDependencies": [
+              "dragula"
+            ]
           },
           "configurations": {
             "production": {

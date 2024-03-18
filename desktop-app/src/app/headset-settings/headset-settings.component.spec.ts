@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ToolsComponent } from './tools.component';
+import { HeadsetSettingsComponent } from './headset-settings.component';
 
-describe('ToolsComponent', () => {
-    let component: ToolsComponent;
-    let fixture: ComponentFixture<ToolsComponent>;
+describe('HeadsetSettingsComponent', () => {
+    let component: HeadsetSettingsComponent;
+    let fixture: ComponentFixture<HeadsetSettingsComponent>;
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
-            declarations: [ToolsComponent],
+            declarations: [HeadsetSettingsComponent],
         }).compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ToolsComponent);
+        fixture = TestBed.createComponent(HeadsetSettingsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

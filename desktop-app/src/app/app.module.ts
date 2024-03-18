@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // import { MzButtonModule, MzCheckboxModule, MzModalModule, MzTooltipModule } from '@steinv/ngx-materialize';
+import { MzModalModule} from './mz-components/modal';
 import { NgxMaterialize } from '@steinv/ngx-materialize';
 import { DragulaModule } from 'ng2-dragula';
 import { HeaderComponent } from './header/header.component';
@@ -60,7 +61,7 @@ import { StreamOptionsComponent } from './stream-options/stream-options.componen
         FormsModule,
         RouterModule.forRoot(AppRoutes, { useHash: true }),
 //        MzTooltipModule,
-      //        MzModalModule,
+        MzModalModule,
 //        MzButtonModule,
         HttpClientModule,
 //        MzCheckboxModule,

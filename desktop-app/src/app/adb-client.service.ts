@@ -396,7 +396,11 @@ export class AdbClientService {
             return requestAnimationFrame(this.connectedStatus.bind(this));
         this.lastConnectionCheck = now;
         return this.adbCommand('listDevices')
-            .then((devices: any) => devices.filter(device => device.type !== 'offline'))
+            .then((devices: any) => {
+              console.log("d1", devices);
+              let f = devices.filter(device => device.type !== 'offline')
+              return f;
+            })
             .then(async devices => {
                 if (devices.length > 1 && this.justChangedMPT) {
                     this.justChangedMPT = false;
@@ -415,7 +419,7 @@ export class AdbClientService {
                 requestAnimationFrame(this.connectedStatus.bind(this));
             })
             .catch(err => {
-                console.warn(err);
+                console.warn(err, err.stack);
                 alert(
                     this.appService.os.platform() === 'win32'
                         ? `It looks like there is something wrong with your install.
@@ -455,6 +459,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 await this.appService.seedPlatformTools();
             }
             this.appService.electron.ipcRenderer.on('adb-command', (event, arg: any) => {
+              console.log("result", arg.uuid, arg.status, arg.error, arg.resp)
                 if (this.adbResolves[arg.uuid]) {
                     if (arg.status && this.adbResolves[arg.uuid].callback) {
                         this.adbResolves[arg.uuid].callback(arg.status);
@@ -470,7 +475,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             });
             this.lastErrorMessage = null;
         } catch (e) {
-            console.error(e);
+            console.error(e, e.stack);
             this.deviceStatus = ConnectionStatus.DISCONNECTED;
             this.deviceStatusMessage = 'ADB Setup Error';
             this.lastErrorMessage = e.toString();

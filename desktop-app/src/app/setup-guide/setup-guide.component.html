@@ -16,8 +16,8 @@
       <p>If you are still having trouble then please visit our support community on SideQuest.</p>
       <div class="pure-material-button-contained extra-margin-bottom" (click)="appService.opn('https://sdq.st/support')">Open Support Community</div>
       <br>
-      <p *ngIf="adb.diagnostics.usb && adb.diagnostics.usb.log">If instructed to upload logs by a SideQuest support person, please click this button.</p>
-      <div *ngIf="adb.diagnostics.usb && adb.diagnostics.usb.log" class="pure-material-button-contained extra-margin-bottom" (click)="uploadLogs();">{{'Upload Logs'}}</div>
+      <p *ngIf="adb.diagnostics?.usb && adb.diagnostics.usb.log">If instructed to upload logs by a SideQuest support person, please click this button.</p>
+      <div *ngIf="adb.diagnostics?.usb && adb.diagnostics.usb.log" class="pure-material-button-contained extra-margin-bottom" (click)="uploadLogs();">{{'Upload Logs'}}</div>
       <div *ngIf="link">
         Copy and paste this link into your support request:
         <h3>{{link}}</h3>

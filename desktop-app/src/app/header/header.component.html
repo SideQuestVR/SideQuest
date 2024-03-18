@@ -55,81 +55,81 @@
 <!--        <app-link *ngIf="appService.updateAvailable"-->
 <!--                  class="waves-effect waves-light btn-flat  link small-button warning" (click)="updateAvailable()"-->
 <!--                  text="Update"></app-link>-->
-        <i mz-tooltip routerLink="/webview" (click)="doBack()"
-           class="material-icons white-text no-outline" position="bottom" tooltip="Back">
+        <i routerLink="/webview" (click)="doBack()"
+           class="material-icons white-text no-outline" data-position="bottom" mTooltip data-tooltip="Back">
           arrow_back
         </i>
-        <i mz-tooltip *ngIf="!webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
-           class="material-icons white-text no-outline" position="bottom" tooltip="Web Browser">
+        <i *ngIf="!webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
+           class="material-icons white-text no-outline" data-position="bottom" mTooltip data-tooltip="Web Browser">
           public
         </i>
-        <div mz-tooltip *ngIf="webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
-             class="loader-tiny pointer" position="bottom"
-             tooltip="Web Browser Loading..."></div>
-        <i mz-tooltip routerLink="/webview" (click)="webService.forward()"
-           class="material-icons white-text no-outline" position="bottom" tooltip="Forward">
+        <div *ngIf="webService.isWebviewLoading" (click)="browserMenu.style.display = 'block';browserMenuBack.style.display = 'block'"
+             class="loader-tiny pointer" data-position="bottom"
+             mTooltip data-tooltip="Web Browser Loading..."></div>
+        <i routerLink="/webview" (click)="webService.forward()"
+           class="material-icons white-text no-outline" data-position="bottom" mTooltip data-tooltip="Forward">
           arrow_forward
         </i>
-        <i mz-tooltip routerLink="/streaming" *ngIf="isConnected()&&osPlatform === 'win32'"
-           class="material-icons white-text no-outline" position="bottom"
-           tooltip="Stream from your headset to your PC with ScrCpy.">
+        <i routerLink="/streaming" *ngIf="isConnected()&&osPlatform === 'win32'"
+           class="material-icons white-text no-outline" data-position="bottom"
+           mTooltip data-tooltip="Stream from your headset to your PC with ScrCpy.">
           live_tv
         </i>
-        <i mz-tooltip *ngIf="adbService.deviceIp" routerLink="/wireless"
+        <i *ngIf="adbService.deviceIp" routerLink="/wireless"
            class="material-icons no-outline"
-           [ngClass]="{'green-text':adbService.wifiEnabled,'white-text':!adbService.wifiEnabled}" position="bottom"
-           tooltip="Enable wireless mode. (Experimental)">
+           [ngClass]="{'green-text':adbService.wifiEnabled,'white-text':!adbService.wifiEnabled}" data-position="bottom"
+           mTooltip data-tooltip="Enable wireless mode. (Experimental)">
           wifi
         </i>
-        <i mz-tooltip #mainLogo (click)="selectAppToInstall()"
-           class="material-icons white-text no-outline" position="bottom"
-           tooltip="Install APK file from folder on computer.">
+        <i #mainLogo (click)="selectAppToInstall()"
+           class="material-icons white-text no-outline" data-position="bottom"
+           mTooltip data-tooltip="Install APK file from folder on computer.">
           archive
         </i>
-        <i mz-tooltip class="material-icons white-text no-outline " routerLink="/device-files"
-           position="bottom" tooltip="Manage files on the headset.">
+        <i class="material-icons white-text no-outline " routerLink="/device-files"
+           data-position="bottom" mTooltip data-tooltip="Manage files on the headset.">
           folder
         </i>
-        <i routerLink="packages" mz-tooltip class="material-icons white-text no-outline"
-           position="bottom" tooltip="Currently installed apps">
+        <i routerLink="packages" class="material-icons white-text no-outline"
+           data-position="bottom" mTooltip data-tooltip="Currently installed apps">
           apps
         </i>
-        <i routerLink="tasks" mz-tooltip class="material-icons white-text no-outline" position="bottom"
-           tooltip="Running {{processService.left_length}} tasks.">
+        <i routerLink="tasks" class="material-icons white-text no-outline" data-position="bottom"
+           mTooltip [attr.data-tooltip]="'Running' + processService.left_length + 'tasks.'">
           playlist_add_check
-        </i><span routerLink="tasks" mz-tooltip *ngIf="processService.left_length" position="bottom"
-                  tooltip="Running {{processService.left_length}} tasks."
+        </i><span routerLink="tasks" *ngIf="processService.left_length" data-position="bottom"
+                  mTooltip data-tooltip="Running {{processService.left_length}} tasks."
                   class="process-badge pink-button">{{processService.left_length>100?'99+':processService.left_length}}</span>
-        <span routerLink="tasks" mz-tooltip *ngIf="!processService.left_length&&processService.failed_length"
-              position="bottom" tooltip="{{processService.failed_length}} failed tasks."
+        <span routerLink="tasks" *ngIf="!processService.left_length&&processService.failed_length"
+              data-position="bottom" mTooltip data-tooltip="{{processService.failed_length}} failed tasks."
               class="process-badge pink-button red">{{processService.failed_length>100?'99+':processService.failed_length}}</span>
-        <i id="device-settings" routerLink="tools" mz-tooltip
-           class="material-icons white-text no-outline" position="bottom"
-           tooltip="Device settings & tools">
+        <i id="device-settings" routerLink="tools"
+           class="material-icons white-text no-outline" data-position="bottom"
+           mTooltip data-tooltip="Device settings & tools">
           build
         </i>
-        <i id="support-screen" routerLink="/setup" mz-tooltip
-           class="material-icons white-text no-outline" position="bottom"
-           tooltip="Help and support with SideQuest">
+        <i id="support-screen" routerLink="/setup"
+           class="material-icons white-text no-outline" data-position="bottom"
+           mTooltip data-tooltip="Help and support with SideQuest">
           contact_support
         </i>
 
-        <i mz-tooltip (click)="commandMenu.style.display = 'block';commandMenuBack.style.display = 'block'"
+        <i (click)="commandMenu.style.display = 'block';commandMenuBack.style.display = 'block'"
            class="material-icons white-text no-outline"
-           position="bottom" tooltip="Run ADB commands">
+           data-position="bottom" mTooltip data-tooltip="Run ADB commands">
           input
         </i>
       </div>
       <div id="connection-status-container">
-        <i mz-tooltip class="material-icons white-text no-outline connection-device-select pointer left"
+        <i class="material-icons white-text no-outline connection-device-select pointer left"
            *ngIf="adbService.devices && adbService.devices.length > 1"
            (click)="deviceMenu.style.display = 'block';deviceMenuBack.style.display = 'block'"
-           position="bottom" tooltip="Select Device">
+           data-position="bottom" mTooltip data-tooltip="Select Device">
           arrow_drop_down
         </i>
         <div class="connection-status-outer left">
-          <div id="connection-status" class="connection-status-unauthorized  "  mz-tooltip
-               position="bottom" [ngClass]="adbService.connectionCss" [tooltip]="adbService.lastErrorMessage||'Device connection status.'">
+          <div id="connection-status" class="connection-status-unauthorized"
+               data-position="bottom" [ngClass]="adbService.connectionCss" mTooltip [attr.data-tooltip]="adbService.lastErrorMessage||'Device connection status.'">
 
 
           </div>
