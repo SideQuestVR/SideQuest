@@ -464,3 +464,26 @@ virtual-scroller{
 .footer-margin-right{
   margin-right: 1em!important;
 }
+
+.sidetestvr {
+  background-color: darkgreen;
+  color: white;
+}
+
+.friedquestvr {
+  background-color: darkred;
+  color: yellow;
+}
+
+.localtest {
+  background-color: darkblue;
+  color: yellow;
+}
+
+.sideenvironment {
+  position: absolute;
+  top: 5px;
+  right: calc(50% - 50px);
+  font-size: 16px;
+  font-weight: bold;
+}

@@ -1,7 +1,7 @@
-<div class="header">
+<div id=header class="header">
   <div class="top-bar">
     <div class="relative">
-      <div class="topper"></div>
+      <div class="topper {{headerClass}}"></div>
       <div class="user-menu-back" (click)="browserMenu.style.display = 'none';browserMenuBack.style.display = 'none'"
            #browserMenuBack></div>
       <div class="user-menu-back" (click)="commandMenu.style.display = 'none';commandMenuBack.style.display = 'none'"
@@ -16,6 +16,9 @@
           >[{{device.id}}] {{device.deviceName}}</div><br>
         </ng-container>
       </div>
+
+      <div class="sideenvironment {{headerClass}}">{{headerText}}</div>
+
       <div class="title-menu-container">
         <div class="user-menu command-menu" #commandMenu>
           <div class="btn-flat waves-light waves-light full-width center-align white-text truncate"
@@ -52,7 +55,8 @@
         </div>
         <div class="pure-material-button-contained slim update-available" *ngIf="appService.updateAvailable" (click)="updateAvailable()">Update Available</div>
 
-<!--        <app-link *ngIf="appService.updateAvailable"-->
+
+        <!--        <app-link *ngIf="appService.updateAvailable"-->
 <!--                  class="waves-effect waves-light btn-flat  link small-button warning" (click)="updateAvailable()"-->
 <!--                  text="Update"></app-link>-->
         <i routerLink="/webview" (click)="doBack()"
@@ -95,7 +99,7 @@
           apps
         </i>
         <i routerLink="tasks" class="material-icons white-text no-outline" data-position="bottom"
-           mTooltip [attr.data-tooltip]="'Running' + processService.left_length + 'tasks.'">
+           mTooltip [attr.data-tooltip]="'Running ' + processService.left_length + ' tasks.'">
           playlist_add_check
         </i><span routerLink="tasks" *ngIf="processService.left_length" data-position="bottom"
                   mTooltip data-tooltip="Running {{processService.left_length}} tasks."
@@ -140,7 +144,6 @@
     </div>
   </div>
   <div class="top-dnd-backing">
-
     <div class="top-banner">
 <!--      <div>-->
 <!--        <a href="#/" class="logo">-->

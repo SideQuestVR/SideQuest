@@ -1,3 +1,4 @@
+
 export function getEnvCfg() {
     switch (process.env['SQ_ENV_CFG']) {
         case 'test':
@@ -15,6 +16,23 @@ export function getEnvCfg() {
                 http_url: 'https://testapi.side.quest',
                 cdnUrl: 'https://testcdn.sidequestvr.com',
                 shortenerUrl: 'https://testlinks.side.quest',
+            };
+        case 'fried':
+        case 'friedquest':
+            return {
+                web_url: 'https://friedquestvr.com',
+                ws_url: 'wss://ws.friedquestvr.com',
+                http_url: 'https://api.friedquestvr.com',
+                cdnUrl: 'https://cdn.friedquestvr.com',
+                shortenerUrl: 'https://links.friedquestvr.com',
+            };
+        case 'localhost':
+            return {
+                web_url: 'http://127.0.0.1:3005',
+                ws_url: 'ws://127.0.0.1:3008',
+                http_url: 'http://127.0.0.1:3000',
+                cdnUrl: 'http://127.0.0.1:3001',
+                shortenerUrl: 'http://127.0.0.1:3004',
             };
         case 'local':
             return {

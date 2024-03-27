@@ -35,9 +35,9 @@ interface LogCatEntry {
     styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-    @ViewChild('header') header;
+   //  @ViewChild('header') header;
     @ViewChild('bookmarksModal') bookmarksModal;
-    @ViewChild('beatOnModal') beatOnModal;
+    // @ViewChild('beatOnModal') beatOnModal;
     @ViewChild('mainLogo') mainLogo;
     @ViewChild('safeModal') safeModal;
     @ViewChild('manageFavs') manageFavs;
@@ -94,6 +94,8 @@ export class HeaderComponent implements OnInit {
     currentLogCat: LogCatEntry[] = [];
     isStarted: boolean;
     showAddFavourite: boolean;
+    protected headerClass: string;
+    protected headerText: string;
     constructor(
         public adbService: AdbClientService,
         public appService: AppService,
@@ -111,6 +113,9 @@ export class HeaderComponent implements OnInit {
         this.resetFavourites('fileFavourites');
         this.resetFavourites('commandFavourites');
         this.appService.headerComponent = this;
+        this.headerClass = environment.header?.color || "";
+        this.headerText = environment.header?.text || "";
+        console.log('Header: ' + this.headerClass + ' ' + this.headerText);
     }
     doBack() {
         if (

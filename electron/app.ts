@@ -9,21 +9,16 @@ const download = require('./download');
 const extract = require('extract-zip');
 
 const Readable = require('stream').Readable;
-const adb = require('adbkit');
+const adb = require('@devicefarmer/adbkit').Adb;
 const fs = require('fs');
-const exec = require('child_process').exec;
 const crypto = require('crypto');
 const request = require('request');
 const progress = require('request-progress');
 //without this, there's a bug in electron that makes facebook pages ruin everything, see https://github.com/electron/electron/issues/25469
 app.commandLine.appendSwitch('disable-features', 'CrossOriginOpenerPolicy');
 
-// const Readable = require('stream').Readable;
 import { SetPropertiesCommand } from './setproperties';
 import { OPEN_IN_SYSTEM_BROWSER_DOMAINS } from './external-urls';
-
-let has_port = process.argv.indexOf('--port');
-let valid_port = has_port > -1 && process.argv[has_port + 1] && Number.isInteger(Number(process.argv[has_port + 1]));
 
 let installErrorCallback;
 
@@ -35,19 +30,35 @@ process.on('uncaughtException', function(error) {
     }
 });
 
+
+const makeDeferred = () => {
+    const deferred = {promise: null, resolve:  () => {} , reject:  () => {}};
+    // @ts-ignore
+    deferred.promise = new Promise((resolve: Function, reject: Function): void => {
+        // @ts-ignore
+        deferred.resolve = resolve;
+        // @ts-ignore
+        deferred.reject = reject;
+    });
+    return deferred;
+}
+
 class ADB {
-    client;
+    client= null;
     _logcat;
     adbPath;
+    _clientSetup = makeDeferred();
+
     setupAdb(adbPath, cb, ecb) {
         if (this.client) return;
         this.adbPath = adbPath;
-        let port = valid_port ? Number(process.argv[has_port + 1]) : process.env.ANDROID_ADB_SERVER_PORT || 5037;
         this.client = adb.createClient({
             bin: adbPath,
         });
+        this._clientSetup.resolve();
         cb();
     }
+
     async checkAPK(updateStatus: (string) => void, filePath: string): Promise<boolean> {
         const hash = await this.computeFileHash(updateStatus, filePath);
         const url = `${getEnvCfg().shortenerUrl || 'https://sdq.st'}/check-app-hash/${hash}`;
@@ -171,26 +182,33 @@ class ADB {
         }
     }
     logcat(serial, tag, priority, cb, scb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        if (!this._logcat) this.endLogcat();
-        this.client
-            .openLogcat(serial, { clear: true })
-            .then(logcat => {
-                this._logcat = logcat;
-                logcat.include(tag, priority).on('entry', entry => scb(entry));
-            })
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            if (!this._logcat) this.endLogcat();
+            this.client
+                .openLogcat(serial, { clear: true })
+                .then(logcat => {
+                    this._logcat = logcat;
+                    logcat.include(tag, priority).on('entry', entry => scb(entry));
+                })
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     installRemote(serial, path, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .installRemote(serial, path)
-            .then(cb)
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .installRemote(serial, path)
+                .then(cb)
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     async install(serial, apkpath, isLocal, cb, scb, ecb) {
+        await this._clientSetup.promise;
+
         console.log('installapk');
         let stopUpdate;
+
         installErrorCallback = e => {
             stopUpdate = true;
             ecb(e);
@@ -245,160 +263,190 @@ class ADB {
             .then(cb)
             .catch(e => ecb(e));
     }
-    uninstall(serial, packageName, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .uninstall(serial, packageName)
-            .then(cb)
-            .catch(e => ecb(e));
+     uninstall(serial, packageName, cb, ecb) {
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .uninstall(serial, packageName)
+                .then(cb)
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     clear(serial, packageName, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .clear(serial, packageName)
-            .then(cb)
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .clear(serial, packageName)
+                .then(cb)
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     disconnect(cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .disconnect()
-            .then(cb)
-            .then(() => this.client.kill())
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .disconnect()
+                .then(cb)
+                .then(() => this.client.kill())
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     connect(deviceIp, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .connect(deviceIp + ':5555')
-            .then(cb)
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .connect(deviceIp + ':5555')
+                .then(cb)
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     tcpip(serial, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .tcpip(serial, 5555)
-            .then(r => {
-                console.log(r);
-                cb(r);
-            })
-            .catch(e => {
-                console.log(serial, e);
-                ecb(e);
-            });
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .tcpip(serial, 5555)
+                .then(r => {
+                    console.log(r);
+                    cb(r);
+                })
+                .catch(e => {
+                    console.log(serial, e);
+                    ecb(e);
+                });
+        }).catch(e => ecb(e));
     }
     usb(serial, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .usb(serial)
-            .then(cb)
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .usb(serial)
+                .then(cb)
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     listDevices(cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .listDevices()
-            .then(d => cb(d))
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .listDevices()
+                .then(d => cb(d))
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     setProperties(serial, command, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .transport(serial)
-            .then(function(transport) {
-                return new SetPropertiesCommand(transport).execute(command);
-            })
-            // this.client
-            //     .setProperties(serial, command)
-            .then(res => cb(res))
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .transport(serial)
+                .then(function(transport) {
+                    return new SetPropertiesCommand(transport).execute(command);
+                })
+                // this.client
+                //     .setProperties(serial, command)
+                .then(res => cb(res))
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     getPackages(serial, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .getPackages(serial)
-            .then(res => cb(res))
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .getPackages(serial)
+                .then(res => cb(res))
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     shell(serial, command, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .shell(serial, command)
-            .then(adb.util.readAll)
-            .then(res => cb(res.toString()))
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .shell(serial, command)
+                .then(adb.util.readAll)
+                .then(res => cb(res.toString()))
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     readdir(serial, path, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .readdir(serial, path)
-            .then(res =>
-                res
-                    .map(r => {
-                        r.__isFile = r.isFile();
-                        return r;
-                    })
-                    .filter(r => !(r.__isFile && r.name.lastIndexOf('\\') > -1))
-            )
-            .then(res => cb(res))
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .readdir(serial, path)
+                .then(res =>
+                    res
+                        .map(r => {
+                            r.__isFile = r.isFile();
+                            return r;
+                        })
+                        .filter(r => !(r.__isFile && r.name.lastIndexOf('\\') > -1))
+                )
+                .then(res => cb(res))
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
     push(serial, path, savePath, cb, scb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .push(serial, fs.createReadStream(path), savePath)
-            .then(transfer => {
-                let _stats, autocancel;
-                const interval = setInterval(() => {
-                    scb(_stats);
-                }, 1000);
-                transfer.on('progress', stats => {
-                    clearTimeout(autocancel);
-                    _stats = stats;
-                    autocancel = setTimeout(() => {
+        this._clientSetup.promise.then(() => {
+
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .push(serial, fs.createReadStream(path), savePath)
+                .then(transfer => {
+                    let _stats, autoCancel;
+                    const interval = setInterval(() => {
+                        scb(_stats);
+                    }, 1000);
+                    transfer.on('progress', stats => {
+                        clearTimeout(autoCancel);
+                        _stats = stats;
+                        autoCancel = setTimeout(() => {
+                            clearInterval(interval);
+                            cb();
+                        }, 90000);
+                    });
+                    transfer.on('end', () => {
+                        clearTimeout(autoCancel);
                         clearInterval(interval);
                         cb();
-                    }, 90000);
-                });
-                transfer.on('end', () => {
-                    clearTimeout(autocancel);
-                    clearInterval(interval);
-                    cb();
-                });
-                transfer.on('error', e => {
+                    });
+                    transfer.on('error', e => {
+                        ecb(e);
+                    });
+                })
+                .catch(e => {
                     ecb(e);
                 });
-            })
-            .catch(e => {
-                ecb(e);
-            });
+        }).catch(e => ecb(e));
     }
     pull(serial, path, savePath, cb, scb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .pull(serial, path)
-            .then(transfer => {
-                transfer.on('progress', stats => {
-                    scb(stats);
-                });
-                transfer.on('end', () => {
-                    cb();
-                });
-                transfer.on('error', e => {
+        this._clientSetup.promise.then(() => {
+
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .pull(serial, path)
+                .then(transfer => {
+                    transfer.on('progress', stats => {
+                        scb(stats);
+                    });
+                    transfer.on('end', () => {
+                        cb();
+                    });
+                    transfer.on('error', e => {
+                        ecb(e);
+                    });
+                    transfer.pipe(fs.createWriteStream(savePath));
+                })
+                .catch(e => {
                     ecb(e);
                 });
-                transfer.pipe(fs.createWriteStream(savePath));
-            })
-            .catch(e => {
-                ecb(e);
-            });
+        }).catch(e => ecb(e));
     }
     stat(serial, path, cb, ecb) {
-        if (!this.client) return ecb('Not connected.');
-        this.client
-            .stat(serial, path)
-            .then(res => cb(res))
-            .catch(e => ecb(e));
+        this._clientSetup.promise.then(() => {
+            if (!this.client) return ecb('Not connected.');
+            this.client
+                .stat(serial, path)
+                .then(res => cb(res))
+                .catch(e => ecb(e));
+        }).catch(e => ecb(e));
     }
 }
 
@@ -530,6 +578,47 @@ function createWindow() {
             console.log('did create window fired');
             handleWindow(child);
         });
+
+        child.webContents.session.on('select-usb-device', (event, details, callback) => {
+            // Add events to handle devices being added or removed before the callback on
+            // `select-usb-device` is called.
+
+            //event.preventDefault();
+            if (details.deviceList && details.deviceList.length > 0) {
+                // Meta Quest Device
+                if (details.deviceList[0].vendorId === 10291) {
+                    callback(details.deviceList[0].deviceId);
+                    return;
+                }
+                //  if (deviceToReturn) {
+                //      callback(deviceToReturn.deviceId)
+                //  } else {
+                //      callback()
+                //  }
+            }
+            callback();
+        });
+
+/*
+        child.webContents.session.setPermissionCheckHandler((webContents, permission, requestingOrigin, details) => {
+            console.log("SET PERMISSION CHECK HANDLER", permission, requestingOrigin, details)
+            if (permission === 'usb') {
+                return true
+            }
+        }) */
+
+        child.webContents.session.setDevicePermissionHandler((details) => {
+            if (details.deviceType === 'usb') {
+                if (details.device.vendorId === 10291) {
+                    // Meta Oculus
+                    return true;
+                }
+                // TODO: Pico
+                console.log("SET DEVICE PERMISSION HANDLER FALSE", details)
+                return false;
+            }
+        });
+
     };
     handleWindow(mainWindow);
     mainWindow.webContents.session.setUserAgent(mainWindow.webContents.session.getUserAgent() + ' SQ/' + app.getVersion());
@@ -697,6 +786,8 @@ function setupApp() {
         mainWindow.webContents.send('info', text);
     };
 
+
+
     const adb = new ADB();
 
     ipcMain.on('download-url', async (event, { url, token, directory, filename }) => {
@@ -731,11 +822,13 @@ function setupApp() {
     });
     ipcMain.on('adb-command', (event, arg) => {
         const success = d => {
+            // console.log("  ", arg.command, "Success", d)
             if (!event.sender.isDestroyed()) {
                 event.sender.send('adb-command', { command: arg.command, resp: d, uuid: arg.uuid });
             }
         };
         const reject = e => {
+            // console.log("  ", arg.command, "reject", e)
             if (!event.sender.isDestroyed()) {
                 event.sender.send('adb-command', { command: arg.command, error: e, uuid: arg.uuid });
             }
@@ -745,68 +838,74 @@ function setupApp() {
                 event.sender.send('adb-command', { command: arg.command, status: d, uuid: arg.uuid });
             }
         };
-        switch (arg.command) {
-            case 'installFromToken':
-                adb.installFromToken(arg.settings.token, success, reject);
-                break;
-            case 'setupAdb':
-                adb.setupAdb(arg.settings.adbPath, success, reject);
-                break;
-            case 'endLogcat':
-                adb.endLogcat();
-                success('Done.');
-                break;
-            case 'logcat':
-                adb.logcat(arg.settings.serial, arg.settings.tag, arg.settings.priority, success, status, reject);
-                break;
-            case 'listDevices':
-                adb.listDevices(success, reject);
-                break;
-            case 'getPackages':
-                adb.getPackages(arg.settings.serial, success, reject);
-                break;
-            case 'shell':
-                adb.shell(arg.settings.serial, arg.settings.command, success, reject);
-                break;
-            case 'readdir':
-                adb.readdir(arg.settings.serial, arg.settings.path, success, reject);
-                break;
-            case 'push':
-                adb.push(arg.settings.serial, arg.settings.path, arg.settings.savePath, success, status, reject);
-                break;
-            case 'pull':
-                adb.pull(arg.settings.serial, arg.settings.path, arg.settings.savePath, success, status, reject);
-                break;
-            case 'stat':
-                adb.stat(arg.settings.serial, arg.settings.path, success, reject);
-                break;
-            case 'install':
-                adb.install(arg.settings.serial, arg.settings.path, arg.settings.isLocal, success, status, reject);
-                break;
-            case 'uninstall':
-                adb.uninstall(arg.settings.serial, arg.settings.packageName, success, reject);
-                break;
-            case 'installRemote':
-                adb.installRemote(arg.settings.serial, arg.settings.path, success, reject);
-                break;
-            case 'clear':
-                adb.clear(arg.settings.serial, arg.settings.packageName, success, reject);
-                break;
-            case 'connect':
-                adb.connect(arg.settings.deviceIp, success, reject);
-                break;
-            case 'disconnect':
-                adb.disconnect(success, reject);
-                break;
-            case 'usb':
-                adb.usb(arg.settings.serial, success, reject);
-                break;
-            case 'tcpip':
-                adb.tcpip(arg.settings.serial, success, reject);
-                break;
-            case 'setProperties':
-                adb.setProperties(arg.settings.serial, arg.settings.command, success, reject);
-                break;
+        // console.log("Running:", arg.command);
+        try {
+            switch (arg.command) {
+                case 'installFromToken':
+                    adb.installFromToken(arg.settings.token, success, reject);
+                    break;
+                case 'setupAdb':
+                    adb.setupAdb(arg.settings.adbPath, success, reject);
+                    break;
+                case 'endLogcat':
+                    adb.endLogcat();
+                    success('Done.');
+                    break;
+                case 'logcat':
+                    adb.logcat(arg.settings.serial, arg.settings.tag, arg.settings.priority, success, status, reject);
+                    break;
+                case 'listDevices':
+                    adb.listDevices(success, reject);
+                    break;
+                case 'getPackages':
+                    adb.getPackages(arg.settings.serial, success, reject);
+                    break;
+                case 'shell':
+                    adb.shell(arg.settings.serial, arg.settings.command, success, reject);
+                    break;
+                case 'readdir':
+                    adb.readdir(arg.settings.serial, arg.settings.path, success, reject);
+                    break;
+                case 'push':
+                    adb.push(arg.settings.serial, arg.settings.path, arg.settings.savePath, success, status, reject);
+                    break;
+                case 'pull':
+                    adb.pull(arg.settings.serial, arg.settings.path, arg.settings.savePath, success, status, reject);
+                    break;
+                case 'stat':
+                    adb.stat(arg.settings.serial, arg.settings.path, success, reject);
+                    break;
+                case 'install':
+                    adb.install(arg.settings.serial, arg.settings.path, arg.settings.isLocal, success, status, reject);
+                    break;
+                case 'uninstall':
+                    adb.uninstall(arg.settings.serial, arg.settings.packageName, success, reject);
+                    break;
+                case 'installRemote':
+                    adb.installRemote(arg.settings.serial, arg.settings.path, success, reject);
+                    break;
+                case 'clear':
+                    adb.clear(arg.settings.serial, arg.settings.packageName, success, reject);
+                    break;
+                case 'connect':
+                    adb.connect(arg.settings.deviceIp, success, reject);
+                    break;
+                case 'disconnect':
+                    adb.disconnect(success, reject);
+                    break;
+                case 'usb':
+                    adb.usb(arg.settings.serial, success, reject);
+                    break;
+                case 'tcpip':
+                    adb.tcpip(arg.settings.serial, success, reject);
+                    break;
+                case 'setProperties':
+                    adb.setProperties(arg.settings.serial, arg.settings.command, success, reject);
+                    break;
+            }
+        }
+        catch (e) {
+            reject(e)
         }
     });
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { AdbClientService } from '../adb-client.service';
+import { environment } from '../../environments/environment';
 
 declare const process;
 
@@ -26,6 +27,7 @@ export class HeaderBannerComponent implements OnInit {
     isOutOfDate: boolean;
     // the latest available version of the in-headset app
     private latestAppVersion: string | null = null;
+    private appId: string | null = null;
     constructor(public appService: AppService, public adb: AdbClientService) {}
 
     ngOnInit() {
@@ -47,36 +49,26 @@ export class HeaderBannerComponent implements OnInit {
     }
 
     async getLatestApk() {
-        this.latestAppVersion = '28';
+
+        const request = (await fetch(environment.configuration.http_url + '/v2/apps/get-sidequest-apk', {
+          body: JSON.stringify({ package_name: 'quest.side.vr' }), method: 'POST',
+          headers: { "Content-Type": "application/json" }
+        }));
+
+        let json = await request.json();
+        this.appId = json.app_id;
+        this.latestAppVersion = json.version_code;
+        this.apkDownloadPath = json.url;
         this.setOutOfDate();
-        return;
-
-        const { apk, version } = await this.getExperimentalAPK();
-        if (apk.length) {
-            this.latestAppVersion = version;
-            this.setOutOfDate();
-            this.apkDownloadPath = apk[0].browser_download_url;
-        }
     }
 
-    async getExperimentalAPK() {
-        const json = await fetch('https://api.github.com/repos/SideQuestVR/Lite/releases/latest');
-        const r = await json.json();
-        r.assets.reverse();
-        const apk = r.assets.filter(a => a.name.split('.').pop() === 'apk');
-        const versionFile = r.assets.filter(a => a.name.split('.').pop() === 'versionCode');
-        let version;
-        if (versionFile.length > 0) {
-            version = versionFile[0].name.split('.')[0];
-        }
-        return { apk, version };
-    }
 
-    async downloadExperimentalAPK() {
+    async downloadAPK() {
         if (!this.apkDownloadPath) {
             return Promise.reject('Could not download latest apk, please try again!');
         }
-        console.log('downloadExperimentalAPK', this.apkDownloadPath);
+
+        console.log('downloadAPK', this.appId);
         return new Promise<void>((resolve, reject) => {
             const requestOptions = {
                 timeout: 30000,
@@ -123,9 +115,9 @@ export class HeaderBannerComponent implements OnInit {
             // this.telemetry.telemetry({ event: 'install-sidequest-apk', installType: telemEvent, oldVersion });
             this.isLoading = true;
             try {
-                throw new Error('bypass_experimental');
+                throw new Error('bypass_sdk_download');
                 await this.getLatestApk();
-                await this.downloadExperimentalAPK();
+                await this.downloadAPK();
             } catch (e) {
                 // this.toast.show('Failed to download updated SQ apk, falling back to bundled apk. Are you online?', true);
                 console.warn(e);
@@ -136,8 +128,8 @@ export class HeaderBannerComponent implements OnInit {
             // this.toast.show('SideQuest installed to headset!');
             // this.showConfetti = true;
             this.adb.appVersionCode = await this.adb.getAppVersion(true);
-            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"');
-            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"');
+            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"', true);
+            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"', true);
             try {
                 const homedir = process.env.USERPROFILE || process.env.HOME;
                 if (this.appService.fs.existsSync(homedir + '/.android/adbkey')) {
@@ -163,7 +155,7 @@ export class HeaderBannerComponent implements OnInit {
                                 '--es',
                                 'CERTIFICATE',
                                 rawCertificate,
-                            ].join(' ')
+                            ].join(' '), true
                         );
                     }
                 }
@@ -171,7 +163,10 @@ export class HeaderBannerComponent implements OnInit {
                 console.error('Error sending certificate to SideQuestVR', e);
             }
 
+            this.adb.skipStatusUpdates = true;
             await this.adb.runAdbCommand('tcpip 5555');
+            setTimeout(() => { this.adb.skipStatusUpdates = false; }, 3000);
+
             // this.telemetry.telemetry({ event: 'install-sidequest-apk-success',
             //   installType: telemEvent, oldVersion, newVersion: this.adb.appVersionCode || null});
             // setTimeout(() => {

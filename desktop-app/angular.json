@@ -121,6 +121,46 @@
               "aot": false,
               "extractLicenses": true,
               "vendorChunk": false
+            },
+            "localhost": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.localhost.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false
+            },
+            "fried": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.fried.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false
             }
           },
           "defaultConfiguration": ""
@@ -142,6 +182,12 @@
             },
             "local": {
               "buildTarget": "desktop-app:build:local"
+            },
+            "fried": {
+              "buildTarget": "desktop-app:build:fried"
+            },
+            "localhost": {
+              "buildTarget": "desktop-app:build:localhost"
             }
           }
         },

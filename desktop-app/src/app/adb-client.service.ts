@@ -40,6 +40,7 @@ export class AdbClientService {
     pollInterval: number = 1000 * 1;
     savePath: string;
     isTransferring: boolean;
+    skipStatusUpdates: boolean = false;
     adbResolves: any;
     files: any;
     localFiles: any;
@@ -390,16 +391,17 @@ export class AdbClientService {
         }
     }
 
+    boundConnectedStatus: any = null;
     async connectedStatus() {
+        if (!this.boundConnectedStatus) { this.boundConnectedStatus = this.connectedStatus.bind(this); }
         let now = performance.now();
-        if (now - this.lastConnectionCheck < this.pollInterval || this.isTransferring)
-            return requestAnimationFrame(this.connectedStatus.bind(this));
+        if (now - this.lastConnectionCheck < this.pollInterval || this.isTransferring || this.skipStatusUpdates) {
+          return requestAnimationFrame(this.boundConnectedStatus);
+        }
         this.lastConnectionCheck = now;
         return this.adbCommand('listDevices')
             .then((devices: any) => {
-              console.log("d1", devices);
-              let f = devices.filter(device => device.type !== 'offline')
-              return f;
+              return devices.filter(device => device.type !== 'offline')
             })
             .then(async devices => {
                 if (devices.length > 1 && this.justChangedMPT) {
@@ -416,10 +418,10 @@ export class AdbClientService {
                         this.appVersionCode = await this.getAppVersion(true);
                     } catch {}
                 }
-                requestAnimationFrame(this.connectedStatus.bind(this));
+                requestAnimationFrame(this.boundConnectedStatus);
             })
             .catch(err => {
-                console.warn(err, err.stack);
+                console.error("Wrong Install Error:", err, err.stack);
                 alert(
                     this.appService.os.platform() === 'win32'
                         ? `It looks like there is something wrong with your install.
@@ -429,6 +431,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 );
             });
     }
+
     adbCommand(command: string, settings?, callback?) {
         const uuid = this.appService.uuidv4();
         return new Promise<any>((resolve, reject) => {
@@ -441,6 +444,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         const { clipboard } = (window as any).require('electron');
         clipboard.writeText(value);
     }
+
     async getAppVersion(isCode: boolean): Promise<string | null> {
         const versionInfo = await this.runAdbCommand('shell dumpsys package ' + this.VR_APP_PACKAGE, true);
         this.notInstalled = versionInfo.includes('Unable to find package');
@@ -459,7 +463,6 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 await this.appService.seedPlatformTools();
             }
             this.appService.electron.ipcRenderer.on('adb-command', (event, arg: any) => {
-              console.log("result", arg.uuid, arg.status, arg.error, arg.resp)
                 if (this.adbResolves[arg.uuid]) {
                     if (arg.status && this.adbResolves[arg.uuid].callback) {
                         this.adbResolves[arg.uuid].callback(arg.status);
@@ -481,6 +484,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             this.lastErrorMessage = e.toString();
         }
     }
+
     isAdbDownloaded() {
         try {
             let downloaded = true;
@@ -504,6 +508,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return false;
         }
     }
+
     setPermission(packageName: string, permission: string, isRevoke?: boolean) {
         return this.adbCommand('shell', {
             serial: this.deviceSerial,
@@ -512,6 +517,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             this.statusService.showStatus('Permission set OK!!');
         });
     }
+
     doesFileExist(path) {
         try {
             return this.appService.fs.existsSync(path);
@@ -519,6 +525,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return false;
         }
     }
+
     getAdbBinary() {
         if (this.appService.os.platform() === 'win32') {
             return 'adb.exe';
@@ -526,6 +533,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return 'adb';
         }
     }
+
     getFilenameDate() {
         return JSON.stringify(new Date())
             .split('"')
@@ -534,6 +542,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             .join('-')
             .trim();
     }
+
     getPackageLocation(packageName) {
         return this.adbCommand('shell', { serial: this.deviceSerial, command: 'pm list packages -f ' + packageName }).then(res => {
             let parts = res.split(':');
@@ -544,6 +553,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             }
         });
     }
+
     async makeBackupFolders(packageName: string) {
         let mainBackupPath = this.appService.path.join(this.appService.backupPath, packageName);
         return this.appService
@@ -551,6 +561,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             .then(() => this.appService.mkdir(this.appService.path.join(mainBackupPath, 'apks')))
             .then(() => this.appService.mkdir(this.appService.path.join(mainBackupPath, 'data')));
     }
+
     async getBackups(packageName: string) {
         await this.makeBackupFolders(packageName);
         let backupPath = this.appService.path.join(this.appService.backupPath, packageName, 'apks');
@@ -560,6 +571,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             .filter(file => !this.appService.fs.lstatSync(file).isDirectory() && this.appService.path.extname(file) === '.apk')
             .reverse();
     }
+
     async getDataBackups(packageName: string) {
         await this.makeBackupFolders(packageName);
         let backupPath = this.appService.path.join(this.appService.backupPath, packageName, 'data');
@@ -604,6 +616,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 });
         });
     }
+
     installAPK(
         filePath: string,
         isLocal?: boolean,
@@ -646,6 +659,9 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                         if (filePath.indexOf('com.weloveoculus.BMBF') > -1) {
                             return this.beatonService.setBeatOnPermission(this);
                         }
+                        if (filePath.indexOf('quest.side.vr') > -1) {
+                            return this.addVRPermissions();
+                        }
                     })
                     .catch(async e => {
                         if (deleteAfter) {
@@ -685,6 +701,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             name
         );
     }
+
     uninstallAPK(pkg) {
         return this.processService.addItem('apk_uninstall', task => {
             task.status = 'Uninstalling ' + pkg + '...';
@@ -706,12 +723,14 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 .catch(e => Promise.reject(e.message ? e.message : e.code ? e.code : e.toString() + pkg));
         });
     }
+
     makeFolder(files) {
         if (!files.length) return null;
         let f: any = files.shift();
         this.spinnerService.setMessage('Making folder: <br>' + f.saveName);
         return this.appService.mkdir(f.saveName).then(() => this.makeFolder(files));
     }
+
     downloadFile(files, task) {
         if (!files.length) return;
         let f: any = files.shift();
@@ -724,6 +743,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 'MB';
         }).then(r => this.downloadFile(files, task));
     }
+
     async getFoldersRecursive(root: string) {
         return this.getFolders(root).then(entries => {
             entries.forEach(f => {
@@ -739,6 +759,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return recurse();
         });
     }
+
     async getLocalFoldersRecursive(root: string) : Promise<void> {
         return new Promise(resolve => {
             this.appService.fs.readdir(root, async (err, entries) => {
@@ -757,6 +778,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             });
         });
     }
+
     async uploadFile(files, task) {
         if (!files.length) return;
         let f: any = files.shift();
@@ -765,6 +787,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             task.status = 'File uploading: ' + f.name + ' ' + Math.round((stats.bytesTransferred / 1024 / 1024) * 100) / 100 + 'MB';
         }).then(r => this.uploadFile(files, task));
     }
+
     async launchYurOverlay() {
         await this.adbCommand('shell', {
             serial: this.deviceSerial,
@@ -775,6 +798,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             command: 'am startservice com.yur.fitquest/.service.YURCounterService',
         });
     }
+
     async restoreDataBackup(packageName: string, folderName: string) {
         return this.processService.addItem('restore_files', async task => {
             task.status = 'Transferring Files...';
@@ -823,6 +847,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return Promise.resolve();
         });
     }
+
     async makeDataBackup(packageName: string) {
         return this.processService.addItem('save_files', async task => {
             task.status = 'Starting Backup...';
@@ -881,15 +906,18 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 });
         });
     }
+
     async hasSDFolder(name: string, packageName: string) {
         let folders = await this.getFolders('/sdcard/Android/' + name + '/');
         return !!~folders.map(d => d.name).indexOf(packageName);
     }
+
     async getFolders(root) {
         return this.adbCommand('readdir', { serial: this.deviceSerial, path: root }).catch(e =>
             this.statusService.showStatus('Error: ' + e.toString() + ' while reading path ' + root, true)
         );
     }
+
     installFile(url, destinationFolder: string, number?: number, total?: number) {
         return this.processService.addItem('file_install', async task => {
             return this.appService
@@ -905,6 +933,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 .then((_path: string) => this.installLocalFile(_path, destinationFolder, false, null, number, total, task));
         });
     }
+
     installLocalFile(
         filepath: string,
         destinationFolder: string,
@@ -962,6 +991,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         }
         return p;
     }
+
     installZip(url, number?: number, total?: number, deleteAfter?: boolean) {
         return this.processService.addItem('file_install', async task => {
             return this.appService
@@ -991,6 +1021,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 });
         });
     }
+
     installObb(url, number?: number, total?: number, name?: string) {
         return this.processService.addItem(
             'file_install',
@@ -1022,6 +1053,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             name
         );
     }
+
     installLocalObb(filepath: string, dontCatchError = false, cb = null, number?: number, total?: number, task?, name?: string) {
         let filename = this.appService.path.basename(filepath);
         let match = filename.match(this.obbRegex);
@@ -1059,6 +1091,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         }
         return p;
     }
+
     async installLocalZip(filepath, dontCatchError, cb, task?, deleteAfter?) : Promise<void> {
         const typeBasedActions = {
             '.apk': filepath => {
@@ -1116,6 +1149,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             );
         });
     }
+
     cleanUpFolder(folderPath = this.appService.path.join(this.appService.appData, 'tmp')) {
         this.appService.fs.readdir(folderPath, (readErr, files) => {
             files.forEach((val, index) => {
@@ -1183,6 +1217,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             return { permission, enabled };
         });
     }
+
     async getFreeSpace() {
         return this.adbCommand('shell', { serial: this.deviceSerial, command: 'df -h' }).then(data => {
             data = data.split(' ').filter(d => d);
@@ -1191,6 +1226,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             this.freespace.percent = data[data.length - 2];
         });
     }
+
     async getBatteryLevel() {
         return this.adbCommand('shell', { serial: this.deviceSerial, command: 'dumpsys battery' }).then(data => {
             let batteryObject = {};
@@ -1209,9 +1245,51 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             this.batteryLevel = batteryObject['level'];
         });
     }
+
     async getDeviceModel() {
         return this.adbCommand('shell', { serial: this.deviceSerial, command: 'getprop ro.product.model' }).then(
             data => (this.deviceModel = data.trim())
         );
     }
+
+  private async addVRPermissions() {
+    await this.adbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"', { serial: this.deviceSerial });
+    await this.adbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"', { serial: this.deviceSerial });
+    try {
+      const homedir = process.env.USERPROFILE || process.env.HOME;
+      if (this.appService.fs.existsSync(homedir + '/.android/adbkey')) {
+        let rawCertificate = this.appService.fs.readFileSync(homedir + '/.android/adbkey', 'utf8').toString();
+        rawCertificate = rawCertificate
+          .replace('-----BEGIN RSA PRIVATE KEY-----', '')
+          .replace('-----END RSA PRIVATE KEY-----', '');
+        rawCertificate = rawCertificate
+          .replace('-----BEGIN PRIVATE KEY-----', '')
+          .replace('-----END PRIVATE KEY-----', '');
+        rawCertificate = rawCertificate.replace(/\n|\r|\n\r|\r\n/g, '');
+
+        if (rawCertificate && rawCertificate.length) {
+          await this.adbCommand(
+            [
+              'shell',
+              'am',
+              'start',
+              '-a',
+              'android.intent.action.MAIN',
+              '-n',
+              'quest.side.vr/.SignInActivity',
+              '--es',
+              'CERTIFICATE',
+              rawCertificate,
+            ].join(' '), { serial: this.deviceSerial }
+          );
+        }
+      }
+    } catch (e) {
+      console.error('Error sending certificate to SideQuestVR', e);
+    }
+
+    this.skipStatusUpdates = true;
+    await this.adbCommand('tcpip 5555', { serial: this.deviceSerial });
+    setTimeout(() => { this.skipStatusUpdates = false; }, 3000);
+  }
 }

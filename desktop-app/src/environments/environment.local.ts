@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
+    header: {color: "localtest", text: "Local Test VR"},
     configuration: {
         web_url: 'https://sidequestvr.local',
         ws_url: 'wss://ws.sidetestvr.local',
