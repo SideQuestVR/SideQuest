@@ -4,7 +4,7 @@ import { AppService, FolderType } from '../app.service';
 import { LoadingSpinnerService } from '../loading-spinner.service';
 import { StatusBarService } from '../status-bar.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { PackageService } from './package.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { PackageService } from './package.service';
     styleUrls: ['./packages.component.scss'],
 })
 export class PackagesComponent implements OnInit {
-    @ViewChild('appSettingsModal', { static: false }) appSettingsModal;
+    @ViewChild('appSettingsModal') appSettingsModal;
     isLoadingApp = false;
     folder = FolderType;
     currentPackage: any = { package: { packageName: '', name: '', icon: '' }, versionCode: 0 };

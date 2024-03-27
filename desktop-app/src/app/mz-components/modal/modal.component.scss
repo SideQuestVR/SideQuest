@@ -1,0 +1,26 @@
+.modal {
+
+  &:not(.bottom-sheet) {
+    &.modal-fullscreen {
+      top: 12px !important;
+      margin: 0 auto;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+      max-height: none;
+    }
+  }
+
+  &.bottom-sheet {
+    &.modal-fullscreen {
+      height: 100%;
+      max-height: none;
+    }
+  }
+}
+
+::ng-deep mz-modal-header {
+  h5, h6
+  {
+    margin-top: 0;
+  }
+}

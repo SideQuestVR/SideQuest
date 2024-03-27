@@ -1,0 +1,16 @@
+<div #modal
+  class="modal"
+  [class.modal-fixed-footer]="fixedFooter"
+  [class.bottom-sheet]="bottomSheet"
+  [class.modal-fullscreen]="fullscreen"
+>
+  <div class="modal-content">
+    <ng-content select="mz-modal-header"></ng-content>
+    <div>
+      <ng-content select="mz-modal-content"></ng-content>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <ng-content select="mz-modal-footer"></ng-content>
+  </div>
+</div>

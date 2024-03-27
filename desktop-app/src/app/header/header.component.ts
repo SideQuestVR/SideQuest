@@ -8,7 +8,7 @@ import { BeatOnService } from '../beat-on.service';
 import { DragAndDropService } from '../drag-and-drop.service';
 import { Router } from '@angular/router';
 import { ProcessBucketService } from '../process-bucket.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 interface ReplaceText {
@@ -35,12 +35,12 @@ interface LogCatEntry {
     styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-    @ViewChild('header', { static: false }) header;
-    @ViewChild('bookmarksModal', { static: false }) bookmarksModal;
-    @ViewChild('beatOnModal', { static: false }) beatOnModal;
-    @ViewChild('mainLogo', { static: false }) mainLogo;
-    @ViewChild('safeModal', { static: false }) safeModal;
-    @ViewChild('manageFavs', { static: false }) manageFavs;
+   //  @ViewChild('header') header;
+    @ViewChild('bookmarksModal') bookmarksModal;
+    // @ViewChild('beatOnModal') beatOnModal;
+    @ViewChild('mainLogo') mainLogo;
+    @ViewChild('safeModal') safeModal;
+    @ViewChild('manageFavs') manageFavs;
     ConnectionStatus = ConnectionStatus;
     folder = FolderType;
     isAlive = true;
@@ -94,6 +94,8 @@ export class HeaderComponent implements OnInit {
     currentLogCat: LogCatEntry[] = [];
     isStarted: boolean;
     showAddFavourite: boolean;
+    protected headerClass: string;
+    protected headerText: string;
     constructor(
         public adbService: AdbClientService,
         public appService: AppService,
@@ -111,6 +113,9 @@ export class HeaderComponent implements OnInit {
         this.resetFavourites('fileFavourites');
         this.resetFavourites('commandFavourites');
         this.appService.headerComponent = this;
+        this.headerClass = environment.header?.color || "";
+        this.headerText = environment.header?.text || "";
+        console.log('Header: ' + this.headerClass + ' ' + this.headerText);
     }
     doBack() {
         if (

@@ -3,7 +3,9 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MzButtonModule, MzCheckboxModule, MzModalModule, MzTooltipModule } from 'ngx-materialize';
+// import { MzButtonModule, MzCheckboxModule, MzModalModule, MzTooltipModule } from '@steinv/ngx-materialize';
+import { MzModalModule} from './mz-components/modal';
+import { NgxMaterialize } from '@steinv/ngx-materialize';
 import { DragulaModule } from 'ng2-dragula';
 import { HeaderComponent } from './header/header.component';
 import { StatusBarComponent } from './status-bar/status-bar.component';
@@ -23,7 +25,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { HttpClientModule } from '@angular/common/http';
 import { CurrentTasksComponent } from './current-tasks/current-tasks.component';
 import { CurrentTaskItemComponent } from './current-task-item/current-task-item.component';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 import { HeadsetSettingsComponent } from './headset-settings/headset-settings.component';
 import { SetupGuideComponent } from './setup-guide/setup-guide.component';
 import { ConnectionStatusComponent } from './connection-status/connection-status.component';
@@ -58,11 +60,12 @@ import { StreamOptionsComponent } from './stream-options/stream-options.componen
         DragulaModule.forRoot(),
         FormsModule,
         RouterModule.forRoot(AppRoutes, { useHash: true }),
-        MzTooltipModule,
+//        MzTooltipModule,
         MzModalModule,
-        MzButtonModule,
+//        MzButtonModule,
         HttpClientModule,
-        MzCheckboxModule,
+//        MzCheckboxModule,
+        NgxMaterialize,
         ColorPickerModule,
         BrowserAnimationsModule,
         VirtualScrollerModule,

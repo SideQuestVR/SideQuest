@@ -1,5 +1,5 @@
-const Command = require('adbkit/lib/adb/command');
-const Protocol = require('adbkit/lib/adb/protocol');
+const Command = require('@devicefarmer/adbkit/dist/src/adb/command').default;
+const Protocol = require('@devicefarmer/adbkit/dist/src/adb/protocol').default;
 
 const RE_KEYVAL = /^\[([\s\S]*?)\]: \[([\s\S]*?)\]\r?$/gm;
 

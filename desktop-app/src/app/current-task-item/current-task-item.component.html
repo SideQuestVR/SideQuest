@@ -1,8 +1,8 @@
 <div class="col s10 package-height chip-padding package-item relative">
-  <div class="chip pointer margin-right menu-chip truncate"
+  <div #tooltip class="chip pointer margin-right menu-chip truncate"
        [ngClass]="{'pink-button' : task.running, 'white-text' : task.running || task.failed || task.succeeded, 'orange' : task.failed, 'green' : task.succeeded}"
-       mz-tooltip [tooltip]="task.running ? 'This task is running' : task.failed ? 'This task has failed' : task.succeeded ? 'This task succeeded' : 'This task is waiting'"
-       position="bottom" [innerHTML]="'<i class=material-icons>' + task.icon + '</i>' + task.status">
+       mTooltip [attr.data-tooltip]="task.running ? 'This task is running' : task.failed ? 'This task has failed' : task.succeeded ? 'This task succeeded' : 'This task is waiting'"
+       data-position="bottom" [innerHTML]="'<i class=material-icons>' + task.icon + '</i>' + task.status">
   </div>
 </div>
 <div class="col s2 package-height centered package-item right-align">

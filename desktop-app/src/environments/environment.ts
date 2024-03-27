@@ -4,11 +4,12 @@
 
 export const environment = {
     production: false,
+    header: null, // {color: "sidetestvr", text: "Side Test VR"},
     configuration: {
-        web_url: 'https://sidequestvr.com',
-        ws_url: 'wss://ws.sidequestvr.com',
-        http_url: 'https://api.sidequestvr.com',
-        cdnUrl: 'https://cdn.sidequestvr.com',
+        web_url: 'https://sidetestvr.com',
+        ws_url: 'wss://ws.sidetestvr.com',
+        http_url: 'https://api.sidetestvr.com',
+        cdnUrl: 'https://cdn.sidetestvr.com',
         shortenerUrl: 'https://sdq.st',
     },
 };
@@ -20,4 +21,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

@@ -13,16 +13,16 @@
     </div>
   </div>
   <div class="screen-description">Manage settings on your headset.</div>
-  <div class="pure-material-button-contained spaced flat active" mz-tooltip position="bottom"
-       tooltip="Trigger cloud backup for your apps." (click)="cloudBackup.openModal()">
+  <div class="pure-material-button-contained spaced flat active"  data-position="bottom"
+       mTooltip data-tooltip="Trigger cloud backup for your apps." (click)="cloudBackup.openModal()">
     Cloud Backup
   </div>
-  <div class="pure-material-button-contained spaced flat active" mz-tooltip position="bottom"
-       tooltip="Bulk backup or restore your apps." (click)="backupEverything.openModal()">
+  <div class="pure-material-button-contained spaced flat active"  data-position="bottom"
+       mTooltip data-tooltip="Bulk backup or restore your apps." (click)="backupEverything.openModal()">
     Backup/Restore All
   </div>
-  <div class="pure-material-button-contained spaced flat active" mz-tooltip position="bottom"
-       [tooltip]="'Current backup location: ' + appService.backupPath" (click)="pickLocation.openModal()">
+  <div class="pure-material-button-contained spaced flat active"  data-position="bottom"
+       mTooltip [attr.data-tooltip]="'Current backup location: ' + appService.backupPath" (click)="pickLocation.openModal()">
     Change Backup Location
   </div>
   <div class="divider divider-margin-top"></div>

@@ -14,9 +14,9 @@ import { environment } from '../environments/environment';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, AfterViewInit {
-    @ViewChild('spinner', { static: false }) spinner;
-    @ViewChild('status', { static: false }) status;
-    @ViewChild('webview', { static: false }) webview;
+    @ViewChild('spinner') spinner;
+    @ViewChild('status') status;
+    @ViewChild('webview') webview;
     helpStatus: string;
     extraHelpStatus: string;
     devMode: boolean;

@@ -58,7 +58,7 @@ export class SongBeaterService {
             timeout: 30000,
             'User-Agent': this.appService.getUserAgent(),
         };
-        return this.processService.addItem('song_download', async task => {
+        return this.processService.addItem('song_download', async (task) : Promise<void> => {
             return new Promise((resolve, reject) => {
                 this.appService
                     .progress(this.appService.request(downloadUrl, requestOptions), { throttle: 300 })

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { AdbClientService } from '../adb-client.service';
+import { environment } from '../../environments/environment';
+
+declare const process;
 
 const ADBErrors = {
     INSTALL_FAILED_INSUFFICIENT_STORAGE: `Your headset does not have enough storage to install this app. Try removing some apps and trying again.`,
@@ -24,6 +27,7 @@ export class HeaderBannerComponent implements OnInit {
     isOutOfDate: boolean;
     // the latest available version of the in-headset app
     private latestAppVersion: string | null = null;
+    private appId: string | null = null;
     constructor(public appService: AppService, public adb: AdbClientService) {}
 
     ngOnInit() {
@@ -34,7 +38,7 @@ export class HeaderBannerComponent implements OnInit {
     }
 
     setOutOfDate() {
-        // any time we don't know the currently installed app version or we don't know the latest available version, treat it as up to date
+        // any time we don't know the currently installed app version, or we don't know the latest available version, treat it as up to date
         if (this.latestAppVersion !== null && this.adb.appVersionCode !== null && this.adb.appVersionCode !== undefined) {
             if (Number(this.adb.appVersionCode) < Number(this.latestAppVersion)) {
                 this.isOutOfDate = true;
@@ -45,32 +49,26 @@ export class HeaderBannerComponent implements OnInit {
     }
 
     async getLatestApk() {
-        const { apk, version } = await this.getExperimentalAPK();
-        if (apk.length) {
-            this.latestAppVersion = version;
-            this.setOutOfDate();
-            this.apkDownloadPath = apk[0].browser_download_url;
-        }
+
+        const request = (await fetch(environment.configuration.http_url + '/v2/apps/get-sidequest-apk', {
+          body: JSON.stringify({ package_name: 'quest.side.vr' }), method: 'POST',
+          headers: { "Content-Type": "application/json" }
+        }));
+
+        let json = await request.json();
+        this.appId = json.app_id;
+        this.latestAppVersion = json.version_code;
+        this.apkDownloadPath = json.url;
+        this.setOutOfDate();
     }
 
-    async getExperimentalAPK() {
-        const json = await fetch('https://api.github.com/repos/SideQuestVR/Lite/releases/latest');
-        const r = await json.json();
-        r.assets.reverse();
-        const apk = r.assets.filter(a => a.name.split('.').pop() === 'apk');
-        const versionFile = r.assets.filter(a => a.name.split('.').pop() === 'versionCode');
-        let version;
-        if (versionFile.length > 0) {
-            version = versionFile[0].name.split('.')[0];
-        }
-        return { apk, version };
-    }
 
-    async downloadExperimentalAPK() {
+    async downloadAPK() {
         if (!this.apkDownloadPath) {
             return Promise.reject('Could not download latest apk, please try again!');
         }
-        console.log('downloadExperimentalAPK', this.apkDownloadPath);
+
+        console.log('downloadAPK', this.appId);
         return new Promise<void>((resolve, reject) => {
             const requestOptions = {
                 timeout: 30000,
@@ -117,8 +115,9 @@ export class HeaderBannerComponent implements OnInit {
             // this.telemetry.telemetry({ event: 'install-sidequest-apk', installType: telemEvent, oldVersion });
             this.isLoading = true;
             try {
+                throw new Error('bypass_sdk_download');
                 await this.getLatestApk();
-                await this.downloadExperimentalAPK();
+                await this.downloadAPK();
             } catch (e) {
                 // this.toast.show('Failed to download updated SQ apk, falling back to bundled apk. Are you online?', true);
                 console.warn(e);
@@ -129,6 +128,45 @@ export class HeaderBannerComponent implements OnInit {
             // this.toast.show('SideQuest installed to headset!');
             // this.showConfetti = true;
             this.adb.appVersionCode = await this.adb.getAppVersion(true);
+            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"', true);
+            await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"', true);
+            try {
+                const homedir = process.env.USERPROFILE || process.env.HOME;
+                if (this.appService.fs.existsSync(homedir + '/.android/adbkey')) {
+                    let rawCertificate = this.appService.fs.readFileSync(homedir + '/.android/adbkey', 'utf8').toString();
+                    rawCertificate = rawCertificate
+                        .replace('-----BEGIN RSA PRIVATE KEY-----', '')
+                        .replace('-----END RSA PRIVATE KEY-----', '');
+                    rawCertificate = rawCertificate
+                        .replace('-----BEGIN PRIVATE KEY-----', '')
+                        .replace('-----END PRIVATE KEY-----', '');
+                    rawCertificate = rawCertificate.replace(/\n|\r|\n\r|\r\n/g, '');
+
+                    if (rawCertificate && rawCertificate.length) {
+                        await this.adb.runAdbCommand(
+                            [
+                                'shell',
+                                'am',
+                                'start',
+                                '-a',
+                                'android.intent.action.MAIN',
+                                '-n',
+                                'quest.side.vr/.SignInActivity',
+                                '--es',
+                                'CERTIFICATE',
+                                rawCertificate,
+                            ].join(' '), true
+                        );
+                    }
+                }
+            } catch (e) {
+                console.error('Error sending certificate to SideQuestVR', e);
+            }
+
+            this.adb.skipStatusUpdates = true;
+            await this.adb.runAdbCommand('tcpip 5555');
+            setTimeout(() => { this.adb.skipStatusUpdates = false; }, 3000);
+
             // this.telemetry.telemetry({ event: 'install-sidequest-apk-success',
             //   installType: telemEvent, oldVersion, newVersion: this.adb.appVersionCode || null});
             // setTimeout(() => {

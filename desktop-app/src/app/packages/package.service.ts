@@ -23,7 +23,7 @@ export class PackageService {
                             this.allApps[packageName] = body[packageName];
                             this.allApps[packageName].icon = this.indexUrl + this.allApps[packageName].icon;
                         });
-                        resolve();
+                        resolve(true);
                     } catch (e) {
                         return reject('JSON parse Error');
                     }

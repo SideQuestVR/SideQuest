@@ -86,9 +86,9 @@ export class ProcessBucketService {
         this.left_length = this.tasks.filter(t => !t.failed && !t.running && !t.cancelled && !t.succeeded).length;
     }
 
-    async processBucket() {
+    async processBucket() : Promise<void> {
         const objects = this.tasks.filter(t => !t.failed && !t.running && !t.cancelled && !t.succeeded);
-        const timeout = () => new Promise(resolve => setTimeout(() => resolve(), 500));
+        const timeout = () => new Promise<void>(resolve => setTimeout(() => resolve(), 500));
         this.left_length = objects.length;
         if (objects.length) {
             this.is_running = true;
@@ -143,7 +143,7 @@ export class ProcessBucketService {
         if (!task.succeeded) {
             task.cancelled = true;
             this.tasks = this.tasks.filter(t => t !== task);
-            const timeout = new Promise(resolve => setTimeout(() => resolve(), 1000));
+            const timeout = new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
             await timeout.then(() => this.processBucket());
         }
     }

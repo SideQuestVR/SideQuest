@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "suppressImplicitAnyIndexErrors": true,
         "strictNullChecks": false,
         "lib": [
             "es5", "es2015.core", "dom"

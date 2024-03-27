@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebviewService } from '../webview.service';
 import { AppService } from '../app.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-webview',
