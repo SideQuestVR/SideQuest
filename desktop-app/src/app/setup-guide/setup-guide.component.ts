@@ -51,8 +51,7 @@ export class SetupGuideComponent implements OnInit {
             .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
             .join('&');
         try {
-            const ftch = (window as any).require('node-fetch');
-            const resp = await ftch('https://api.teknik.io/v1/Paste', {
+            const resp = await fetch('https://api.teknik.io/v1/Paste', {
                 body: formData,
                 method: 'POST',
                 headers: {

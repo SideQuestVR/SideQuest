@@ -57,7 +57,7 @@ export class AdbClientService {
     devices: ADBDevice[];
     displayDevices: ADBDevice[];
     deviceName: string;
-    connectionCss: any;
+    connectionCss: string = "connection-status-unauthorized";
     obbRegex = /[a-z]{4,5}.[0-9]{1,}.([A-z0-9.]{1,}).obb/;
     freespace = {
         available: '',
@@ -85,13 +85,25 @@ export class AdbClientService {
         this.setConnectionCssClass();
     }
     setConnectionCssClass() {
-        this.connectionCss = {
-            'connection-status-connected': this.deviceStatus === ConnectionStatus.CONNECTED,
-            'connection-status-unauthorized': this.deviceStatus === ConnectionStatus.UNAUTHORIZED,
-            'connection-status-disconnected': this.deviceStatus === ConnectionStatus.DISCONNECTED,
-            'connection-status-too-many': this.deviceStatus === ConnectionStatus.LINUX_PERMS,
-            'connection-status-dev-mode': this.deviceStatus === ConnectionStatus.DEV_MODE,
-        };
+      switch ( this.deviceStatus ) {
+        case ConnectionStatus.CONNECTED:
+          this.connectionCss = 'connection-status-connected';
+          break;
+        case ConnectionStatus.UNAUTHORIZED:
+          this.connectionCss = 'connection-status-unauthorized';
+          break;
+        case ConnectionStatus.DISCONNECTED:
+          this.connectionCss = 'connection-status-disconnected';
+          break;
+        case ConnectionStatus.LINUX_PERMS:
+          this.connectionCss = 'connection-status-too-many';
+          break;
+        case ConnectionStatus.DEV_MODE:
+          this.connectionCss = 'connection-status-dev-mode';
+          break;
+        default:
+          this.connectionCss = 'connection-status-unauthorized';
+      }
     }
 
     diagBegin() {
@@ -147,13 +159,19 @@ export class AdbClientService {
             command = command.substr(3);
         }
         return new Promise((resolve, reject) => {
+          const cmd = '"' + this.appService.path.join(this.adbPath, this.getAdbBinary()) + '" -s ' + this.deviceSerial + ' ' + command
             this.appService.exec(
-                '"' + this.appService.path.join(this.adbPath, this.getAdbBinary()) + '" -s ' + this.deviceSerial + ' ' + command,
+                cmd,
                 function(err, stdout, stderr) {
                     if (err) {
                         return reject(err);
                     }
-                    if (stderr) return reject(stderr);
+                    if (stderr) {
+                      // Monkey always reports the Args/Commands on stderr, so ignore it if that is all that it is...
+                      if (cmd.indexOf("shell monkey -p") === -1 || stderr.indexOf("data=\"android.intent.category.LAUNCHER\"") !== stderr.length - 40) {
+                        return reject(stderr);
+                      }
+                    }
                     return resolve(stdout);
                 }
             );
@@ -246,13 +264,22 @@ export class AdbClientService {
                         ((p.substr(0, 10) !== 'com.oculus' &&
                             p.substr(0, 11) !== 'com.android' &&
                             p.substr(0, 11) !== 'android.ext' &&
+                            p.substr(0, 8) !== 'com.meta' &&
                             p !== 'android' &&
                             p.substr(0, 12) !== 'com.qualcomm' &&
                             p !== 'com.facebook.system' &&
                             p !== 'oculus.platform' &&
                             p !== 'com.svox.pico' &&
-                            p !== 'org.codeaurora.bluetooth') ||
-                            p === 'com.oculus.DogCorp')
+                            p !== 'org.codeaurora.bluetooth' &&
+                            p !== 'com.facebook.wearable.system.location.proxy' &&
+                            p !== 'com.facebook.arvr.quillplayer' &&
+                            p !== 'com.facebook.wearable.system.location.service' &&
+                            p !== 'com.facebook.spatial_persistence_service' &&
+                            p !== 'meta.skymap.service'
+                          ) ||
+                            p === 'com.oculus.DogCorp' ||
+                            p === 'com.meta.samples.crypticcabinet'
+                        )
                     );
                 });
             // if (this.devicePackages.indexOf('com.apkinstaller.ApkInstaller') > -1 ) {
@@ -338,7 +365,7 @@ export class AdbClientService {
             }
             this.displayDevices = this.devices;
         })();
-        document.getElementById('connection-status').className = 'connection-status-' + status;
+        document.getElementById('connection-status').className = this.connectionCss;
         switch (this.deviceStatus) {
             case ConnectionStatus.LINUX_PERMS:
                 this.deviceStatusMessage = 'Warning: no permissions. ADB udev rules missing.';

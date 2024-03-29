@@ -115,7 +115,6 @@ export class HeaderBannerComponent implements OnInit {
             // this.telemetry.telemetry({ event: 'install-sidequest-apk', installType: telemEvent, oldVersion });
             this.isLoading = true;
             try {
-                throw new Error('bypass_sdk_download');
                 await this.getLatestApk();
                 await this.downloadAPK();
             } catch (e) {

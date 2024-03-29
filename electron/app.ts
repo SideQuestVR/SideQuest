@@ -9,11 +9,11 @@ const download = require('./download');
 const extract = require('extract-zip');
 
 const Readable = require('stream').Readable;
-const adb = require('@devicefarmer/adbkit').Adb;
+const Adb = require('@devicefarmer/adbkit').Adb;
 const fs = require('fs');
 const crypto = require('crypto');
 const request = require('request');
-const progress = require('request-progress');
+//const progress = require('request-progress');
 //without this, there's a bug in electron that makes facebook pages ruin everything, see https://github.com/electron/electron/issues/25469
 app.commandLine.appendSwitch('disable-features', 'CrossOriginOpenerPolicy');
 
@@ -43,8 +43,27 @@ const makeDeferred = () => {
     return deferred;
 }
 
+export class ReadableStreamClone extends Readable {
+    constructor(readableStream, options?) {
+        super(options);
+        readableStream.on('data', chunk => {
+            this.push(chunk);
+        });
+
+        readableStream.on('end', () => {
+            this.push(null);
+        });
+
+        readableStream.on('error', err => {
+            this.emit('error', err);
+        });
+    }
+    public _read() {}
+}
+
+
 class ADB {
-    client= null;
+    client = null;
     _logcat;
     adbPath;
     _clientSetup = makeDeferred();
@@ -52,7 +71,7 @@ class ADB {
     setupAdb(adbPath, cb, ecb) {
         if (this.client) return;
         this.adbPath = adbPath;
-        this.client = adb.createClient({
+        this.client = Adb.createClient({
             bin: adbPath,
         });
         this._clientSetup.resolve();
@@ -74,7 +93,7 @@ class ADB {
                 },
                 rejectUnauthorized: process.env.NODE_ENV !== 'dev',
             };
-            request(options, (error, response, body) => {
+            request(url, options, (error, response, body) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -141,7 +160,7 @@ class ADB {
             rejectUnauthorized: process.env.NODE_ENV !== 'dev',
             json: { token: token },
         };
-        request(options, (error, response, body) => {
+        request(options.url, options, (error, response, body) => {
             if (!error && body.data && body.data.apps && body.data.apps.length) {
                 let tasks = [];
                 for (let i = 0; i < body.data.apps.length; i++) {
@@ -185,8 +204,9 @@ class ADB {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
             if (!this._logcat) this.endLogcat();
-            this.client
-                .openLogcat(serial, { clear: true })
+            const device = this.client.getDevice(serial);
+            device
+                .openLogcat({ clear: true })
                 .then(logcat => {
                     this._logcat = logcat;
                     logcat.include(tag, priority).on('entry', entry => scb(entry));
@@ -197,8 +217,8 @@ class ADB {
     installRemote(serial, path, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .installRemote(serial, path)
+            const device = this.client.getDevice(serial);
+            device.installRemote(path)
                 .then(cb)
                 .catch(e => ecb(e));
         }).catch(e => ecb(e));
@@ -206,7 +226,7 @@ class ADB {
     async install(serial, apkpath, isLocal, cb, scb, ecb) {
         await this._clientSetup.promise;
 
-        console.log('installapk');
+        console.log('installapk', apkpath, isLocal);
         let stopUpdate;
 
         installErrorCallback = e => {
@@ -214,6 +234,7 @@ class ADB {
             ecb(e);
             console.log(e, stopUpdate);
         };
+
         if (!this.client) return ecb('Not connected.');
         if (isLocal) {
             let found;
@@ -232,8 +253,41 @@ class ADB {
             if (isLocal) {
                 stream = fs.createReadStream(apkpath);
             } else {
+                const response = await fetch(apkpath + '?t=' + Date.now());
+                if (!response.ok || response.body == null) {
+                    console.log(response.statusText, response.status, response.headers);
+                    return ecb('Unable to fetch package');
+                }
+
+                let size = parseInt(response.headers.get('Content-Length') || '0', 10);
+                if (size <= 0) {
+                    // Approximate app size in case we cannot get the size from the server
+                    size = 30_000_000;
+                }
+                let bytesRead = 0;
+                let webStream = Readable.fromWeb(response.body);
+                stream = new ReadableStreamClone(webStream);
+                let progress = new ReadableStreamClone(webStream);
+
+                progress.on('data', chunk => {
+                    bytesRead += chunk.length;
+                    const percentage =  Math.round(Math.min(bytesRead / size, 1) * 100);
+                    if (!stopUpdate) {
+                        scb({percent: percentage});
+                    }
+                });
+                progress.on('end', () => {
+                    if (!stopUpdate) {
+                        scb({
+                            percent: 1,
+                        });
+                    }
+                });
+
+
+                /*
                 stream = new Readable().wrap(
-                    progress(request(apkpath), {
+                    progress(request(apkpath, undefined, undefined), {
                         throttle: 60,
                     })
                         .on('progress', state => {
@@ -242,15 +296,17 @@ class ADB {
                             }
                         })
                         .on('end', () => {
+                            console.log("Downloaded")
                             if (!stopUpdate) {
                                 scb({
                                     percent: 1,
                                 });
                             }
                         })
-                );
+                ); */
             }
         } catch (e) {
+            console.error(e)
             const isInvalidURI = e && typeof e.message === 'string' && e.message.startsWith('Invalid URI "');
             if (isInvalidURI) {
                 return ecb("Can't download file. Invalid URL:");
@@ -258,16 +314,19 @@ class ADB {
                 return ecb(e);
             }
         }
-        this.client
-            .install(serial, stream)
+
+        const device = this.client.getDevice(serial);
+        device
+            .install(stream)
             .then(cb)
-            .catch(e => ecb(e));
+            .catch(e => { console.error("error installing", e); ecb(e) });
     }
      uninstall(serial, packageName, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .uninstall(serial, packageName)
+            const device = this.client.getDevice(serial);
+            device
+                .uninstall(packageName)
                 .then(cb)
                 .catch(e => ecb(e));
         }).catch(e => ecb(e));
@@ -275,8 +334,10 @@ class ADB {
     clear(serial, packageName, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .clear(serial, packageName)
+
+            const device = this.client.getDevice(serial);
+            device
+                .clear(packageName)
                 .then(cb)
                 .catch(e => ecb(e));
         }).catch(e => ecb(e));
@@ -303,8 +364,9 @@ class ADB {
     tcpip(serial, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .tcpip(serial, 5555)
+            const device = this.client.getDevice(serial);
+            device
+                .tcpip(5555)
                 .then(r => {
                     console.log(r);
                     cb(r);
@@ -318,8 +380,9 @@ class ADB {
     usb(serial, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .usb(serial)
+            const device = this.client.getDevice(serial);
+            device
+                .usb()
                 .then(cb)
                 .catch(e => ecb(e));
         }).catch(e => ecb(e));
@@ -336,7 +399,9 @@ class ADB {
     setProperties(serial, command, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
+
+            const device = this.client.getDevice(serial);
+            device
                 .transport(serial)
                 .then(function(transport) {
                     return new SetPropertiesCommand(transport).execute(command);
@@ -350,8 +415,9 @@ class ADB {
     getPackages(serial, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .getPackages(serial)
+            const device = this.client.getDevice(serial);
+            device
+                .getPackages()
                 .then(res => cb(res))
                 .catch(e => ecb(e));
         }).catch(e => ecb(e));
@@ -359,9 +425,10 @@ class ADB {
     shell(serial, command, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .shell(serial, command)
-                .then(adb.util.readAll)
+            const device = this.client.getDevice(serial);
+            device
+                .shell(command)
+                .then(Adb.util.readAll)
                 .then(res => cb(res.toString()))
                 .catch(e => ecb(e));
         }).catch(e => ecb(e));
@@ -369,8 +436,9 @@ class ADB {
     readdir(serial, path, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .readdir(serial, path)
+            const device = this.client.getDevice(serial);
+            device
+                .readdir(path)
                 .then(res =>
                     res
                         .map(r => {
@@ -387,8 +455,9 @@ class ADB {
         this._clientSetup.promise.then(() => {
 
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .push(serial, fs.createReadStream(path), savePath)
+            const device = this.client.getDevice(serial);
+            device
+                .push(fs.createReadStream(path), savePath)
                 .then(transfer => {
                     let _stats, autoCancel;
                     const interval = setInterval(() => {
@@ -420,8 +489,9 @@ class ADB {
         this._clientSetup.promise.then(() => {
 
             if (!this.client) return ecb('Not connected.');
-            this.client
-                .pull(serial, path)
+            const device = this.client.getDevice(serial);
+            device
+                .pull(path)
                 .then(transfer => {
                     transfer.on('progress', stats => {
                         scb(stats);
@@ -442,7 +512,8 @@ class ADB {
     stat(serial, path, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
-            this.client
+            const device = this.client.getDevice(serial);
+            device
                 .stat(serial, path)
                 .then(res => cb(res))
                 .catch(e => ecb(e));
@@ -807,10 +878,9 @@ function setupApp() {
                     event.sender.send('extract-progress', { stats, token });
                 },
             },
-            err => {
-                event.sender.send('extract-file', { token });
-            }
-        );
+        ).catch(err => {
+            event.sender.send('extract-file', { token });
+        });
     });
 
     ipcMain.on('automatic-update', (event, arg) => {
@@ -822,13 +892,13 @@ function setupApp() {
     });
     ipcMain.on('adb-command', (event, arg) => {
         const success = d => {
-            // console.log("  ", arg.command, "Success", d)
+            //console.log("  ", arg.command, "Success", d)
             if (!event.sender.isDestroyed()) {
                 event.sender.send('adb-command', { command: arg.command, resp: d, uuid: arg.uuid });
             }
         };
         const reject = e => {
-            // console.log("  ", arg.command, "reject", e)
+            //console.log("  ", arg.command, "reject", e)
             if (!event.sender.isDestroyed()) {
                 event.sender.send('adb-command', { command: arg.command, error: e, uuid: arg.uuid });
             }

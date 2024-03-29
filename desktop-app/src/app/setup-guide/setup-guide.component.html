@@ -16,6 +16,8 @@
       <p>If you are still having trouble then please visit our support community on SideQuest.</p>
       <div class="pure-material-button-contained extra-margin-bottom" (click)="appService.opn('https://sdq.st/support')">Open Support Community</div>
       <br>
+      <ng-container *nfIf="false">
+        TODO: This site is no longer active -- find another way....
       <p *ngIf="adb.diagnostics?.usb && adb.diagnostics.usb.log">If instructed to upload logs by a SideQuest support person, please click this button.</p>
       <div *ngIf="adb.diagnostics?.usb && adb.diagnostics.usb.log" class="pure-material-button-contained extra-margin-bottom" (click)="uploadLogs();">{{'Upload Logs'}}</div>
       <div *ngIf="link">
@@ -23,6 +25,7 @@
         <h3>{{link}}</h3>
         <div class="pure-material-button-contained button-margin-bottom" (click)="copyToClipboard()">Copy to Clipboard</div>
       </div>
+      </ng-container>
       <div id="thankYou">
         <ng-container *ngIf="link">Thank you!</ng-container>
       </div>

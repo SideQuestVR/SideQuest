@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
+    production: true,
     header: {color: "sidetestvr", text: "Side Test VR"},
     configuration: {
         web_url: 'https://sidetestvr.com',

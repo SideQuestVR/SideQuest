@@ -38,8 +38,8 @@ if (!__fs.existsSync(outputPath)) {
                             var stats = entry.fileName;
                             // console.log(stats);
                         },
-                    },
-                    function(err) {
+                    }).catch(
+                    (err) => {
                         if (err) {
                             return console.log(err);
                         }
@@ -58,8 +58,8 @@ if (!__fs.existsSync(outputPath)) {
                                 }
                             });
                         });
-                    }
-                );
+                    });
+
             }, 5000);
         })
         .catch(function(e) {
