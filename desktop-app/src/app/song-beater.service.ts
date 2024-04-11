@@ -56,20 +56,13 @@ export class SongBeaterService {
         let name = parts[parts.length - 1].split('.')[0];
         const requestOptions = {
             timeout: 30000,
-            'User-Agent': this.appService.getUserAgent(),
+            'User-Agent': this.appService.getUserAgent()
         };
         return this.processService.addItem('song_download', async (task) : Promise<void> => {
             return new Promise((resolve, reject) => {
-                this.appService
-                    .progress(this.appService.request(downloadUrl, requestOptions), { throttle: 300 })
-                    .on('error', error => {
-                        reject(error);
-                    })
-                    .on('progress', state => {
-                        this.spinnerService.setMessage('Saving to SongBeater... ' + Math.round(state.percent * 100) + '%');
-                    })
-                    .on('end', () => {
-                        let dir = this.appService.path.join(this.appService.appData, 'temp', name);
+              this.spinnerService.setMessage('Saving to SongBeater... ');
+              this.appService.downloadFileAPI( downloadUrl, null, zipPath, requestOptions, task).then( async (fileName) => {
+                 let dir = this.appService.path.join(this.appService.appData, 'temp', name);
                         this.appService.fs.mkdir(dir, () => {
                             this.appService.extract(zipPath, { dir: dir }, error => {
                                 this.appService.fs.unlink(zipPath, err => {
@@ -88,7 +81,6 @@ export class SongBeaterService {
                             });
                         });
                     })
-                    .pipe(this.appService.fs.createWriteStream(zipPath));
             });
         });
     }

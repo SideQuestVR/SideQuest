@@ -39,7 +39,7 @@
         "platform-tools": "node build-electron/platform-tools.js",
         "electron-build": "tsc",
         "reset": "rm -rf node_modules && rm -rf desktop-app/node_modules && yarn install && cd desktop-app && yarn install"
-    }, 
+    },
     "build": {
         "productName": "SideQuest",
         "appId": "com.sidequestvr.app",
@@ -56,14 +56,16 @@
         "win": {
             "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
             "sign": "./build/windows-codesign.js",
-            "publish": ["github"],
+            "publish": [
+                "github"
+            ],
             "target": [
                 "nsis"
             ]
         },
         "linux": {
             "target": [
-               "tar.xz"
+                "tar.xz"
             ]
         },
         "nsis": {
@@ -88,7 +90,7 @@
             "build/**/*"
         ],
         "afterSign": "build/notarize.js"
-    }, 
+    },
     "husky": {
         "hooks": {
             "pre-commit": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\"",
@@ -107,16 +109,17 @@
         "trailingComma": "es5"
     },
     "dependencies": {
+        "@devicefarmer/adbkit": "^3.2.6",
         "@electron/remote": "^2.1.2",
         "@types/electron": "^1.6.10",
-        "@devicefarmer/adbkit": "^3.2.6",
         "adm-zip": "^0.5.10",
         "bytenode": "^1.5.3",
         "crypto": "^1.0.1",
         "electron-updater": "^6.1.8",
-        "express": "^4.17.3",
         "env-cmd": "^10.1.0",
+        "express": "^4.17.3",
         "extract-zip": "^2.0.1",
+        "got": "11.8.6",
         "md5": "^2.3.0",
         "mkdirp": "^3.0.1",
         "node-stream-zip": "^1.15.0",
@@ -131,12 +134,12 @@
         "yauzl": "^3.1.0"
     },
     "devDependencies": {
-        "concurrently": "^8.2.2",
         "@angular/cli": "^17.1.3",
+        "@electron/notarize": "^2.2.1",
+        "concurrently": "^8.2.2",
+        "cross-env": "^7.0.3",
         "electron": "28.2.4",
         "electron-builder": "24.12.0",
-        "cross-env": "^7.0.3",
-        "@electron/notarize": "^2.2.1",
         "husky": "^9.0.11",
         "prettier": "3.2.5",
         "pretty-quick": "^4.0.0",

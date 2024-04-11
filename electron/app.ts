@@ -6,6 +6,7 @@ import { getEnvCfg } from './env-config';
 const path = require('path');
 const { autoUpdater } = require('electron-updater');
 const download = require('./download');
+const upload = require('./upload');
 const extract = require('extract-zip');
 
 const Readable = require('stream').Readable;
@@ -160,9 +161,11 @@ class ADB {
             rejectUnauthorized: process.env.NODE_ENV !== 'dev',
             json: { token: token },
         };
+        console.log("IFT:", options)
         request(options.url, options, (error, response, body) => {
             if (!error && body.data && body.data.apps && body.data.apps.length) {
                 let tasks = [];
+                console.log("IFT Body", body);
                 for (let i = 0; i < body.data.apps.length; i++) {
                     let app = body.data.apps[i];
                     if (Number(app.app_categories_id) === 1) {
@@ -861,13 +864,23 @@ function setupApp() {
 
     const adb = new ADB();
 
-    ipcMain.on('download-url', async (event, { url, token, directory, filename }) => {
-        download(url, path.join(directory, filename), stats => {
+    ipcMain.on('download-url', async (event, { url, token, directory, filename, options }) => {
+        download(url, directory ? path.join(directory, filename) : filename, stats => {
             return event.sender.send('download-progress', { stats, token });
-        })
-            .then(() => event.sender.send('download-url', { token }))
+        }, options)
+            .then((fileName) => event.sender.send('download-url', { token, fileName }))
             .catch(e => event.sender.send('download-url-fail', { e, token }));
     });
+
+    ipcMain.on('upload-url', async (event, { url, token, filename, options }) => {
+        upload(url,  filename, stats => {
+            return event.sender.send('download-progress', { stats, token });
+        }, options)
+            .then((fileName) => event.sender.send('download-url', { token, fileName }))
+            .catch(e => event.sender.send('download-url-fail', { e, token }));
+
+    });
+
     ipcMain.on('extract-file', async (event, { token, directory, filename }) => {
         extract(
             filename,
@@ -890,6 +903,7 @@ function setupApp() {
             }, 5000);
         }
     });
+
     ipcMain.on('adb-command', (event, arg) => {
         const success = d => {
             //console.log("  ", arg.command, "Success", d)
@@ -912,6 +926,7 @@ function setupApp() {
         try {
             switch (arg.command) {
                 case 'installFromToken':
+                    console.log("E-IFT", arg.settings.token)
                     adb.installFromToken(arg.settings.token, success, reject);
                     break;
                 case 'setupAdb':

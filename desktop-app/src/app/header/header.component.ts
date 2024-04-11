@@ -283,23 +283,22 @@ export class HeaderComponent implements OnInit {
             this.bookmarksModal.closeModal();
         }
     }
-    addCurrentFavourite() {
-        this.appService.request(
-            'https://i.olsh.me/allicons.json?url=' + this.webService.currentAddress,
-            (error, response, body) => {
-                let json: any = {};
-                try {
-                    json = JSON.parse(response.body);
-                } catch (e) {}
-                this.favourites.browserFavourites.unshift({
+    async addCurrentFavourite() {
+      const request = await fetch( 'https://i.olsh.me/allicons.json?url=' + this.webService.currentAddress, {
+        method: 'GET',
+        headers: { "Content-Type": "application/json" }
+      });
+
+      let json = await request.json();
+
+      this.favourites.browserFavourites.unshift({
                     name: this.webService.getTitle(),
                     uri: this.webService.currentAddress,
                     icon: json && json.icons && json.icons.length ? json.icons[0].url : '',
-                });
-                this.saveFavourites('browserFavourites');
-            }
-        );
+      });
+      this.saveFavourites('browserFavourites');
     }
+
     async selectAppToInstall() {
         let files = await this.appService.remote.dialog.showOpenDialog({
             properties: ['openFile', 'multiSelections'],

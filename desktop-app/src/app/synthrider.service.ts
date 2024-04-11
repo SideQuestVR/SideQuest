@@ -19,35 +19,16 @@ export class SynthriderService {
 
     downloadSong(downloadUrl, adbService) {
         return this.processService.addItem('song_download', async (task) : Promise<void> => {
-            let parts = downloadUrl.split('/');
             let zipPath = this.appService.path.join(this.appService.appData, this.appService.path.basename(downloadUrl));
-            let ws = this.appService.fs.createWriteStream(zipPath);
-            //let name = parts[parts.length - 1].split('.')[0];
             const requestOptions = {
                 timeout: 30000,
                 'User-Agent': this.appService.getUserAgent(),
+                useContentDispositionFilename: true,
             };
             task.status = 'Saving to SynthRiders...';
             return new Promise((resolve, reject) => {
-                let request = this.appService
-                    .progress(this.appService.request(downloadUrl, requestOptions), { throttle: 50 })
-                    .on('error', error => {
-                        task.failed = true;
-                        task.status = 'Failed to save item... ' + error.toString();
-                        reject(error);
-                    })
-                    .on('progress', state => {
-                        task.status = 'Saving to SynthRiders... ' + Math.round(state.percent * 100) + '%';
-                    })
-                    .on('response', response => {
-                        var regexp = /filename=\"(.*)\"/gi;
-                        var _regResult = regexp.exec(response.headers['content-disposition']);
-                        if (_regResult && _regResult.length) {
-                            zipPath = this.appService.path.join(this.appService.appData, decodeURIComponent(_regResult[1]));
-                        }
-                        request.pipe(this.appService.fs.createWriteStream(zipPath));
-                    })
-                    .on('end', async () => {
+              this.appService.downloadFileAPI( downloadUrl, null, zipPath, requestOptions, task).then( async (fileName) => {
+                        let zipPath = fileName;
                         let ext = this.appService.path.extname(zipPath).toLowerCase();
                         let basename = this.appService.path.basename(zipPath);
                         await adbService.uploadFile(
@@ -73,6 +54,10 @@ export class SynthriderService {
                             if (err) console.warn(err);
                         });
                         resolve();
+                    }).catch((error) => {
+                      task.failed = true;
+                      task.status = 'Failed to save item... ' + error.toString();
+                      reject(error);
                     });
             });
         });

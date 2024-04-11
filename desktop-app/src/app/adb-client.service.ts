@@ -653,10 +653,13 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         deleteAfter?: boolean,
         name?: string
     ) {
+      console.log("Starting install of APK", filePath, isLocal, shouldUninstall, number, total, deleteAfter, name)
         return this.processService.addItem(
             'apk_install',
             task => {
-                if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
+              console.log("Task APK", filePath, isLocal, shouldUninstall, number, total, deleteAfter, name)
+
+              if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
                     return Promise.reject(name + 'Apk install failed - No device connected!');
                 }
                 const showTotal = number && total ? '(' + number + '/' + total + ') ' : '';

@@ -213,7 +213,7 @@ export class BeatOnService {
             let zipPath = this.appService.path.join(this.appService.appData, this.appService.uuidv4() + '.zip');
             const requestOptions = {
                 timeout: 30000,
-                'User-Agent': this.appService.getUserAgent(),
+                'User-Agent': this.appService.getUserAgent()
             };
             task.status = 'Saving to BMBF...';
             return new Promise((resolve, reject) => {
@@ -223,65 +223,19 @@ export class BeatOnService {
                     this.beatOnPID &&
                     this.beatOnStatus.CurrentStatus === 'ModInstalled'
                 ) {
-                    this.appService
-                        .progress(this.appService.request(downloadUrl, requestOptions), { throttle: 50 })
-                        .on('error', error => {
-                            task.failed = true;
-                            task.status = 'Failed to save song... ' + error.toString();
-                            reject(error);
-                        })
-                        .on('progress', state => {
-                            task.status = 'Saving to BMBF... ' + Math.round(state.percent * 100) + '%';
-                        })
-                        .on('end', () => {
-                            let formData = {
-                                file: {
-                                    value: this.appService.fs.createReadStream(zipPath),
-                                    options: {
-                                        filename: parts[parts.length - 1],
-                                        contentType: 'application/zip',
-                                    },
-                                },
-                            };
-                            let options = {
-                                url: 'http://' + adbService.deviceIp + ':50000/host/beatsaber/upload',
-                                method: 'POST',
-                                formData: formData,
-                            };
-                            let timeoutCheck = setTimeout(() => {
-                                if (task.fail_once) {
-                                    task.fail_once = false;
-                                    task.failed = true;
-                                    task.status = 'Failed to save song... Timeout';
-                                    reject(task.status);
-                                } else {
-                                    task.fail_once = true;
-                                    task.running = false;
-                                    task.status = 'Waiting...';
-                                    resolve();
-                                }
-                            }, 30000);
-                            this.appService
-                                .progress(this.appService.request(options), { throttle: 50 })
-                                .on('error', error => {
-                                    clearTimeout(timeoutCheck);
-                                    task.failed = true;
-                                    task.status = 'Failed to save song... ' + error.toString();
-                                    reject(error);
-                                })
-                                .on('progress', state => {
-                                    clearTimeout(timeoutCheck);
-                                    task.status = 'Uploading To Beat On... ' + Math.round(state.percent * 100) + '%';
-                                })
-                                .on('end', () => {
-                                    clearTimeout(timeoutCheck);
-                                    this.appService.fs.unlink(zipPath, err => {
-                                        task.status = 'Saved! ' + downloadUrl;
-                                        resolve(parts[parts.length - 1].split('.')[0]);
-                                    });
-                                });
-                        })
-                        .pipe(this.appService.fs.createWriteStream(zipPath));
+                  this.appService.downloadFileAPI( downloadUrl, null, zipPath, requestOptions, task).then( async (fileName) => {
+                          let url = 'http://' + adbService.deviceIp + ':50000/host/beatsaber/upload';
+                          return this.appService.uploadFileAPI( url,  zipPath, {contentType: 'application/zip', fileName: parts[parts.length -1], method: "post"}, task).then( async () => {
+                              this.appService.fs.unlink(zipPath, err => {
+                                  task.status = 'Saved! ' + downloadUrl;
+                                  resolve(parts[parts.length - 1].split('.')[0]);
+                              });
+                           });
+                  }).catch((error) => {
+                          task.failed = true;
+                          task.status = 'Failed to save song... ' + error.toString();
+                          reject(error);
+                        });
                 } else {
                     reject(
                         new Error(

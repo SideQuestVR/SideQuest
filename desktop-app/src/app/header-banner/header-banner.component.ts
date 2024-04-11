@@ -50,10 +50,10 @@ export class HeaderBannerComponent implements OnInit {
 
     async getLatestApk() {
 
-        const request = (await fetch(environment.configuration.http_url + '/v2/apps/get-sidequest-apk', {
+        const request = await fetch(environment.configuration.http_url + '/v2/apps/get-sidequest-apk', {
           body: JSON.stringify({ package_name: 'quest.side.vr' }), method: 'POST',
           headers: { "Content-Type": "application/json" }
-        }));
+        });
 
         let json = await request.json();
         this.appId = json.app_id;
@@ -69,23 +69,12 @@ export class HeaderBannerComponent implements OnInit {
         }
 
         console.log('downloadAPK', this.appId);
-        return new Promise<void>((resolve, reject) => {
-            const requestOptions = {
-                timeout: 30000,
+        const requestOptions = {
+                timeout: 60000,
                 'User-Agent': this.appService.getUserAgent(),
-            };
-            this.appService
-                .request(this.apkDownloadPath, requestOptions)
-                .on('error', error => {
-                    console.log(`Request Error ${error}`);
-                    reject(error);
-                })
-                .on('progress', state => {})
-                .on('end', () => {
-                    return resolve();
-                })
-                .pipe(this.appService.fs.createWriteStream(this.appService.path.join(this.appService.appData, 'experimental.apk')));
-        });
+        };
+        const fileName = this.appService.path.join(this.appService.appData, 'experimental.apk');
+        return this.appService.downloadFileAPI(this.apkDownloadPath, null, fileName, requestOptions, null);
     }
 
     useBundledAPK() {

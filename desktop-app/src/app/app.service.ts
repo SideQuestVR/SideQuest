@@ -42,8 +42,6 @@ export class AppService {
     remote: any;
     electron: any;
     os: any;
-    request: any;
-    progress: any;
     Readable: any;
     opn: any;
     spawn: any;
@@ -67,8 +65,6 @@ export class AppService {
     constructor(private spinnerService: LoadingSpinnerService, private router: Router) {
         this.path = (<any>window).require('path');
         this.fs = (<any>window).require('fs');
-        this.request = (<any>window).require('request');
-        this.progress = (<any>window).require('request-progress');
         this.os = (<any>window).require('os');
         this.Readable = (<any>window).require('stream').Readable;
         this.opn = (<any>window).require('opn');
@@ -372,11 +368,13 @@ export class AppService {
                 break;
         }
         let downloadPath = getPath(downloadUrl);
-        return this.downloadFileAPI(downloadUrl, this.path.dirname(downloadPath), this.path.basename(downloadPath), task).then(
+        return this.downloadFileAPI(downloadUrl, this.path.dirname(downloadPath), this.path.basename(downloadPath), {}, task).then(
             () => downloadPath
         );
+
+
     }
-    downloadFileAPI(url, directory, filename, task?) {
+    downloadFileAPI(url, directory, filename, options, task?): Promise<string> {
         // Send request to application thread to download a file. Store the callback for the response.
         return new Promise((resolve, reject) => {
             let token = this.uuidv4();
@@ -389,10 +387,29 @@ export class AppService {
                 resolve,
                 reject,
             };
-            this.electron.ipcRenderer.send('download-url', { token, url, directory, filename });
+            this.electron.ipcRenderer.send('download-url', { token, url, directory, filename, options });
         });
     }
-    getUserAgent() {
+
+  uploadFileAPI(url,  filename, options, task?): Promise<string> {
+    // Send request to application thread to upload a file. Store the callback for the response.
+    return new Promise((resolve, reject) => {
+      let token = this.uuidv4();
+      this.downloadResolves[token] = {
+        scb: stats => {
+          if (task) {
+            task.status = (task.app_name ? task.app_name + ': ' : '') + 'Uploading... ' + stats + '%';
+          }
+        },
+        resolve,
+        reject,
+      };
+      this.electron.ipcRenderer.send('upload-url', { token, url, filename, options });
+    });
+  }
+
+
+  getUserAgent() {
         const nodeString = `NodeJs/${(<any>window).process.version}`;
         const packageString = 'OpenStoreVR';
         const computerString = `Hostname/${this.os.hostname()} Platform/${this.os.platform()} PlatformVersion/${this.os.release()}`;

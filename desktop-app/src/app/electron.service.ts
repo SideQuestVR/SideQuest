@@ -64,7 +64,9 @@ export class ElectronService {
     }
 
     async installFromToken(token) {
+        console.log("Install from token", token)
         let res = await this.adbService.adbCommand('installFromToken', { token });
+        console.log("IT: res", res)
         res.forEach((l, i) => {
             switch (l.type) {
                 case 'Mod':
@@ -121,6 +123,7 @@ export class ElectronService {
             }
         });
         this.appService.electron.ipcRenderer.on('open-url', async (event, data) => {
+          console.log("Open URL", data);
             if (data) {
                 let url = data.split('#');
                 switch (url[0]) {
@@ -143,6 +146,7 @@ export class ElectronService {
                         this.adbService.uninstallAPK(url[1]);
                         break;
                     case 'sidequest://sideload-multi/':
+                      console.log("SQM", data)
                         try {
                             let urls = JSON.parse(
                                 data
