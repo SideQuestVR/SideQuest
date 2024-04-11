@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  afterNextRender,
+  AfterRenderPhase,
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AdbClientService, ConnectionStatus } from '../adb-client.service';
 import { AppService } from '../app.service';
 import { LoadingSpinnerService } from '../loading-spinner.service';
@@ -21,7 +29,7 @@ declare let M;
     templateUrl: './files.component.html',
     styleUrls: ['./files.component.scss'],
 })
-export class FilesComponent implements OnInit {
+export class FilesComponent implements OnInit, AfterViewInit {
     @ViewChild('filesModal') filesModal;
     @ViewChild('fixedAction') fixedAction;
     @ViewChild('downloadMediaModal') downloadMediaModal;
@@ -49,9 +57,20 @@ export class FilesComponent implements OnInit {
         //  appService.isFilesOpen = true;
         appService.webService.isWebviewOpen = false;
     }
-    ngOnAfterViewInit() {
-        M.FloatingActionButton.init(this.fixedAction.nativeElement, {});
+
+    ngAfterViewInit() {
+      this.setupActionButton();
     }
+
+    private setupActionButton() {
+      // We have to wait until it is actually ready, this component isn't ready even afterViewInit, so we have to loop wait
+      if (this.fixedAction == null) {
+        setTimeout(() => this.setupActionButton(), 100);
+        return;
+      }
+      M.FloatingActionButton.init(this.fixedAction.nativeElement, {});
+    }
+
     ngOnInit() {
         this.appService.setTitle('Headset Files');
     }
@@ -411,4 +430,5 @@ export class FilesComponent implements OnInit {
         });
         return dirContents;
     }
+
 }

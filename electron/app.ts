@@ -457,24 +457,28 @@ class ADB {
 
             if (!this.client) return ecb('Not connected.');
             const device = this.client.getDevice(serial);
+            // TODO: See if we can pipe this thru a stream to get progress
             device
                 .push(fs.createReadStream(path), savePath)
                 .then(transfer => {
-                    let _stats, autoCancel;
+                    let _stats = {bytesTransferred: 0}, counter=0;
+                    let lastNumber = 0;
                     const interval = setInterval(() => {
-                        scb(_stats);
+                        // We are cheating here, frequently the progress event will just stop firing but still will be transferring
+                        // We are faking it at a slower pace so that the user still sees something is happening
+                        if (lastNumber === _stats.bytesTransferred) {
+                            counter += 1024;
+                            scb({bytesTransferred: _stats.bytesTransferred + counter * 10240})
+                        } else {
+                            counter = 0;
+                            scb(_stats);
+                            lastNumber = _stats.bytesTransferred;
+                        }
                     }, 1000);
                     transfer.on('progress', stats => {
-                        // clearTimeout(autoCancel);
-                        console.log("Progress", stats, Date.now());
                         _stats = stats;
-                        /* autoCancel = setTimeout(() => {
-                            clearInterval(interval);
-                            cb();
-                        }, 90000); */
                     });
                     transfer.on('end', () => {
-                        // clearTimeout(autoCancel);
                         clearInterval(interval);
                         cb();
                     });

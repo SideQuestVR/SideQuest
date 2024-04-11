@@ -26,7 +26,7 @@
       <ng-container *ngFor="let favourite of appService.headerComponent.favourites.fileFavourites">
         <a href="javascript:void(0)" class="waves-effect waves-light synthrideerz margin-right"
            (click)="appService.filesComponent.open(favourite.uri)"
-           mTooltip="{{favourite.name}}">
+           mTooltip [attr.data-tooltip]="favourite.name">
           <img *ngIf="favourite.icon" src="{{favourite.icon}}" class="responsive-img" /></a>
       </ng-container>
       <div class="divider divider-margin-top margin-bottom"></div>
@@ -55,32 +55,34 @@
   </div>
   <br><br>
 </div>
+
 <div class="fixed-action-btn" #fixedAction *ngIf="isConnected()">
-  <a class="btn-floating btn-large pink lightn-2" data-position="left" mTooltip data-tooltip="Add a file.">
+  <a class="dropdown-trigger btn-floating btn-large pink lightn-2" data-position="left" mTooltip data-tooltip="Add a file." >
     <i class="large material-icons">add</i>
   </a>
-  <ul>
-    <li data-position="left" mTooltip data-tooltip="Manage favourite folders"
-        (click)="appService.headerComponent.favoriteType = 'fileFavourites';appService.headerComponent.manageFavs.openModal(); appService.headerComponent.favouriteMax = 10; appService.headerComponent.favoritePathType = 'Path';"
-    ><a class="btn-floating red"><i class="material-icons">favorite</i></a></li>
-    <li data-position="left" mTooltip data-tooltip="Upload file to this folder" (click)="uploadFiles()"><a
-        class="btn-floating purple"><i class="material-icons">file_upload</i></a></li>
-    <li data-position="left" mTooltip data-tooltip="Make new folder in this folder" (click)="mkDirModal.openModal()"><a
-        class="btn-floating blue"><i class="material-icons">create_new_folder</i></a></li>
-    <li data-position="left" mTooltip data-tooltip="Open current save location" (click)="openSaveLocation()"><a
-        class="btn-floating yellow darken-2"><i class="material-icons">open_in_new</i></a></li>
-    <li *ngIf="quickSaveSupported()" data-position="left" mTooltip data-tooltip="Save screenshots and recordings"
-      (click)="downloadMediaModal.openModal()"><a class="btn-floating green"><i class="material-icons">get_app</i></a>
-    </li>
-    <li *ngIf="selectedFiles.length > 0" class="divider"></li>
-    <li *ngIf="selectedFiles.length > 0" data-position="left" mTooltip data-tooltip="Delete selected items"
-        (click)="filesToBeDeleted = selectedFiles; confirmModal.openModal()"><a class="btn-floating red darken-2"><i
-      class="material-icons">delete</i></a></li>
-    <li *ngIf="selectedFiles.length > 0" data-position="left" mTooltip data-tooltip="Save selected items to computer"
-      (click)="filesToBeSaved = selectedFiles; filesModal.openModal()">
-      <a class="btn-floating orange"><i class="material-icons">get_app</i></a>
-    </li>
-  </ul>
+<ul>
+<li data-position="left" mTooltip data-tooltip="Manage favourite folders"
+    (click)="appService.headerComponent.favoriteType = 'fileFavourites';appService.headerComponent.manageFavs.openModal(); appService.headerComponent.favouriteMax = 10; appService.headerComponent.favoritePathType = 'Path';"
+><a class="btn-floating red"><i class="material-icons">favorite</i></a></li>
+<li data-position="left" mTooltip data-tooltip="Upload file to this folder" (click)="uploadFiles()"><a
+  class="btn-floating purple"><i class="material-icons">file_upload</i></a></li>
+<li data-position="left" mTooltip data-tooltip="Make new folder in this folder" (click)="mkDirModal.openModal()"><a
+  class="btn-floating blue"><i class="material-icons">create_new_folder</i></a></li>
+<li data-position="left" mTooltip data-tooltip="Open current save location" (click)="openSaveLocation()"><a
+  class="btn-floating yellow darken-2"><i class="material-icons">open_in_new</i></a></li>
+<li *ngIf="quickSaveSupported()" data-position="left" mTooltip data-tooltip="Save screenshots and recordings"
+    (click)="downloadMediaModal.openModal()"><a class="btn-floating green"><i class="material-icons">get_app</i></a>
+</li>
+<li *ngIf="selectedFiles.length > 0" class="divider"></li>
+<li *ngIf="selectedFiles.length > 0" data-position="left" mTooltip data-tooltip="Delete selected items"
+    (click)="filesToBeDeleted = selectedFiles; confirmModal.openModal()"><a class="btn-floating red darken-2"><i
+  class="material-icons">delete</i></a></li>
+<li *ngIf="selectedFiles.length > 0" data-position="left" mTooltip data-tooltip="Save selected items to computer"
+    (click)="filesToBeSaved = selectedFiles; filesModal.openModal()">
+  <a class="btn-floating orange"><i class="material-icons">get_app</i></a>
+</li>
+</ul>
+
 </div>
 
 <mz-modal #mkDirModal [fixedFooter]="true">

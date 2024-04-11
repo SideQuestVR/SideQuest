@@ -13,11 +13,10 @@ export class PackageService {
     }
     async getAppIndex() {
       const request = await fetch(this.indexUrl, {
-        method: 'GET',
-        headers: { "Content-Type": "application/json" }
+        method: 'GET'
       });
 
-      let json = await request.json();
+      let blob = await request.blob();
       const request2 = await fetch(this.indexUrl + 'app-index.json', {
         method: 'GET',
         headers: { "Content-Type": "application/json" }
