@@ -533,6 +533,7 @@ let appWindow: AppWindow;
 let mainWindow: BrowserWindow;
 let popupWindow: BrowserWindow;
 let hasUpdate = false;
+let app_id=0;
 
 if (app.requestSingleInstanceLock()) {
     const environment: EnvironmentConfig = { userDataPath: app.getPath('userData') };
@@ -594,6 +595,22 @@ function addWindowDownloadHandler(window) {
         item.cancel();
     });
 }
+
+function getSideQuestPackage(): Promise<number> {
+    return new Promise((resolve, reject) => {
+        const api = getEnvCfg().http_url + "/v2/apps/get-sidequest-apk"
+        let options = {
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({ package_name: 'quest.side.vr' }),
+            method: 'POST',
+        }
+        fetch(api, options).then(res => res.json()).then(json => {
+            app_id = json.apps_id;
+            resolve( json.apps_id);
+        }).catch(reject);
+    });
+}
+
 function createWindow() {
     appWindow = new AppWindow(config);
     mainWindow = appWindow.window;
@@ -658,6 +675,17 @@ function createWindow() {
         });
 
         child.webContents.session.on('select-usb-device', (event, details, callback) => {
+            // Redirect Code
+            if (app_id == 0) {
+                getSideQuestPackage().then(url => {
+                    console.log('redirecting to app', url);
+                    mainWindow.webContents.send('open-url', "sidequest://app/#" + url);
+                });
+            } else {
+                mainWindow.webContents.send('open-url', "sidequest://app/#" + app_id);
+            }
+
+            return;
             // Add events to handle devices being added or removed before the callback on
             // `select-usb-device` is called.
 
@@ -700,6 +728,8 @@ function createWindow() {
     };
     handleWindow(mainWindow);
     mainWindow.webContents.session.setUserAgent(mainWindow.webContents.session.getUserAgent() + ' SQ/' + app.getVersion());
+    // This can run in the background
+    getSideQuestPackage();
 }
 
 function setupMenu() {

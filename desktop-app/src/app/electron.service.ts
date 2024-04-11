@@ -9,6 +9,7 @@ import { BeatOnService } from './beat-on.service';
 import { SynthriderService } from './synthrider.service';
 import { SongBeaterService } from './song-beater.service';
 import { AudicaService } from './audica.service';
+import { environment } from '../environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -64,9 +65,7 @@ export class ElectronService {
     }
 
     async installFromToken(token) {
-        console.log("Install from token", token)
         let res = await this.adbService.adbCommand('installFromToken', { token });
-        console.log("IT: res", res)
         res.forEach((l, i) => {
             switch (l.type) {
                 case 'Mod':
@@ -84,7 +83,6 @@ export class ElectronService {
 
     setupIPC() {
         this.appService.electron.ipcRenderer.on('pre-open-url', (event, data) => {
-            console.log('here', data);
             this.spinnerService.showLoader();
             this.spinnerService.setMessage('Do you want to install this file?<br><br>' + data.name);
             this.spinnerService.setupConfirm().then(() => {
@@ -123,10 +121,12 @@ export class ElectronService {
             }
         });
         this.appService.electron.ipcRenderer.on('open-url', async (event, data) => {
-          console.log("Open URL", data);
             if (data) {
                 let url = data.split('#');
                 switch (url[0]) {
+                    case 'sidequest://app/':
+                      this.webviewService.loadUrl(environment.configuration.web_url + '/app/' + url[1]);
+                      break;
                     case 'sidequest://w/':
                         this.adbService
                             .runAdbCommand(
@@ -146,7 +146,6 @@ export class ElectronService {
                         this.adbService.uninstallAPK(url[1]);
                         break;
                     case 'sidequest://sideload-multi/':
-                      console.log("SQM", data)
                         try {
                             let urls = JSON.parse(
                                 data
