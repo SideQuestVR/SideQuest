@@ -15,6 +15,7 @@ exports.default = async function notarizing(context) {
             appleId: process.env.APPLE_ID,
             appleIdPassword: process.env.APPLE_ID_PASS,
             teamId: process.env.APPLE_ID_TEAM,
+            ascProvider: process.env.APPLE_ID_TEAM
         });
     } else {
         console.warn('NOTICE: Did not notarize application due to missing environment variables.');
