@@ -483,6 +483,7 @@ class ADB {
                         cb();
                     });
                     transfer.on('error', e => {
+                        clearInterval(interval);
                         ecb(e);
                     });
                 })
