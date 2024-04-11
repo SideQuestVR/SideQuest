@@ -32,7 +32,7 @@
         "electron-dev:test2": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=test2 electron .",
         "electron-dev:local": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=local electron .",
         "electron": "yarn electron-build && yarn electron-dev",
-        "app-build": "cd desktop-app && ng build --prod --aot && cd ..",
+        "app-build": "cd desktop-app && ng build -c production --aot && cd ..",
         "app-build-test": "cd desktop-app && ng build -c test --aot && cd ..",
         "app-build-fried": "cd desktop-app && ng build -c fried --aot && cd ..",
         "app-build-localhost": "cd desktop-app && ng build -c localhost --aot && cd ..",
