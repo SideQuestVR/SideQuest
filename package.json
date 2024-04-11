@@ -38,7 +38,8 @@
         "app-build-localhost": "cd desktop-app && ng build -c localhost --aot && cd ..",
         "platform-tools": "node build-electron/platform-tools.js",
         "electron-build": "tsc",
-        "reset": "rm -rf node_modules && rm -rf desktop-app/node_modules && yarn install && cd desktop-app && yarn install"
+        "reset": "rm -rf node_modules && rm -rf desktop-app/node_modules && yarn install && cd desktop-app && yarn install",
+        "pretty-quick": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\""
     },
     "build": {
         "productName": "SideQuest",
