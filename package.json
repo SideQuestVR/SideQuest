@@ -32,13 +32,14 @@
         "electron-dev:test2": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=test2 electron .",
         "electron-dev:local": "yarn platform-tools && cross-env NODE_ENV=dev SQ_ENV_CFG=local electron .",
         "electron": "yarn electron-build && yarn electron-dev",
-        "app-build": "cd desktop-app && ng build --prod --aot && cd ..",
+        "app-build": "cd desktop-app && ng build -c production --aot && cd ..",
         "app-build-test": "cd desktop-app && ng build -c test --aot && cd ..",
         "app-build-fried": "cd desktop-app && ng build -c fried --aot && cd ..",
         "app-build-localhost": "cd desktop-app && ng build -c localhost --aot && cd ..",
         "platform-tools": "node build-electron/platform-tools.js",
         "electron-build": "tsc",
-        "reset": "rm -rf node_modules && rm -rf desktop-app/node_modules && yarn install && cd desktop-app && yarn install"
+        "reset": "rm -rf node_modules && rm -rf desktop-app/node_modules && yarn install && cd desktop-app && yarn install",
+        "pretty-quick": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\""
     },
     "build": {
         "productName": "SideQuest",
@@ -93,7 +94,7 @@
         ],
         "afterSign": "build/notarize.js"
     },
-    "husky": {
+    "husky": { 
         "hooks": {
             "pre-commit": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\"",
             "post-commit": "git update-index -g",
@@ -131,7 +132,7 @@
         "request-progress": "^3.0.0",
         "semver": "^7.6.0",
         "targz": "^1.0.1",
-        "usb-detection2": "../node-usb-detection",
+        "usb-detection2": "https://github.com/SideQuestVR/node-usb-detection",
         "wait-on": "^7.2.0",
         "yauzl": "^3.1.0"
     },
