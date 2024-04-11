@@ -13,8 +13,7 @@ const Readable = require('stream').Readable;
 const Adb = require('@devicefarmer/adbkit').Adb;
 const fs = require('fs');
 const crypto = require('crypto');
-const request = require('request');
-//const progress = require('request-progress');
+
 //without this, there's a bug in electron that makes facebook pages ruin everything, see https://github.com/electron/electron/issues/25469
 app.commandLine.appendSwitch('disable-features', 'CrossOriginOpenerPolicy');
 
@@ -94,20 +93,19 @@ class ADB {
                 },
                 rejectUnauthorized: process.env.NODE_ENV !== 'dev',
             };
-            request(url, options, (error, response, body) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    try {
-                        const found = JSON.parse(body).found;
-                        if (!found) {
-                            updateStatus('APK is not in the blacklist. Installing...');
-                        }
-                        resolve(found);
-                    } catch (e) {
-                        reject(e);
-                    }
+            fetch(url, options).then((response) => {
+                if (!response.ok || response.body == null) {
+                    console.log(response.statusText, response.status, response.headers);
+                    return reject(response.statusText);
                 }
+                response.json().then(body => {
+                    let found = body.found;
+                    if (!found) {
+                        updateStatus('APK is not in the blacklist. Installing...');
+                    }
+                    resolve(found);
+
+                }).catch(reject);
             });
         });
     }
@@ -150,20 +148,24 @@ class ADB {
         return `${percentage}%`;
     }
     installFromToken(token, cb, ecb) {
+        let url = `${getEnvCfg().http_url || 'https://api.sidequestvr.com'}/install-from-key`;
         let options = {
-            url: `${getEnvCfg().http_url || 'https://api.sidequestvr.com'}/install-from-key`,
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 Origin: getEnvCfg().web_url || 'https://sidequestvr.com',
             },
-            rejectUnauthorized: process.env.NODE_ENV !== 'dev',
-            json: { token: token },
+           // rejectUnauthorized: process.env.NODE_ENV !== 'dev',
+            body: JSON.stringify({ token: token }),
         };
-        console.log("IFT:", options)
-        request(options.url, options, (error, response, body) => {
-            if (!error && body.data && body.data.apps && body.data.apps.length) {
+        console.log("IFT:", url, options)
+        fetch(url, options).then(response => {
+            if (!response.ok || response.body == null) {
+                console.log(response.statusText, response.status, response.headers);
+                return ecb('Unable to fetch package');
+            }
+            response.json().then(body => {
                 let tasks = [];
                 console.log("IFT Body", body);
                 for (let i = 0; i < body.data.apps.length; i++) {
@@ -192,9 +194,7 @@ class ADB {
                     }
                 }
                 cb(tasks);
-            } else {
-                ecb(error || 'Nothing to install.');
-            }
+            }).catch(ecb);
         });
     }
     endLogcat() {

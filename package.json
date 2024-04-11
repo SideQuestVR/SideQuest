@@ -16,13 +16,13 @@
         "start:local": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev SQ_ENV_CFG=local electron .\" \"cd desktop-app && ng serve -c local --port 4205\"",
         "start:localhost": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev SQ_ENV_CFG=localhost electron .\" \"cd desktop-app && ng serve -c localhost --port 4205\"",
         "postinstall": "electron-builder install-app-deps && cd desktop-app && yarn install",
-        "dist": "yarn electron-build && yarn platform-tools && yarn app-build && env-cmd --silent electron-builder --publish onTagOrDraft",
-        "build:win": "yarn electron-build && yarn platform-tools && yarn app-build && cross-env NODE_ENV=production electron-builder --win",
-        "build:linux": "yarn electron-build && yarn platform-tools && yarn app-build && cross-env NODE_ENV=production electron-builder --linux",
-        "dist-test": "yarn electron-build && yarn platform-tools && yarn app-build-test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
-        "dist-sidetest": "yarn electron-build && yarn platform-tools && yarn app-build-test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
-        "dist-fried": "yarn electron-build && yarn platform-tools && yarn app-build-fried && cross-env NODE_ENV=production SQ_ENV_CFG=fried electron-builder",
-        "dist-localhost": "yarn electron-build && yarn platform-tools && yarn app-build-localhost && cross-env SQ_ENV_CFG=localhost electron-builder --linux",
+        "dist": "yarn electron-build && yarn platform-tools && yarn app-build && node build-electron/make-config && env-cmd --silent electron-builder --publish onTagOrDraft",
+        "build:win": "yarn electron-build && yarn platform-tools && yarn app-build && node build-electron/make-config && cross-env NODE_ENV=production electron-builder --win",
+        "build:linux": "yarn electron-build && yarn platform-tools && yarn app-build && node build-electron/make-config && cross-env NODE_ENV=production electron-builder --linux",
+        "dist-test": "yarn electron-build && yarn platform-tools && yarn app-build-test && node build-electron/make-config test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
+        "dist-sidetest": "yarn electron-build && yarn platform-tools && yarn app-build-test && node build-electron/make-config test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
+        "dist-fried": "yarn electron-build && yarn platform-tools && yarn app-build-fried && node build-electron/make-config fried && cross-env NODE_ENV=production SQ_ENV_CFG=fried electron-builder",
+        "dist-localhost": "yarn electron-build && yarn platform-tools && yarn app-build-localhost && node build-electron/make-config localhost && cross-env SQ_ENV_CFG=localhost electron-builder --linux",
         "angular": "cd desktop-app && ng serve --port 4205",
         "angular:test": "cd desktop-app && ng serve -c test --port 4205",
         "angular:test2": "cd desktop-app && ng serve -c test2 --port 4205",
@@ -85,7 +85,8 @@
             "build-electron/state-storage.js",
             "build-electron/window.js",
             "build-electron/env-config.js",
-            "build-electron/external-urls.js"
+            "build-electron/external-urls.js",
+            "build-electron/config.js"
         ],
         "asarUnpack": [
             "build/**/*"
