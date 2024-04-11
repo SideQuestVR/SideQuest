@@ -92,7 +92,7 @@
         ],
         "afterSign": "build/notarize.js"
     },
-    "husky": {
+    "husky": { 
         "hooks": {
             "pre-commit": "pretty-quick --staged --pattern \"**/*.*(js|jsx|ts|tsx)\"",
             "post-commit": "git update-index -g",
