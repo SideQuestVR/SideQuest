@@ -438,7 +438,7 @@ class ADB {
     }
     readdir(serial, path, cb, ecb) {
         this._clientSetup.promise.then(() => {
-            if (!this.client) return ecb('Not connected.');
+            if (!this.client) return ecb('Not connected.'); 
             const device = this.client.getDevice(serial);
             device
                 .readdir(path)
