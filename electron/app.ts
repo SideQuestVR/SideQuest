@@ -159,7 +159,6 @@ class ADB {
            // rejectUnauthorized: process.env.NODE_ENV !== 'dev',
             body: JSON.stringify({ token: token }),
         };
-        console.log("IFT:", url, options)
         fetch(url, options).then(response => {
             if (!response.ok || response.body == null) {
                 console.log(response.statusText, response.status, response.headers);
@@ -167,7 +166,6 @@ class ADB {
             }
             response.json().then(body => {
                 let tasks = [];
-                console.log("IFT Body", body);
                 for (let i = 0; i < body.data.apps.length; i++) {
                     let app = body.data.apps[i];
                     if (Number(app.app_categories_id) === 1) {
@@ -467,15 +465,16 @@ class ADB {
                         scb(_stats);
                     }, 1000);
                     transfer.on('progress', stats => {
-                        clearTimeout(autoCancel);
+                        // clearTimeout(autoCancel);
+                        console.log("Progress", stats, Date.now());
                         _stats = stats;
-                        autoCancel = setTimeout(() => {
+                        /* autoCancel = setTimeout(() => {
                             clearInterval(interval);
                             cb();
-                        }, 90000);
+                        }, 90000); */
                     });
                     transfer.on('end', () => {
-                        clearTimeout(autoCancel);
+                        // clearTimeout(autoCancel);
                         clearInterval(interval);
                         cb();
                     });
