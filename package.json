@@ -80,6 +80,7 @@
             "package.json",
             "build-electron/app.js",
             "build-electron/download.js",
+            "build-electron/upload.js",
             "build-electron/setproperties.js",
             "build-electron/state-storage.js",
             "build-electron/window.js",
