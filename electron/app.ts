@@ -227,13 +227,13 @@ class ADB {
     async install(serial, apkpath, isLocal, cb, scb, ecb) {
         await this._clientSetup.promise;
 
-        console.log('installapk', apkpath, isLocal);
+        // console.log('installapk', apkpath, isLocal);
         let stopUpdate;
 
         installErrorCallback = e => {
             stopUpdate = true;
             ecb(e);
-            console.log(e, stopUpdate);
+            console.error(e, stopUpdate);
         };
 
         if (!this.client) return ecb('Not connected.');
@@ -307,7 +307,7 @@ class ADB {
                 ); */
             }
         } catch (e) {
-            console.error(e)
+            console.error("Error", e);
             const isInvalidURI = e && typeof e.message === 'string' && e.message.startsWith('Invalid URI "');
             if (isInvalidURI) {
                 return ecb("Can't download file. Invalid URL:");
@@ -322,6 +322,7 @@ class ADB {
             .then(cb)
             .catch(e => { console.error("error installing", e); ecb(e) });
     }
+
      uninstall(serial, packageName, cb, ecb) {
         this._clientSetup.promise.then(() => {
             if (!this.client) return ecb('Not connected.');
@@ -822,9 +823,9 @@ function setupApp() {
     });
     app.on('ready', createWindow);
     // Quit when all windows are closed.
-    app.on('window-all-closed', function() {
+   /*  app.on('window-all-closed', function() {
         if (process.platform !== 'darwin') app.quit();
-    });
+    }); */
 
     // Kill the adb client when the app is definitely quitting, regardless of how it quit.
     app.on('will-quit', () => {
@@ -960,7 +961,6 @@ function setupApp() {
         try {
             switch (arg.command) {
                 case 'installFromToken':
-                    console.log("E-IFT", arg.settings.token)
                     adb.installFromToken(arg.settings.token, success, reject);
                     break;
                 case 'setupAdb':

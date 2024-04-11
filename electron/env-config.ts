@@ -2,7 +2,6 @@ require('./config');
 
 export function getEnvCfg() {
     const cfg = process.env['SQ_ENV_CFG'] || global.SQ_ENV_CFG;
-    console.log('SQ_ENV_CFG:', cfg);
     switch (cfg) {
         case 'test':
             return {

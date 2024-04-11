@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StatusBarService } from '../status-bar.service';
 import { animate, sequence, style, transition, trigger } from '@angular/animations';
 

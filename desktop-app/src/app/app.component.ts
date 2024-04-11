@@ -4,7 +4,6 @@ import { LoadingSpinnerService } from './loading-spinner.service';
 import { StatusBarService } from './status-bar.service';
 import { WebviewService } from './webview.service';
 import { DragAndDropService } from './drag-and-drop.service';
-import { ElectronService } from './electron.service';
 import { AdbClientService } from './adb-client.service';
 import { environment } from '../environments/environment';
 
@@ -29,7 +28,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         public appService: AppService,
         public webService: WebviewService,
         public dragService: DragAndDropService,
-        private electronService: ElectronService
     ) {
         this.devMode = isDevMode();
     }

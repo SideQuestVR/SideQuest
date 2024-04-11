@@ -1,7 +1,7 @@
 {
     "name": "SideQuest",
     "productName": "SideQuest",
-    "version": "0.10.40",
+    "version": "0.10.41",
     "description": "A open app store for mobile android based VR devices such as the Levovo Mirage, Oculus Go, Oculus Quest, Vive Focus.",
     "repository": "https://github.com/SideQuestVR/SideQuest.git",
     "license": "UNLICENCED",
@@ -19,10 +19,11 @@
         "dist": "yarn electron-build && yarn platform-tools && yarn app-build && node build-electron/make-config && env-cmd --silent electron-builder --publish onTagOrDraft",
         "build:win": "yarn electron-build && yarn platform-tools && yarn app-build && node build-electron/make-config && cross-env NODE_ENV=production electron-builder --win",
         "build:linux": "yarn electron-build && yarn platform-tools && yarn app-build && node build-electron/make-config && cross-env NODE_ENV=production electron-builder --linux",
-        "dist-test": "yarn electron-build && yarn platform-tools && yarn app-build-test && node build-electron/make-config test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
-        "dist-sidetest": "yarn electron-build && yarn platform-tools && yarn app-build-test && node build-electron/make-config test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
-        "dist-fried": "yarn electron-build && yarn platform-tools && yarn app-build-fried && node build-electron/make-config fried && cross-env NODE_ENV=production SQ_ENV_CFG=fried electron-builder",
-        "dist-localhost": "yarn electron-build && yarn platform-tools && yarn app-build-localhost && node build-electron/make-config localhost && cross-env SQ_ENV_CFG=localhost electron-builder --linux",
+        "build:mac": "yarn electron-build && yarn platform-tools && yarn app-build && node build-electron/make-config && cross-env NODE_ENV=production electron-builder --mac",
+        "dist:test": "yarn electron-build && yarn platform-tools && yarn app-build-test && node build-electron/make-config test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
+        "dist:sidetest": "yarn electron-build && yarn platform-tools && yarn app-build-test && node build-electron/make-config test && cross-env NODE_ENV=production SQ_ENV_CFG=test electron-builder",
+        "dist:fried": "yarn electron-build && yarn platform-tools && yarn app-build-fried && node build-electron/make-config fried && cross-env NODE_ENV=production SQ_ENV_CFG=fried electron-builder",
+        "dist:localhost": "yarn electron-build && yarn platform-tools && yarn app-build-localhost && node build-electron/make-config localhost && cross-env SQ_ENV_CFG=localhost electron-builder --linux",
         "angular": "cd desktop-app && ng serve --port 4205",
         "angular:test": "cd desktop-app && ng serve -c test --port 4205",
         "angular:test2": "cd desktop-app && ng serve -c test2 --port 4205",
@@ -141,12 +142,21 @@
         "@electron/notarize": "^2.2.1",
         "concurrently": "^8.2.2",
         "cross-env": "^7.0.3",
-        "electron": "28.2.4",
-        "electron-builder": "24.12.0",
+        "electron": "29.3.1",
+        "electron-builder": "24.13.3",
         "husky": "^9.0.11",
         "prettier": "3.2.5",
         "pretty-quick": "^4.0.0",
         "ts-loader": "^9.5.1",
         "typescript": "^5.3.3"
+    },
+    "resolutions": {
+        "nan": "2.19.0",
+        "node-abi": "3.57.0",
+        "node-gyp": "10.1.0",
+        "prebuild-install": "7.1.2",
+        "prebuild": "13.0.0"
+    },
+    "unused": {
     }
 }

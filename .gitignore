@@ -44,3 +44,4 @@ tmp
 .DS_Store
 **/.DS_Store
 
+/build/experimental.apk

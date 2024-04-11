@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppService } from './app.service';
-import { Notification, StatusBarComponent, StatusType } from './status-bar/status-bar.component';
+import { StatusBarComponent } from './status-bar/status-bar.component';
 
 @Injectable({
     providedIn: 'root',

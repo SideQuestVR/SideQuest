@@ -653,11 +653,10 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         deleteAfter?: boolean,
         name?: string
     ) {
-      console.log("Starting install of APK", filePath, isLocal, shouldUninstall, number, total, deleteAfter, name)
+      // console.log("Starting install of APK", filePath, isLocal, shouldUninstall, number, total, deleteAfter, name)
         return this.processService.addItem(
             'apk_install',
             task => {
-              console.log("Task APK", filePath, isLocal, shouldUninstall, number, total, deleteAfter, name)
 
               if (this.deviceStatus !== ConnectionStatus.CONNECTED) {
                     return Promise.reject(name + 'Apk install failed - No device connected!');
@@ -666,7 +665,6 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                 task.show_total = showTotal;
                 task.app_name = name || '';
                 task.status = name + showTotal + 'Installing Apk... ';
-                console.log('Installing filePath', filePath, 'Name', name);
                 return this.adbCommand('install', { serial: this.deviceSerial, path: filePath, isLocal: !!isLocal }, status => {
                     if (status.percent && status.size && status.time) {
                         task.status =
@@ -682,17 +680,19 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
                     }
                 })
                     .then(r => {
-                        task.status = name + 'APK installed ok!!';
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
                         }
                         if (filePath.indexOf('com.weloveoculus.BMBF') > -1) {
                             return this.beatonService.setBeatOnPermission(this);
                         }
-                        if (filePath.indexOf('quest.side.vr') > -1) {
+                        if (filePath.indexOf('quest.side.vr') > -1 || filePath.toLowerCase().indexOf("/sidequestvr-") > -1) {
                             return this.addVRPermissions();
                         }
-                    })
+                        //console.log("APK Installed", filePath)
+                    }).then(() => {
+                    task.status = name + 'APK installed ok!!';
+                  })
                     .catch(async e => {
                         if (deleteAfter) {
                             this.appService.fs.unlink(filePath, err => {});
@@ -1283,8 +1283,16 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
     }
 
   private async addVRPermissions() {
-    await this.adbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"', { serial: this.deviceSerial });
-    await this.adbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"', { serial: this.deviceSerial });
+    console.log("Adding VR Permissions");
+
+    await this.adbCommand('shell', {
+      serial: this.deviceSerial,
+      command: "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"
+    });
+    await this.adbCommand('shell', {
+      command: "pm grant quest.side.vr android.permission.READ_LOGS",
+      serial: this.deviceSerial });
+
     try {
       const homedir = process.env.USERPROFILE || process.env.HOME;
       if (this.appService.fs.existsSync(homedir + '/.android/adbkey')) {
@@ -1299,8 +1307,9 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
 
         if (rawCertificate && rawCertificate.length) {
           await this.adbCommand(
-            [
+
               'shell',
+            { command: [
               'am',
               'start',
               '-a',
@@ -1310,7 +1319,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
               '--es',
               'CERTIFICATE',
               rawCertificate,
-            ].join(' '), { serial: this.deviceSerial }
+            ].join(' '),  serial: this.deviceSerial }
           );
         }
       }
@@ -1319,7 +1328,15 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
     }
 
     this.skipStatusUpdates = true;
-    await this.adbCommand('tcpip 5555', { serial: this.deviceSerial });
-    setTimeout(() => { this.skipStatusUpdates = false; }, 3000);
+    await this.adbCommand('tcpip', {command: '5555', serial: this.deviceSerial });
+
+    await this.sleep(5000);
+    this.skipStatusUpdates = false;
+    return true;
   }
+
+  private sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 }

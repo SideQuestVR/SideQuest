@@ -52,6 +52,12 @@
       </p>
       <p>
         <label>
+          <input name="textureSize" type="radio" value="1680-1760" [(ngModel)]="textureSize" (click)="setSSO(SSO._Quest3)"/>
+          <span>Default - Quest 3</span>
+        </label>
+      </p>
+      <p>
+        <label>
           <input name="textureSize" type="radio" value="512-563" [(ngModel)]="textureSize" (click)="setSSO(SSO._512)"/>
           <span>512</span>
         </label>

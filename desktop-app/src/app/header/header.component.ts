@@ -108,14 +108,14 @@ export class HeaderComponent implements OnInit {
         private router: Router
     ) {
         this.osPlatform = this.appService.os.platform();
-        console.log('Platform: ' + this.osPlatform);
+        //console.log('Platform: ' + this.osPlatform);
         this.resetFavourites('browserFavourites');
         this.resetFavourites('fileFavourites');
         this.resetFavourites('commandFavourites');
         this.appService.headerComponent = this;
         this.headerClass = environment.header?.color || "";
         this.headerText = environment.header?.text || "";
-        console.log('Header: ' + this.headerClass + ' ' + this.headerText);
+        //console.log('Header: ' + this.headerClass + ' ' + this.headerText);
     }
     doBack() {
         if (

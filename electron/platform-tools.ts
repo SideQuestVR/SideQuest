@@ -1,6 +1,6 @@
-const os = require('os');
-const path = require('path');
-const __fs = require('fs');
+const os = require('node:os');
+const path = require('node:path');
+const fs = require('node:fs');
 const extract = require('extract-zip');
 const download = require('./download');
 const url = 'https://dl.google.com/android/repository/platform-tools-latest-';
@@ -17,52 +17,46 @@ switch (os.platform()) {
         break;
 }
 console.log('Platform: ' + os.platform());
-var outputPath = path.join(__dirname, '..', 'build', 'platform-tools');
-if (!__fs.existsSync(outputPath)) {
-    __fs.mkdir(outputPath, { recursive: true }, function(err) {
-        if (err) console.log(err);
-    });
+let outputPath = path.join(__dirname, '..', 'build', 'platform-tools');
+if (!fs.existsSync(outputPath)) {
+    fs.mkdirSync(outputPath, { recursive: true });
     console.log('Downloading platform tools...');
     download(downloadUrl, path.join(__dirname, 'platform-tools.zip'), function(stats) {
         // console.log(stats);
-    })
+    }, {})
         .then(function() {
             console.log('Downloaded platform tools.');
             console.log('Extracting platform tools...');
-            setTimeout(() => {
-                extract(
-                    path.join(__dirname, 'platform-tools.zip'),
-                    {
-                        dir: __dirname,
-                        onEntry: function(entry) {
-                            var stats = entry.fileName;
-                            // console.log(stats);
-                        },
-                    }).catch(
-                    (err) => {
-                        if (err) {
-                            return console.log(err);
-                        }
-                        console.log('Extracted platform tools.');
-                        __fs.readdir(path.join(__dirname, 'platform-tools'), function(err, files) {
-                            files.forEach(function(file) {
-                                var curPath = path.join(__dirname, 'platform-tools', file);
-                                if (
-                                    !__fs.lstatSync(curPath).isDirectory() &&
-                                    file !== 'make_f2fs.exe' &&
-                                    file !== 'make_f2fs_casefold.exe'
-                                ) {
-                                    __fs.rename(curPath, path.join(outputPath, file), function(err) {
-                                        if (err) console.log(err);
-                                    });
-                                }
-                            });
-                        });
-                    });
+            extract(
+                path.join(__dirname, 'platform-tools.zip'),
+                <any>{
+                    dir: __dirname,
+                    onEntry: function(entry) {
+                        // console.log(entry.fileName);
+                    },
+                }).then(() => {
+                const skipFiles = [
+                    // Linux & Mac
+                    "etc1tool", "fastboot", "hprof-conv", "make_f2fs", "make_f2fs_casefold", "mke_f2fs", "mke2fs", "mke2fs.conf", "sqlite3",
+                    // Windows
+                    "etc1tool.exe", "fastboot.exe", "hprof-conv.exe", "make_f2fs.exe", "make_f2fs_casefold.exe", "mke_f2fs.exe", "mke2fs.exe", "mke2fs.conf", "sqlite3"];
 
-            }, 5000);
+                console.log('Extracted platform tools.');
+                fs.readdir(path.join(__dirname, 'platform-tools'), function(err, files) {
+                    files.forEach(function(file) {
+                        const curPath = path.join(__dirname, 'platform-tools', file);
+                        if (!fs.lstatSync(curPath).isDirectory() && skipFiles.indexOf(file) === -1) {
+                            fs.rename(curPath, path.join(outputPath, file), function(err) {
+                                if (err) console.log(err);
+                            });
+                        }
+                    });
+                });
+            }).catch((err) => {
+                return console.error(err);
+            });
         })
-        .catch(function(e) {
-            console.log(e);
+        .catch((e) => {
+            console.error(e);
         });
 }

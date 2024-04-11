@@ -28,6 +28,7 @@ export class HeaderBannerComponent implements OnInit {
     // the latest available version of the in-headset app
     private latestAppVersion: string | null = null;
     private appId: string | null = null;
+    private addedPerms = false;
     constructor(public appService: AppService, public adb: AdbClientService) {}
 
     ngOnInit() {
@@ -43,6 +44,12 @@ export class HeaderBannerComponent implements OnInit {
             if (Number(this.adb.appVersionCode) < Number(this.latestAppVersion)) {
                 this.isOutOfDate = true;
                 return;
+            }
+            if (!this.addedPerms) {
+              this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"', true).then(() => {
+                this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"', true);
+              });
+              this.addedPerms = true;
             }
         }
         this.isOutOfDate = false;
@@ -116,6 +123,7 @@ export class HeaderBannerComponent implements OnInit {
             // this.toast.show('SideQuest installed to headset!');
             // this.showConfetti = true;
             this.adb.appVersionCode = await this.adb.getAppVersion(true);
+
             await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.WRITE_SECURE_SETTINGS"', true);
             await this.adb.runAdbCommand('shell "pm grant quest.side.vr android.permission.READ_LOGS"', true);
             try {

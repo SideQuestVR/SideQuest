@@ -40,6 +40,7 @@ enum SSO {
     _Go,
     _Quest1,
     _Quest2,
+    _Quest3,
 }
 enum CR {
     _480,
@@ -430,6 +431,11 @@ export class HeadsetSettingsComponent implements OnInit {
                 value = 1440;
                 hvalue = 1584;
                 break;
+            case SSO._Quest3:
+                value = 1680;
+                hvalue = 1760;
+                break;
+
         }
 
         this.runAdbCommand('setprop debug.oculus.textureWidth ' + value)
