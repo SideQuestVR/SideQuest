@@ -55,7 +55,7 @@
                 ]
             },
             "notarize": {
-                "teamId": "${APPLE_ID_TEAM}"
+                "teamId": "778YBN5YK7"
             }
         },
         "win": {
