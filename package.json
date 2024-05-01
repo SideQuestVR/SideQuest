@@ -91,7 +91,7 @@
             "build-electron/config.js"
         ],
         "asarUnpack": [
-            "build/**/*"
+            "build/**/*" 
         ],
         "afterSign": "build/notarize.js"
     },
