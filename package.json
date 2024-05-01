@@ -53,6 +53,9 @@
                     "arm64",
                     "x64"
                 ]
+            },
+            "notarize": {
+                "teamId": "778YBN5YK7"
             }
         },
         "win": {
@@ -91,9 +94,8 @@
             "build-electron/config.js"
         ],
         "asarUnpack": [
-            "build/**/*" 
-        ],
-        "afterSign": "build/notarize.js"
+            "build/**/*"
+        ]
     },
     "husky": { 
         "hooks": {
