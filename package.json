@@ -53,6 +53,9 @@
                     "arm64",
                     "x64"
                 ]
+            },
+            "notarize": {
+                "teamId": "${APPLE_ID_TEAM}"
             }
         },
         "win": {
@@ -92,8 +95,7 @@
         ],
         "asarUnpack": [
             "build/**/*"
-        ],
-        "afterSign": "build/notarize.js"
+        ]
     },
     "husky": { 
         "hooks": {
