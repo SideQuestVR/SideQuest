@@ -121,6 +121,9 @@ export class ElectronService {
             }
         });
         this.appService.electron.ipcRenderer.on('open-url', async (event, data) => {
+            if (data.indexOf("sidequest://app/") === 0 && data.indexOf("#") === -1) {
+              data = data.substring(0,16) + "#" + data.substring(16);
+            }
             if (data) {
                 let url = data.split('#');
                 switch (url[0]) {
