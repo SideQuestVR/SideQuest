@@ -7,6 +7,10 @@ import { DragAndDropService } from './drag-and-drop.service';
 import { AdbClientService } from './adb-client.service';
 import { environment } from '../environments/environment';
 
+// DO NOT REMOVE the ElectronService import
+import { ElectronService } from './electron.service';
+// ---------------------------------------------------
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -28,6 +32,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         public appService: AppService,
         public webService: WebviewService,
         public dragService: DragAndDropService,
+        // Do not remove
+        private electronService: ElectronService
+        // -------------
     ) {
         this.devMode = isDevMode();
     }
