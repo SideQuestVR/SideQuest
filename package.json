@@ -6,7 +6,7 @@
     "repository": "https://github.com/SideQuestVR/SideQuest.git",
     "license": "UNLICENCED",
     "author": "Shane Harris",
-    "main": "build-electron/app.js",
+    "main": "build-electron/app.js", 
     "scripts": {
         "concurrently": "concurrently",
         "start": "concurrently \"yarn electron-build && yarn platform-tools && wait-on http-get://localhost:4205/ && cross-env NODE_ENV=dev electron .\" \"cd desktop-app && ng serve --port 4205\"",
