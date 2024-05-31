@@ -1,49 +1,49 @@
 # SideQuest
-Below is the documentation of SideQuest with instructions for building and signing then application.
+Below is the documentation of SideQuest with instructions for building and signing the application.
 
 ### Build Steps
 
 Clone the repo
 
-To install the app dependencies 
+To install the app's dependencies, run:
 ```
 yarn install
 ```
 
-To start the dev stack run 
+To start the dev stack, run:
 ```
 yarn start
 ```
 
-To build the angular app only
+To build the angular app only, run:
 ```
 yarn app-build
 ```
 
 
-To build the electron app only
+To build the electron app only, run:
 ```
 yarn build
 yarn build --mac
 yarn build --wlm
 ```
 
-To build the app & angular app (NOT for Raspberry Pi)
+To build the app & angular app (NOT for Raspberry Pi), run:
 ```
 yarn dist
 ```
 
-To build the app & angular app on a Raspberry Pi
+To build the app & angular app on a Raspberry Pi, run:
 ```
 yarn dist --armv7l
 ```
 
-To re-launch electron if you accidentally close it
+To re-launch electron if you accidentally close it, run:
 ```
 yarn electron
 ```
 
-To reset things
+To reset things, run:
 ```
 yarn reset
 ```
@@ -77,6 +77,6 @@ WIN_CSC_LINK - The base64 encoded .p12 file ( Windows Code Signing Cert ). as a 
 
 WIN_CSC_KEY_PASSWORD - The passphrase used when generating the .p12 file for windows.
 
-Edit: Windows signing no longer works without a usb dongle because fuck the signing industry. 
+Edit: Windows signing no longer works without a USB dongle because fuck the signing industry. 
 
 You'll need this on the path to build for windows locally: C:\Users\USER\AppData\Local\electron-builder\Cache\winCodeSign\winCodeSign-2.6.0\windows-10\x64
