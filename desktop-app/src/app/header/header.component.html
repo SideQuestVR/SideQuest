@@ -196,10 +196,10 @@
 
 <mz-modal #logcatModal [fixedFooter]="true" [options]="{dismissible: false}">
   <mz-modal-header>
-    <div class="pure-material-button-contained spaced red right" (click)="logcatModal.closeModal();stopLogcat(); currentLogCat.length = 0; isStarted = false;">Close</div>
-    <div class="pure-material-button-contained spaced red right" (click)="stopLogcat(); isStarted = false;">Stop</div>
+    <div class="pure-material-button-contained spaced glowing right" (click)="logcatModal.closeModal();stopLogcat(); currentLogCat.length = 0; isStarted = false;">Close</div>
+    <div class="pure-material-button-contained spaced glowing right" (click)="stopLogcat(); isStarted = false;">Stop</div>
     <div class="pure-material-button-contained spaced right" *ngIf="!saveLogcatPath" (click)="selectLogcatOutput();">Pick Output Folder</div>
-    <div class="pure-material-button-contained spaced red right" *ngIf="saveLogcatPath" (click)="cancelLogcatOutput(); isStarted = false;">Cancel Output</div>
+    <div class="pure-material-button-contained spaced glowing right" *ngIf="saveLogcatPath" (click)="cancelLogcatOutput(); isStarted = false;">Cancel Output</div>
 
   <h4>ADB Logcat</h4>
   </mz-modal-header>
@@ -261,18 +261,18 @@
   </mz-modal-header>
   <mz-modal-content>
 
-    <img class="right margin-left" src="assets/images/bigman.gif" style="width: 430px"/>
+    <img class="right margin-left no-drag" src="assets/images/bigman.gif" style="width: 430px"/>
     WARNING: We have stopped this install because it may may harm your device.
     <br><br>
     If you think this has happened in error, please contact us on Discord with a link to the apk file.<br><br>
     We have protected you from:<br><br>
     - Causing physical damage to your headset.<br>
-    - Having your personal information stolen ( including tracking your movments in VR )<br>
+    - Having your personal information stolen ( including tracking your movements in VR )<br>
     - Being banned from the Oculus platform.<br>
     - Loosing access to developer/experimental mode on your headset.<br>
     - Loosing access to your content library including paid games and apps.<br>
     - Being banned from creating Oculus Accounts in the future.<br>
-    - Being reported to the police for illegal activites.<br>
+    - Being reported to the police for illegal activities.<br>
     - Starving poor developers to death.<br><br>
     You can click "Back to Safety" and the harmful content will not make it onto your device.
     <br><br>

@@ -1,19 +1,19 @@
 <div class="inner-app-container">
   <div class="screen-description">Manage tasks for downloading, transferring and installing to your headset.</div>
   <div class="sync-songs">
-    <div class="pure-material-button-contained spaced flat active" data-position="bottom"
+    <div class="pure-material-button-contained spaced" data-position="bottom"
          mTooltip data-tooltip="Clear out the finished tasks." (click)="processService.clearDone()">
       Clear Done
     </div>
-    <div class="pure-material-button-contained spaced flat active" data-position="bottom"
+    <div class="pure-material-button-contained spaced active" data-position="bottom"
          mTooltip data-tooltip="Restart the failed tasks." (click)="processService.retryFailed()">
       Retry Failed
     </div>
-    <div class="pure-material-button-contained spaced flat active" data-position="bottom"
+    <div class="pure-material-button-contained spaced active" data-position="bottom"
          mTooltip data-tooltip="Clear out the failed tasks." (click)="processService.clearFailed()">
       Clear Failed
     </div>
-    <div class="pure-material-button-contained spaced active red" data-position="bottom"
+    <div class="pure-material-button-contained spaced active glowing" data-position="bottom"
          mTooltip data-tooltip="Clear out the finished tasks." (click)="processService.clearAll()">
       Clear All
     </div>
