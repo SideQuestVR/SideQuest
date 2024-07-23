@@ -276,6 +276,10 @@ code > pre, .code{
   user-select: none;
 }
 
+.select-text {
+  user-select: text;
+}
+
 .no-drag {
   user-drag: none;
   -webkit-user-drag: none;

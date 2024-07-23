@@ -1,10 +1,10 @@
-<div class="relative">
+<div class="relative no-select">
   <div class="tab" [ngClass]="{'active': !isSupport}" (click)="isSupport = false">Setup Instructions</div>
   <div class="tab" [ngClass]="{'active': isSupport}" (click)="isSupport = true">Support Options</div>
   <!--  <div class="tab-underline"></div>-->
 </div>
 
-<div class="inner-app-container text-dark-theme relative margin-top" *ngIf="isSupport">
+<div class="inner-app-container text-dark-theme relative margin-top no-select" *ngIf="isSupport">
   <app-connection-status #connectionStatus></app-connection-status>
   <div class="setup-container">
         <div class="screen-description">Get help and support from SideQuest.</div>
@@ -33,7 +33,7 @@
   </div>
 
 </div>
-<div class="inner-app-container text-dark-theme relative inner-app-container-margin-top" *ngIf="!isSupport">
+<div class="inner-app-container text-dark-theme relative inner-app-container-margin-top no-select" *ngIf="!isSupport">
   <div class="pure-material-button-contained flat" [ngClass]="{'active': page === 1}" (click)="page = 1">Step 1: Create Org</div> >
   <div class="pure-material-button-contained flat" [ngClass]="{'active': page === 2}" (click)="page = 2">Step 2: Dev Mode</div> >
   <div class="pure-material-button-contained flat clearfix" [ngClass]="{'active': page === 3}" (click)="page = 3">Step 3: Connect</div>
@@ -58,7 +58,7 @@
           To allow installing apps & games to your headset we need to enable developer mode. To do this,
           you have to be a registered "developer" on the Meta website, it's free, quick and easy. Open
         </ng-container>
-        <a class="diagnosticator" (click)="open('https://developer.oculus.com/sign-up/ ')">developer.oculus.com/sign-up/</a>
+        <a class="diagnosticator select-text" (click)="open('https://developer.oculus.com/sign-up/')">developer.oculus.com/sign-up/</a>
         <ng-container i18n>
           and create an 'organization'.
           You'll need to accept the developer agreement and to verify your account using either a credit card
