@@ -424,6 +424,7 @@ export class AppService {
                 '" --crop ' +
                 options.crop +
                 ' ' +
+                (!options.redirect_audio ? ' --no-audio ' : '') +
                 ' -b ' +
                 options.bit_rate +
                 ' ' +
