@@ -12,14 +12,17 @@
   height: 40px;
   border-radius: 50%;
 }
+
 .drag-indicator{
   font-size: 2rem;
   line-height: 3rem;
   vertical-align: middle;
 }
+
 .filename-padding-top{
   padding-top: 10px;
 }
+
 .selected{
   background: #e93c96;
   border-radius: 10px;
@@ -30,9 +33,14 @@
   margin-right: 0.5em;
   margin-left: 0.5em;
 }
+
 .top-bar{
   direction: rtl;
   white-space: nowrap;
   text-align: left;
   width: 100%;
+}
+
+.hidden {
+  display: none;
 }

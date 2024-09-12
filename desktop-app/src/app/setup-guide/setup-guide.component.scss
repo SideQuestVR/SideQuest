@@ -34,6 +34,7 @@
 .flip-horizontal{
   transform: scaleX(-1);
 }
+
 .tab{
   text-align: center;
   padding: 10px;
@@ -42,12 +43,12 @@
   height: 60px;
   line-height: 40px;
   color: white;
-  background: #24284E;
+  background: #222222;
   cursor: pointer;
-  border-top: 2px #7289DA;
+
 }
 .tab.active{
-  background: #7289DA;
+  background: #1c1c1c;
 }
 .tab-underline{
   border: 1px solid #CFCFCF;

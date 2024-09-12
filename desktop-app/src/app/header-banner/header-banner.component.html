@@ -1,6 +1,6 @@
-<div class="banner-container">
+<div class="banner-container no-select">
   <div class="right in-vr-installer">
-    <img src="assets/images/in-vr-logo.png" class="left"/>
+    <img src="assets/images/in-vr-logo.png" class="left no-drag"/>
     <div class="right">
       <div class="in-vr-title">SideQuest inside your VR headset</div>
       <div class="in-vr-description">Discover, Download & Play thousands of FREE VR apps and games with SideQuest's VR App</div>
@@ -9,7 +9,7 @@
 <!--        Install SideQuest in your headset-->
 <!--      </div>-->
       <ng-container *ngIf="!adb.isReady">
-        <div class="pure-material-button-contained " routerLink="/setup">
+        <div class="pure-material-button-contained glowing" routerLink="/setup">
           Open Setup Instructions
         </div>
         </ng-container>

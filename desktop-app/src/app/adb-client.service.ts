@@ -273,6 +273,7 @@ export class AdbClientService {
                             p !== 'org.codeaurora.bluetooth' &&
                             p !== 'com.facebook.wearable.system.location.proxy' &&
                             p !== 'com.facebook.arvr.quillplayer' &&
+                            p !== 'com.facebook.orca' &&
                             p !== 'com.facebook.wearable.system.location.service' &&
                             p !== 'com.facebook.spatial_persistence_service' &&
                             p !== 'meta.skymap.service'

@@ -1,20 +1,20 @@
-<div *ngIf="isConnected()" class="top-bar">
+<div *ngIf="isConnected()" class="top-bar no-drag">
   <nav class="pink lighten-2 breadcrumb-wrapper ">
     <div class="nav-wrapper inner-app-container">
       <div class="col s12 truncate">
-        <a *ngFor="let breadcrumb of breadcrumbs; let i = index" href="javascript:void(0)" class="breadcrumb"
+        <a *ngFor="let breadcrumb of breadcrumbs; let i = index" href="javascript:void(0)" class="breadcrumb no-drag"
           (click)="open('/'+breadcrumb.path)">{{breadcrumb.name}}<span *ngIf="i === breadcrumbs.length-1 && folderSize"> ({{folderSize}})</span> </a>
       </div>
     </div>
   </nav>
 </div>
-<div class="inner-app-container files-section">
+<div class="inner-app-container files-section no-drag">
   <div *ngIf="!isConnected()" class="white-text">
     <br>You are not currently connected.
     <br><br>
     <div class="pure-material-button-contained" routerLink="/setup">Open Setup Instructions</div>
   </div>
-  <div *ngIf="isConnected()">
+  <div *ngIf="isConnected()" class="no-drag">
     <div *ngIf="!files.length">
       <h4 class="text-dark-theme">
         No files here...</h4>
@@ -24,7 +24,7 @@
 
     <div class="beast-saber-buttons">
       <ng-container *ngFor="let favourite of appService.headerComponent.favourites.fileFavourites">
-        <a href="javascript:void(0)" class="waves-effect waves-light synthrideerz margin-right"
+        <a href="javascript:void(0)" class="waves-effect waves-light synthrideerz margin-right no-drag"
            (click)="appService.filesComponent.open(favourite.uri)"
            mTooltip [attr.data-tooltip]="favourite.name">
           <img *ngIf="favourite.icon" src="{{favourite.icon}}" class="responsive-img" /></a>
@@ -73,11 +73,11 @@
 <li *ngIf="quickSaveSupported()" data-position="left" mTooltip data-tooltip="Save screenshots and recordings"
     (click)="downloadMediaModal.openModal()"><a class="btn-floating green"><i class="material-icons">get_app</i></a>
 </li>
-<li *ngIf="selectedFiles.length > 0" class="divider"></li>
-<li *ngIf="selectedFiles.length > 0" data-position="left" mTooltip data-tooltip="Delete selected items"
+<li [class.hidden]="selectedFiles.length === 0" class="divider"></li>
+<li [class.hidden]="selectedFiles.length === 0" data-position="left" mTooltip data-tooltip="Delete selected items"
     (click)="filesToBeDeleted = selectedFiles; confirmModal.openModal()"><a class="btn-floating red darken-2"><i
   class="material-icons">delete</i></a></li>
-<li *ngIf="selectedFiles.length > 0" data-position="left" mTooltip data-tooltip="Save selected items to computer"
+<li [class.hidden]="selectedFiles.length === 0" data-position="left" mTooltip data-tooltip="Save selected items to computer"
     (click)="filesToBeSaved = selectedFiles; filesModal.openModal()">
   <a class="btn-floating orange"><i class="material-icons">get_app</i></a>
 </li>
