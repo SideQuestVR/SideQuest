@@ -11,6 +11,7 @@ import { StatusBarService } from '../status-bar.service';
 export class StreamOptionsComponent implements OnInit {
     scrcpy_options: any = {
         always_on_top: false,
+        redirect_audio: true,
         bit_rate: '8000000',
         crop: '1600:900:2017:510',
         no_control: true,
