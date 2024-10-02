@@ -358,11 +358,7 @@ export class FilesComponent implements OnInit, AfterViewInit {
         }
         this.readdir(path).then(dirContents => {
             this.files = dirContents;
-            this.files.sort(function(a, b) {
-                const textA = a.name.toUpperCase();
-                const textB = b.name.toUpperCase();
-                return textA < textB ? -1 : textA > textB ? 1 : 0;
-            });
+            this.files.sort((a, b) => b.time.getTime() - a.time.getTime());
             this.files = this.files.filter(d => d.icon === 'folder').concat(this.files.filter(d => d.icon !== 'folder'));
         });
     }
