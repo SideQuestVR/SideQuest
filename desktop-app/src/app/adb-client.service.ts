@@ -855,6 +855,7 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
             let obbBackupPath = this.appService.path.join(this.appService.backupPath, packageName, 'data', folderName, 'obb');
             if (this.appService.fs.existsSync(obbBackupPath)) {
                 this.appService.fs.readdir(obbBackupPath, async (err, entries) => {
+                    await this.runAdbCommand('adb shell mkdir -p /sdcard/Android/obb/' + packageName, true);
                     for (let i = 0; i < entries.length; i++) {
                         await this.adbCommand(
                             'push',
@@ -1098,7 +1099,10 @@ This can sometimes be caused by changes to your hosts file. Don't make changes u
         if (task) {
             task.status = name + ': Transferring...';
         }
-        let p: any = this.runAdbCommand('adb push "' + filepath + '" /sdcard/Android/obb/' + packageId + '/' + filename, true);
+        const obbDirectory: string = '/sdcard/Android/obb/' + packageId;
+        let p: any = this.runAdbCommand('adb shell mkdir -p ' + obbDirectory, true).then(() =>
+            this.runAdbCommand('adb push "' + filepath + '" ' + obbDirectory + '/' + filename, true)
+        );
         if (cb) {
             cb();
         }
