@@ -43,6 +43,38 @@ const makeDeferred = () => {
     return deferred;
 }
 
+function isDropboxUrl(url: URL): boolean {
+    const hostname = url.hostname.toLowerCase();
+    return hostname === 'dropbox.com' || hostname.endsWith('.dropbox.com');
+}
+
+function getRemoteApkDownloadUrl(apkPath: string): string {
+    try {
+        const url = new URL(apkPath);
+        if (isDropboxUrl(url)) {
+            url.searchParams.delete('raw');
+            url.searchParams.set('dl', '1');
+        }
+        url.searchParams.set('t', Date.now().toString());
+        return url.toString();
+    } catch (e) {
+        const separator = apkPath.indexOf('?') === -1 ? '?' : '&';
+        return apkPath + separator + 't=' + Date.now();
+    }
+}
+
+function getUnsupportedApkResponseError(response: Response): string | null {
+    const contentType = (response.headers.get('Content-Type') || '').toLowerCase();
+    if (
+        contentType.includes('text/html') ||
+        contentType.includes('text/plain') ||
+        contentType.includes('application/json')
+    ) {
+        return 'Download did not return an APK file. The host returned ' + contentType + ' instead.';
+    }
+    return null;
+}
+
 export class ReadableStreamClone extends Readable {
     constructor(readableStream, options?) {
         super(options);
@@ -254,10 +286,15 @@ class ADB {
             if (isLocal) {
                 stream = fs.createReadStream(apkpath);
             } else {
-                const response = await fetch(apkpath + '?t=' + Date.now());
+                const response = await fetch(getRemoteApkDownloadUrl(apkpath));
                 if (!response.ok || response.body == null) {
                     console.log(response.statusText, response.status, response.headers);
                     return ecb('Unable to fetch package');
+                }
+                const unsupportedResponseError = getUnsupportedApkResponseError(response);
+                if (unsupportedResponseError) {
+                    console.log(unsupportedResponseError, response.statusText, response.status, response.headers);
+                    return ecb(unsupportedResponseError);
                 }
 
                 let size = parseInt(response.headers.get('Content-Length') || '0', 10);
