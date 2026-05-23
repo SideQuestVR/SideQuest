@@ -24,6 +24,22 @@
       </div>
     </div>
     <div class="col s12 fixed-height">
+      Redirect audio from the headset
+      <div class="grey-text small">
+        Redirects audio from the headset to computer speakers.
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
+      <div class="switch">
+        <label>
+          Off
+          <input type="checkbox" [(ngModel)]="scrcpy_options.redirect_audio" />
+          <span class="lever"></span>
+          On
+        </label>
+      </div>
+    </div>
+    <div class="col s12 fixed-height">
       Bit Rate
       <div class="grey-text small">
         Encode the video at the given bit-rate, expressed in bits/s. Unit suffixes are supported: 'K' (x1000) and 'M'
